@@ -6,8 +6,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "rs.ac.bg.fon.chatbot")
-@EnableJpaRepositories("rs.ac.bg.fon.chatbot.db")
 public class SpringChatbotApplication {
 
 	public static void main(String[] args) {
