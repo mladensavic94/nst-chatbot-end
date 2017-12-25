@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -23,8 +24,8 @@ public class FacebookChallengeController {
     private final String TOKEN = "EAAZATKY8ZBibMBAJzzyx384nZBWRPAnIJy6u7RvEIFT36rmZBawFv8R5QjZB54V2FJ8suhzouRYtoDJyWtsvc1DgC4lZCFXkxY2o2XHHsVN2iiMrfrWafQjGaQ0VPnREZBH6cU5NxnKsPyCWqJJMq0y5iw6HHAHmaapZBHGryU3dgYjQfLAnONbv";
 
     @RequestMapping("/validate")
-    public @ResponseBody Object validateFacebookApp(@PathVariable String mode, @PathVariable String verify_token,
-                                                    @PathVariable String challenge){
+    public @ResponseBody Object validateFacebookApp(@RequestParam("hub.mode") String mode, @RequestParam("hub.verify_token") String verify_token,
+                                                    @RequestParam("hub.challenge") String challenge){
         if(verify_token.equals(TOKEN))
         return ResponseEntity.status(HttpStatus.OK).body(challenge);
         return null;
