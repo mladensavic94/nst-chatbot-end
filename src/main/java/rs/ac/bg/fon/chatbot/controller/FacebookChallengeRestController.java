@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/rest")
-public class FacebookChallengeController {
+public class FacebookChallengeRestController {
 
     private final String TOKEN = "EAAZATKY8ZBibMBAJzzyx384nZBWRPAnIJy6u7RvEIFT36rmZBawFv8R5QjZB54V2FJ8suhzouRYtoDJyWtsvc1DgC4lZCFXkxY2o2XHHsVN2iiMrfrWafQjGaQ0VPnREZBH6cU5NxnKsPyCWqJJMq0y5iw6HHAHmaapZBHGryU3dgYjQfLAnONbv";
 
-    @RequestMapping("/validate")
+    @RequestMapping("/chatbot")
     public @ResponseBody Object validateFacebookApp(@RequestParam("hub.mode") String mode, @RequestParam("hub.verify_token") String verify_token,
                                                     @RequestParam("hub.challenge") String challenge){
         if(verify_token.equals(TOKEN))
