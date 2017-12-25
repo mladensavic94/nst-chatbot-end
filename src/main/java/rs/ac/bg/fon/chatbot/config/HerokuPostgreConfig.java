@@ -1,5 +1,6 @@
 package rs.ac.bg.fon.chatbot.config;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -11,8 +12,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan(basePackages = "rs.ac.bg.fon.chatbot")
+@ComponentScan(basePackages = "rs.ac.bg.fon.chatbot.*")
 @EnableJpaRepositories("rs.ac.bg.fon.chatbot.db")
+@EntityScan("rs.ac.bg.fon.chatbot.*")
 public class HerokuPostgreConfig {
 
     @Bean

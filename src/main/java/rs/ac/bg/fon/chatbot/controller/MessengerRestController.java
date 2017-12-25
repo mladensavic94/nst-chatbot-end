@@ -16,8 +16,13 @@ import rs.ac.bg.fon.chatbot.db.LogsService;
 @RequestMapping("/rest")
 public class MessengerRestController {
 
-    @Autowired
+    private final
     LogsService logsService;
+
+    @Autowired
+    public MessengerRestController(LogsService logsService) {
+        this.logsService = logsService;
+    }
 
     @RequestMapping(value = "/chatbot", method = RequestMethod.POST)
     public @ResponseBody Object receiveMessage(String json){
