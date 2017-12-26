@@ -1,6 +1,5 @@
 package rs.ac.bg.fon.chatbot.db;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 
 public class Logs{
 

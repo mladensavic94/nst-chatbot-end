@@ -8,13 +8,15 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan(basePackages = "rs.ac.bg.fon.chatbot.*")
 @EnableJpaRepositories("rs.ac.bg.fon.chatbot.db")
-@EntityScan("rs.ac.bg.fon.chatbot.*")
 public class HerokuPostgreConfig {
 
     @Bean
@@ -23,6 +25,16 @@ public class HerokuPostgreConfig {
     public DataSource dataSource() {
         return DataSourceBuilder.create().build();
     }
+
+    @Bean(name = "entityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource());
+        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
+        return em;
+    }
+
 
 
 }
