@@ -11,7 +11,7 @@ public class Logs{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
+    @Column(name = "IDLog")
     private int id;
     private String log;
 
