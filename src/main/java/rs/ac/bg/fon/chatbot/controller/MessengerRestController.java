@@ -1,11 +1,11 @@
 package rs.ac.bg.fon.chatbot.controller;
 
+import com.github.messenger4j.webhook.Event;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.social.facebook.api.Event;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,15 +19,17 @@ public class MessengerRestController {
 
     @Autowired
     LogsService logsService;
+    @Autowired
+    Gson gson;
 
 
 
     @RequestMapping(value = "/chatbot", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody Object receiveMessage(Object json){
         try {
-            //Event event = new Gson().fromJson(json, Event.class);
-            System.out.println("LOGGING: " + json + json.toString());
-            logsService.saveLog(new Logs(json.toString()));
+            Event event = gson.fromJson(gson.toJson(json), Event.class);
+            System.out.println("LOGGING: " + json + " " + event.senderId());
+            logsService.saveLog(new Logs(gson.toJson(json)));
 
             return ResponseEntity.status(HttpStatus.OK).body("Radi " + json);
         }catch (Exception e){
