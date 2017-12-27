@@ -32,7 +32,7 @@ public class MessengerRestController {
             logsService.saveLog(new Logs(gson.toJson(json)));
             return ResponseEntity.status(HttpStatus.OK).body("Radi " + json);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.OK).body("Radi kurac " + e.getLocalizedMessage());
+            return ResponseEntity.status(HttpStatus.OK).body("Radi kurac " + gson.toJson(json));
         }
     }
 }
