@@ -26,6 +26,7 @@ public class MessengerRestController {
     public @ResponseBody Object receiveMessage(String json){
         try {
             //Event event = new Gson().fromJson(json, Event.class);
+            System.out.println(json);
             logsService.saveLog(new Logs(json));
 
             return ResponseEntity.status(HttpStatus.OK).body("Radi " + json);
