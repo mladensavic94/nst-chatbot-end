@@ -3,6 +3,7 @@ package rs.ac.bg.fon.chatbot.controller;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.social.facebook.api.Event;
 import org.springframework.stereotype.Controller;
@@ -21,10 +22,10 @@ public class MessengerRestController {
 
 
 
-    @RequestMapping(value = "/chatbot", method = RequestMethod.POST)
-    public @ResponseBody Object receiveMessage(Object json){
-        Event event = new Gson().fromJson(json.toString(), Event.class);
-        logsService.saveLog(new Logs(json.toString()));
+    @RequestMapping(value = "/chatbot", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody Object receiveMessage(String json){
+        Event event = new Gson().fromJson(json, Event.class);
+        logsService.saveLog(new Logs(json));
         return ResponseEntity.status(HttpStatus.OK).body("Radi " + json);
     }
 }
