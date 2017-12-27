@@ -2,6 +2,7 @@ package rs.ac.bg.fon.chatbot.config;
 
 import ch.qos.logback.core.db.dialect.PostgreSQLDialect;
 import com.google.gson.Gson;
+import com.owlike.genson.Genson;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -47,9 +48,9 @@ public class HerokuPostgreConfig {
         properties.setProperty("hibernate.show_sql", "true");
         return properties;
     }
-    @Bean
-    public Gson gson(){
-        return new Gson();
+    @Bean("genson")
+    public Genson jsonEngine(){
+        return new Genson();
     }
 
 

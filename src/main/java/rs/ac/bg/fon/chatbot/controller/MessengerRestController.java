@@ -2,6 +2,7 @@ package rs.ac.bg.fon.chatbot.controller;
 
 import com.github.messenger4j.webhook.Event;
 import com.google.gson.Gson;
+import com.owlike.genson.Genson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,7 +21,7 @@ public class MessengerRestController {
     @Autowired
     LogsService logsService;
     @Autowired
-    Gson gson;
+    Genson genson;
 
 
 
@@ -29,10 +30,10 @@ public class MessengerRestController {
         try {
         //    Event event = gson.fromJson(gson.toJson(json), Event.class);
             System.out.println("LOGGING: " + json + " "  /* + event.senderId()*/);
-            logsService.saveLog(new Logs(gson.toJson(json)));
+            logsService.saveLog(new Logs(genson.serialize(json)));
             return ResponseEntity.status(HttpStatus.OK).body("Radi " + json);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.OK).body("Radi kurac " + gson.toJson(json));
+            return ResponseEntity.status(HttpStatus.OK).body("Radi kurac " + genson.serialize(json));
         }
     }
 }
