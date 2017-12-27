@@ -22,7 +22,7 @@ public class MessengerRestController {
 
 
     @RequestMapping(value = "/chatbot", method = RequestMethod.POST)
-    public @ResponseBody Object receiveMessage(String json){
+    public @ResponseBody Object receiveMessage(Object json){
         Event event = new Gson().fromJson(json, Event.class);
         logsService.saveLog(new Logs(json));
         return ResponseEntity.status(HttpStatus.OK).body("Radi " + json);
