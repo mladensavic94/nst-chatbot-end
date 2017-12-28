@@ -14,6 +14,10 @@ import rs.ac.bg.fon.chatbot.ParsingUtil;
 import rs.ac.bg.fon.chatbot.db.domain.Logs;
 import rs.ac.bg.fon.chatbot.db.LogsService;
 
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -31,9 +35,11 @@ public class MessengerRestController {
     public ResponseEntity<Void> receiveMessage(@RequestBody String json){
         try {
             json = ParsingUtil.getFieldByName(json, "entry");
-            List<TextMessageEvent> event = genson.deserialize(json, List.class);
-            System.out.println("LOGGING: " + json + " "   + event.get(0).senderId());
-            logsService.saveLog(new Logs(json));
+            Iterator<TextMessageEvent> events = genson.deserializeValues(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8.name())), TextMessageEvent.class);
+            while(events.hasNext()){
+                System.out.println("LOGGING: "   + events.next().senderId());
+            }
+            logsService.saveLog(new Logs("LOGGING: "   + events.next().senderId()));
             return ResponseEntity.status(HttpStatus.OK).build();
         }catch (Exception e){
             System.out.println("LOGGING: " + json + " " +e.getMessage() /* + event.senderId()*/);
