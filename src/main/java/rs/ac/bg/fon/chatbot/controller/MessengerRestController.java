@@ -34,7 +34,7 @@ public class MessengerRestController {
     @RequestMapping(value = "/chatbot", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> receiveMessage(@RequestBody String json){
         try {
-            json = "{" + json.substring(17);
+            json =json.substring(25, json.length()-1);
             Iterator<TextMessageEvent> events = genson.deserializeValues(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8.name())), TextMessageEvent.class);
             while(events.hasNext()){
                 System.out.println("LOGGING: "   + events.next().senderId());
