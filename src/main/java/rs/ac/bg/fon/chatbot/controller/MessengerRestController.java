@@ -10,8 +10,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.bg.fon.chatbot.ParsingUtil;
 import rs.ac.bg.fon.chatbot.db.domain.Logs;
 import rs.ac.bg.fon.chatbot.db.LogsService;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/rest")
@@ -25,10 +28,11 @@ public class MessengerRestController {
 
 
     @RequestMapping(value = "/chatbot", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> receiveMessage(@RequestBody final String json){
+    public ResponseEntity<Void> receiveMessage(@RequestBody String json){
         try {
-            TextMessageEvent event = genson.deserialize(json, TextMessageEvent.class);
-            System.out.println("LOGGING: " + json + " "   + event.senderId());
+            json = ParsingUtil.getFieldByName(json, "entry");
+            List<TextMessageEvent> event = genson.deserialize(json, List.class);
+            System.out.println("LOGGING: " + json + " "   + event.get(0).senderId());
             logsService.saveLog(new Logs(json));
             return ResponseEntity.status(HttpStatus.OK).build();
         }catch (Exception e){
