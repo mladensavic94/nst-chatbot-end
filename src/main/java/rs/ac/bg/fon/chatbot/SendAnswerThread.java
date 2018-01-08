@@ -1,6 +1,9 @@
 package rs.ac.bg.fon.chatbot;
 
 import com.eclipsesource.json.JsonObject;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 import rs.ac.bg.fon.chatbot.db.domain.Message;
 
@@ -20,7 +23,11 @@ public class SendAnswerThread implements Runnable {
         String response = generateAnswer();
         System.out.println(response);
         RestTemplate sendAnswer = new RestTemplate();
-        sendAnswer.postForLocation(URL, response);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>(response, headers);
+        sendAnswer.postForLocation(URL, entity);
     }
 
     private String generateAnswer() {
