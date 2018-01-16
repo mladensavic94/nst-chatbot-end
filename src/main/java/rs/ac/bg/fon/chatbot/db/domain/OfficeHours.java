@@ -13,7 +13,7 @@ public class OfficeHours {
     @Column(name = "idofficehours")
     private Integer id;
 
-    @Column(name = "idprof")
+    @Column(name = "idprofessor")
     private Integer idprof;
 
     @Column(name = "begin_time")

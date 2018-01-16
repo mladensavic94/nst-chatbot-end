@@ -11,8 +11,8 @@ public class Professor implements Serializable{
     @Id
     @GeneratedValue(generator = "sidprofessor")
     @SequenceGenerator(name = "sidprofessor", sequenceName = "sidprofessor")
-    @Column(name = "idprof")
-    private Integer idprof;
+    @Column(name = "idprofessor")
+    private Integer idprofessor;
 
     @Column(name = "email")
     private String email;
@@ -30,19 +30,19 @@ public class Professor implements Serializable{
     }
 
     public Professor(Integer idprof, String email, String password, String firstName, String lastName) {
-        this.idprof = idprof;
+        this.idprofessor = idprof;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public Integer getIdprof() {
-        return idprof;
+    public Integer getIdprofessor() {
+        return idprofessor;
     }
 
-    public void setIdprof(Integer idprof) {
-        this.idprof = idprof;
+    public void setIdprofessor(Integer idprofessor) {
+        this.idprofessor = idprofessor;
     }
 
     public String getEmail() {
@@ -79,6 +79,6 @@ public class Professor implements Serializable{
 
     @Override
     public boolean equals(Object o) {
-        return Objects.equals(this.idprof, ((Professor) o).idprof);
+        return Objects.equals(this.idprofessor, ((Professor) o).idprofessor);
     }
 }
