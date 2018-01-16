@@ -23,6 +23,7 @@ public class ProfessorRestController {
         try {
             Professor professor = new Professor(null, "mladen@gmail.com", "msavic", "mladen", "savic");
             professorService.saveProfessor(professor);
+            System.out.println(professor.getId());
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
             e.printStackTrace();
