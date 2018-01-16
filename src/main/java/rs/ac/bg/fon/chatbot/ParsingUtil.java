@@ -1,14 +1,15 @@
 package rs.ac.bg.fon.chatbot;
 
 import com.eclipsesource.json.Json;
-import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import rs.ac.bg.fon.chatbot.db.domain.Message;
 import rs.ac.bg.fon.chatbot.db.domain.MessageType;
+import rs.ac.bg.fon.chatbot.db.domain.Professor;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 public class ParsingUtil {
 
@@ -23,6 +24,16 @@ public class ParsingUtil {
            }
        }
        return null;
+   }
+
+   public static String parseListToJson(Iterable<?> list){
+       Gson gson = new Gson();
+       return gson.toJson(list);
+   }
+
+   public static <T> T parseJsonToDomainObject(String json, Class<T> tClass){
+       Gson gson = new Gson();
+       return gson.fromJson(json, tClass);
    }
 
 
