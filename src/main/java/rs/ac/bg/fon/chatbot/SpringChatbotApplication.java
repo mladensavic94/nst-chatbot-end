@@ -17,8 +17,5 @@ public class SpringChatbotApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringChatbotApplication.class, args);
-		Professor professor = new Professor(null, "mladen@gmail.com", "msavic", "mladen", "savic");
-		(new SpringChatbotApplication()).professorService.saveProfessor(professor);
-
 	}
 }
