@@ -14,7 +14,6 @@ public class OfficeHours {
     private Integer id;
 
     @Column(name = "idprofessor")
-    @OneToOne(mappedBy = "idprofessor")
     private Professor professor;
 
     @Column(name = "begin_time")
