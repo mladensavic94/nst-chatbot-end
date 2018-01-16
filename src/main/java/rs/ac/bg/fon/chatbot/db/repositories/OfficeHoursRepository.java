@@ -7,7 +7,7 @@ import rs.ac.bg.fon.chatbot.db.domain.Professor;
 
 public interface OfficeHoursRepository extends CrudRepository<OfficeHours, Integer> {
 
-    @Query("select o from OfficeHours o where o.professor = ?1")
+    @Query("select o from OfficeHours o where o.idprof = ?1")
     Iterable<OfficeHours> findAllByProfessorId(Integer id);
 
 }
