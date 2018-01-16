@@ -1,7 +1,5 @@
 package rs.ac.bg.fon.chatbot.db.domain;
 
-import org.springframework.stereotype.Controller;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -14,7 +12,7 @@ public class Professor implements Serializable{
     @GeneratedValue(generator = "sidprofessor")
     @SequenceGenerator(name = "sidprofessor", sequenceName = "sidprofessor")
     @Column(name = "idprof")
-    private Integer id;
+    private Integer idprof;
 
     @Column(name = "email")
     private String email;
@@ -31,20 +29,20 @@ public class Professor implements Serializable{
     public Professor() {
     }
 
-    public Professor(Integer id, String email, String password, String firstName, String lastName) {
-        this.id = id;
+    public Professor(Integer idprof, String email, String password, String firstName, String lastName) {
+        this.idprof = idprof;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getIdprof() {
+        return idprof;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdprof(Integer idprof) {
+        this.idprof = idprof;
     }
 
     public String getEmail() {
@@ -81,6 +79,6 @@ public class Professor implements Serializable{
 
     @Override
     public boolean equals(Object o) {
-        return Objects.equals(this.id, ((Professor) o).id);
+        return Objects.equals(this.idprof, ((Professor) o).idprof);
     }
 }
