@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "professor", schema = "public")
@@ -76,5 +77,10 @@ public class Professor implements Serializable{
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return Objects.equals(this.id, ((Professor) o).id);
     }
 }
