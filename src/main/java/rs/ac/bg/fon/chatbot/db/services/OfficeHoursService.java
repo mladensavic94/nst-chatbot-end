@@ -20,7 +20,7 @@ public class OfficeHoursService {
         return officeHoursRepository.findAll();
     }
 
-    public  Iterable<OfficeHours> findAllByProfessorId(Professor professor){
-        return officeHoursRepository.findAllByProfessorId(professor);
+    public  Iterable<OfficeHours> findAllByProfessorId(Integer id){
+        return officeHoursRepository.findAllByProfessorId(id);
     }
 }
