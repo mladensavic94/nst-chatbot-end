@@ -19,7 +19,7 @@ public class ProfessorRestController {
     ProfessorService professorService;
 
     @RequestMapping(value = "/professor", method = RequestMethod.GET)
-    public ResponseEntity<Object> receiveMessage(@RequestBody String json) {
+    public ResponseEntity<Object> receiveMessage() {
         try {
             Professor professor = new Professor(null, "mladen@gmail.com", "msavic", "mladen", "savic");
             professorService.saveProfessor(professor);
