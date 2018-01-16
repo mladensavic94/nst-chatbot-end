@@ -13,7 +13,7 @@ public class Professor implements Serializable{
     @GeneratedValue(generator = "sidprofessor")
     @SequenceGenerator(name = "sidprofessor", sequenceName = "sidprofessor")
     @Column(name = "idprof")
-    private Integer id;
+    private Long id;
 
     @Column(name = "email")
     private String email;
@@ -30,7 +30,7 @@ public class Professor implements Serializable{
     public Professor() {
     }
 
-    public Professor(Integer id, String email, String password, String firstName, String lastName) {
+    public Professor(Long id, String email, String password, String firstName, String lastName) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -38,11 +38,11 @@ public class Professor implements Serializable{
         this.lastName = lastName;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
