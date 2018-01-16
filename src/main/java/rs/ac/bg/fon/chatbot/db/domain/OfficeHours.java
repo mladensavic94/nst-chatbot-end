@@ -13,7 +13,6 @@ public class OfficeHours {
     @Column(name = "idofficehours")
     private Integer id;
 
-    @Column(name = "idprofessor")
     @OneToOne(mappedBy = "id")
     private Professor professor;
 
