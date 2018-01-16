@@ -8,8 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.bg.fon.chatbot.ParsingUtil;
 import rs.ac.bg.fon.chatbot.SendAnswerThread;
-import rs.ac.bg.fon.chatbot.db.LogsService;
-import rs.ac.bg.fon.chatbot.db.domain.Logs;
+import rs.ac.bg.fon.chatbot.db.services.LogsService;
 import rs.ac.bg.fon.chatbot.db.domain.Message;
 
 @Controller

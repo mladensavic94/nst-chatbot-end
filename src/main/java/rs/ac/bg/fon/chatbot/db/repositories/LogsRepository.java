@@ -1,4 +1,4 @@
-package rs.ac.bg.fon.chatbot.db;
+package rs.ac.bg.fon.chatbot.db.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 import rs.ac.bg.fon.chatbot.db.domain.Logs;

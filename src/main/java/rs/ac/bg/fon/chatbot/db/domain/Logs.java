@@ -10,7 +10,8 @@ import javax.persistence.*;
 public class Logs{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "sidlogs")
+    @SequenceGenerator(name = "sidlogs", sequenceName = "sidlogs")
     @Column(name = "\"IDLog\"")
     private int id;
     private String log;

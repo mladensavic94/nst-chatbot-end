@@ -1,8 +1,9 @@
-package rs.ac.bg.fon.chatbot.db;
+package rs.ac.bg.fon.chatbot.db.services;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rs.ac.bg.fon.chatbot.db.repositories.LogsRepository;
 import rs.ac.bg.fon.chatbot.db.domain.Logs;
 
 @Service(value = "logsService")
