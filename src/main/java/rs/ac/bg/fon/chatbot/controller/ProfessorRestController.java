@@ -11,7 +11,6 @@ import rs.ac.bg.fon.chatbot.db.services.ProfessorService;
 
 @Controller
 @RequestMapping("/rest")
-@CrossOrigin(origins="*")
 public class ProfessorRestController {
 
     @Autowired
@@ -40,6 +39,7 @@ public class ProfessorRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
 
     @RequestMapping(value = "/professor/save", method = RequestMethod.POST)
     public ResponseEntity<Object> saveProfessor(@RequestBody String json){
