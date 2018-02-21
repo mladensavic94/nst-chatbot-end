@@ -16,10 +16,22 @@ public class ProfessorRestController {
     @Autowired
     ProfessorService professorService;
 
-    @RequestMapping(value = "/professor", method = RequestMethod.GET)
+    @RequestMapping(value = "/professors", method = RequestMethod.GET)
     public ResponseEntity<Object> getAllProfessors() {
         try {
             String response = ParsingUtil.parseListToJson(professorService.findAll());
+            System.out.println(response);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @RequestMapping(value = "/professor", method = RequestMethod.GET)
+    public ResponseEntity<Object> getProfessor(@RequestParam String email, @RequestParam String password) {
+        try {
+            String response = ParsingUtil.parseDomainObjectToJson(professorService.findByUsernameAndPassword(email,password));
             System.out.println(response);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {

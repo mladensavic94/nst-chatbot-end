@@ -31,6 +31,11 @@ public class ParsingUtil {
        return gson.toJson(list);
    }
 
+   public static String parseDomainObjectToJson(Object object){
+       Gson gson = new Gson();
+       return gson.toJson(object);
+   }
+
    public static <T> T parseJsonToDomainObject(String json, Class<T> tClass){
        Gson gson = new Gson();
        return gson.fromJson(json, tClass);

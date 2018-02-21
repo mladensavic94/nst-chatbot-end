@@ -12,12 +12,16 @@ public class ProfessorService {
     @Autowired
     ProfessorRepository professorRepository;
 
-    public void saveProfessor(Professor professor){
+    public void saveProfessor(Professor professor) {
         professorRepository.save(professor);
     }
 
-    public Iterable<Professor> findAll(){
+    public Iterable<Professor> findAll() {
         return professorRepository.findAll();
+    }
+
+    public Professor findByUsernameAndPassword(String email, String password) {
+        return professorRepository.findByUsernameAndPassword(email, password);
     }
 
 }
