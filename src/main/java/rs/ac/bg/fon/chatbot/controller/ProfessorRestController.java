@@ -11,6 +11,7 @@ import rs.ac.bg.fon.chatbot.db.services.ProfessorService;
 
 @Controller
 @RequestMapping("/rest")
+@CrossOrigin(origins="*")
 public class ProfessorRestController {
 
     @Autowired
