@@ -14,7 +14,7 @@ public class OfficeHours {
     private Integer id;
 
     @Column(name = "idprofessor")
-    private Integer idprof;
+    private Professor professor;
 
     @Column(name = "begin_time")
     private Date beginTime;
@@ -22,9 +22,9 @@ public class OfficeHours {
     @Column(name = "end_time")
     private Date endTime;
 
-    public OfficeHours(Integer id, Integer idprof, Date beginTime, Date endTime) {
+    public OfficeHours(Integer id, Professor professor, Date beginTime, Date endTime) {
         this.id = id;
-        this.idprof = idprof;
+        this.professor = professor;
         this.beginTime = beginTime;
         this.endTime = endTime;
     }
@@ -40,12 +40,12 @@ public class OfficeHours {
         this.id = id;
     }
 
-    public Integer getIdprof() {
-        return idprof;
+    public Professor getProfessor() {
+        return professor;
     }
 
-    public void setIdprof(Integer idprof) {
-        this.idprof = idprof;
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
     }
 
     public Date getBeginTime() {

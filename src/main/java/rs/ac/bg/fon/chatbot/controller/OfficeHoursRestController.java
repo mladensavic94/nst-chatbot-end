@@ -22,9 +22,9 @@ public class OfficeHoursRestController {
 
 
     @RequestMapping(value = "/officehours", method = RequestMethod.GET)
-    public ResponseEntity<Object> getOfficeHoursForProfessor(@RequestParam Integer id){
+    public ResponseEntity<Object> getOfficeHoursForProfessor(@RequestParam String email){
         try {
-            String response = ParsingUtil.parseListToJson(officeHoursService.findAllByProfessorId(id));
+            String response = ParsingUtil.parseListToJson(officeHoursService.findAllByProfessorId(email));
             System.out.println(response);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
