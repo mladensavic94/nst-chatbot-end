@@ -13,7 +13,7 @@ public class OfficeHours {
     @Column(name = "idofficehours")
     private Integer id;
 
-    @Column(name = "idprofessor")
+    @OneToOne
     @JoinColumn(name = "idprofessor")
     private Professor professor;
 
