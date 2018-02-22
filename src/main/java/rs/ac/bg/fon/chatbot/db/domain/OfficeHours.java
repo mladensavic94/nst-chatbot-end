@@ -14,6 +14,7 @@ public class OfficeHours {
     private Integer id;
 
     @Column(name = "idprofessor")
+    @JoinColumn(name = "idprofessor")
     private Professor professor;
 
     @Column(name = "begin_time")
