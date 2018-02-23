@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import rs.ac.bg.fon.chatbot.ParsingUtil;
 import rs.ac.bg.fon.chatbot.db.domain.OfficeHours;
 import rs.ac.bg.fon.chatbot.db.services.OfficeHoursService;
+import rs.ac.bg.fon.chatbot.db.services.ProfessorService;
 
 @Controller
 @RequestMapping("/rest")
@@ -20,7 +21,8 @@ public class OfficeHoursRestController {
 
     @Autowired
     OfficeHoursService officeHoursService;
-
+    @Autowired
+    ProfessorService professorService;
 
     @RequestMapping(value = "/officehours", method = RequestMethod.GET)
     public ResponseEntity<Object> getOfficeHoursForProfessor(@RequestParam String email){
@@ -38,6 +40,7 @@ public class OfficeHoursRestController {
     public ResponseEntity<Object> postOfficeHours(@RequestBody String json){
         try {
             OfficeHours officeHours = ParsingUtil.parseJsonToDomainObject(json, OfficeHours.class);
+            professorService.saveProfessor(officeHours.getProfessor());
             officeHoursService.saveOfficeHours(officeHours);
             System.out.println(officeHours);
             return ResponseEntity.status(HttpStatus.OK).build();

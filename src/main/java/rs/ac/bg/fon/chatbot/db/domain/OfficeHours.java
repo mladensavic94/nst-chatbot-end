@@ -13,7 +13,7 @@ public class OfficeHours {
     @Column(name = "idofficehours")
     private Integer id;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, })
     @JoinColumn(name = "idprofessor")
     private Professor professor;
 
