@@ -35,7 +35,7 @@ public class OfficeHoursRestController {
     }
 
     @RequestMapping(value = "/officehours", method = RequestMethod.POST)
-    public ResponseEntity<Object> postOfficeHours(@RequestParam String json){
+    public ResponseEntity<Object> postOfficeHours(@RequestBody String json){
         try {
             OfficeHours officeHours = ParsingUtil.parseJsonToDomainObject(json, OfficeHours.class);
             officeHoursService.saveOfficeHours(officeHours);
