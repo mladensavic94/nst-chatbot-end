@@ -11,15 +11,15 @@ public class OfficeHoursService {
     @Autowired
     OfficeHoursRepository officeHoursRepository;
 
-    public void saveOfficeHours(OfficeHours officeHours){
+    public void saveOfficeHours(OfficeHours officeHours) {
         officeHoursRepository.save(officeHours);
     }
 
-    public Iterable<OfficeHours> findAll(){
+    public Iterable<OfficeHours> findAll() {
         return officeHoursRepository.findAll();
     }
 
-    public  Iterable<OfficeHours> findAllByProfessorId(String email){
+    public Iterable<OfficeHours> findAllByProfessorId(String email) {
         return officeHoursRepository.findAllByProfessorEmail(email);
     }
 }
