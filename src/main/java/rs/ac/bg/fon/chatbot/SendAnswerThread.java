@@ -1,17 +1,26 @@
 package rs.ac.bg.fon.chatbot;
 
 import com.eclipsesource.json.JsonObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
+import rs.ac.bg.fon.chatbot.db.domain.Level;
 import rs.ac.bg.fon.chatbot.db.domain.Message;
+
+import java.util.EnumSet;
+
+import static rs.ac.bg.fon.chatbot.db.domain.Level.DATUM;
 
 public class SendAnswerThread implements Runnable {
 
     private final static String TOKEN = "EAAZATKY8ZBibMBAEsVy3ZA4F73jSboFAfukwl9Qa66VfFtXiAR7TTYRcSLjBjryTBZAu88j3ZAocIXyX2VdXe2EgVVUw0BdUXsiXdWEKodcr1Dh11LrUDNrTi2aTW3FKLCbVHtSRgRRR6uQJ3Jd4C47RvIibFS7wLu6xTFW6c2e9FQQ0qSsjE";
     private final static String URL = "https://graph.facebook.com/v2.6/me/messages?access_token=" + TOKEN;
     private Message message;
+
+    @Autowired
+    CommunicationLevelHolder communicationLevelHolder;
 
 
     public SendAnswerThread(Message message) {
@@ -21,11 +30,13 @@ public class SendAnswerThread implements Runnable {
     @Override
     public void run() {
         String response = generateAnswer();
-        System.out.println(response);
+        sendResponse(response);
+    }
+
+    private void sendResponse(String response) {
         RestTemplate sendAnswer = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
         HttpEntity<String> entity = new HttpEntity<>(response, headers);
         sendAnswer.postForLocation(URL, entity);
     }
@@ -34,7 +45,19 @@ public class SendAnswerThread implements Runnable {
         JsonObject jsonObject = new JsonObject();
         jsonObject.set("messaging_type", "RESPONSE");
         jsonObject.set("recipient", new JsonObject().set("id", message.getSenderID()));
-        jsonObject.set("message", new JsonObject().set("text", message.getText().toString()));
+        communicationLevelHolder.addNewCommunication(message.getSenderID(), EnumSet.of(Level.NEW));
+        Level firstMissing = communicationLevelHolder.getFirstMissing(communicationLevelHolder.getCommunicationLevel(message.getSenderID()));
+        String text = getTextFromEnum(firstMissing);
+        jsonObject.set("message", new JsonObject().set("text", text));
         return jsonObject.toString();
+    }
+
+    private String getTextFromEnum(Level firstMissing) {
+        switch (firstMissing){
+            case DATUM: return "Kog datuma?";
+            case PREDMET: return "Koji predmet?";
+            case PROFESOR: return "Koji profesor?";
+            default: return "";
+        }
     }
 }
