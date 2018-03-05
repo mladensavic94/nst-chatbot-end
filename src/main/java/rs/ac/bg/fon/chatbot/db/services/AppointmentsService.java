@@ -24,4 +24,8 @@ public class AppointmentsService {
         appointment.setOfficeHours(officeHours);
         appointmentsRepository.save(appointment);
     }
+
+    public Iterable<Appointment> findAllByEmail(String email) {
+        return appointmentsRepository.findAllByEmail(email);
+    }
 }

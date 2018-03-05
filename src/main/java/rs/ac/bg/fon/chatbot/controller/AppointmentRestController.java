@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import rs.ac.bg.fon.chatbot.ParsingUtil;
 import rs.ac.bg.fon.chatbot.db.domain.Appointment;
 import rs.ac.bg.fon.chatbot.db.services.AppointmentsService;
@@ -19,9 +20,9 @@ public class AppointmentRestController {
     AppointmentsService appointmentsService;
 
     @RequestMapping(value = "/appointments", method = RequestMethod.GET)
-    public ResponseEntity<Object> getAllAppointments(){
+    public ResponseEntity<Object> getAllAppointments(@RequestParam String email){
         try{
-            String response = ParsingUtil.parseListToJson(appointmentsService.findAll());
+            String response = ParsingUtil.parseListToJson(appointmentsService.findAllByEmail(email));
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }catch (Exception e){
             e.printStackTrace();
