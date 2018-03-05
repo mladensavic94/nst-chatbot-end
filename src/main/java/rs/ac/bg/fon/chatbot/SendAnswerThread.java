@@ -45,9 +45,9 @@ public class SendAnswerThread implements Runnable {
         JsonObject jsonObject = new JsonObject();
         jsonObject.set("messaging_type", "RESPONSE");
         jsonObject.set("recipient", new JsonObject().set("id", message.getSenderID()));
-        communicationLevelHolder.addNewCommunication(message.getSenderID(), EnumSet.of(Level.NEW));
-        Level firstMissing = communicationLevelHolder.getFirstMissing(communicationLevelHolder.getCommunicationLevel(message.getSenderID()));
-        String text = getTextFromEnum(firstMissing);
+//        communicationLevelHolder.addNewCommunication(message.getSenderID(), EnumSet.of(Level.NEW));
+//        Level firstMissing = communicationLevelHolder.getFirstMissing(communicationLevelHolder.getCommunicationLevel(message.getSenderID()));
+        String text = (String) message.getText();
         jsonObject.set("message", new JsonObject().set("text", text));
         return jsonObject.toString();
     }
