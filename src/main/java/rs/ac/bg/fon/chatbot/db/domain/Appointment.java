@@ -24,7 +24,7 @@ public class Appointment implements Serializable{
     private Integer length;
 
     @Column(name = "status")
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     public Integer getId() {
