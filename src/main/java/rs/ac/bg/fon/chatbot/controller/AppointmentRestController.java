@@ -27,7 +27,7 @@ public class AppointmentRestController {
         try{
             Iterable<Appointment> serviceAllByEmail = appointmentsService.findAllByEmail(email);
             String response = ParsingUtil.parseListToJson(serviceAllByEmail);
-            Map<String, String> userInfo = getUserInfo(serviceAllByEmail.iterator().next().getStudentID());
+//            Map<String, String> userInfo = getUserInfo(serviceAllByEmail.iterator().next().getStudentID());
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }catch (Exception e){
             e.printStackTrace();
@@ -40,8 +40,8 @@ public class AppointmentRestController {
         final  String URL = "https://graph.facebook.com/v2.6/"+ userID+ "/messages?fields=first_name,last_name&access_token=" + TOKEN;
 
         RestTemplate getUserInfo = new RestTemplate();
-        ResponseEntity<String> map = getUserInfo.getForEntity(URL, String.class);
-        System.out.println(map.toString());
+        ResponseEntity<String> json = getUserInfo.getForEntity(URL, String.class);
+        System.out.println(json.toString());
         return null;
 
     }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.bg.fon.chatbot.ParsingUtil;
 import rs.ac.bg.fon.chatbot.SendAnswerThread;
+import rs.ac.bg.fon.chatbot.db.domain.Logs;
 import rs.ac.bg.fon.chatbot.db.services.LogsService;
 import rs.ac.bg.fon.chatbot.db.domain.Message;
 
@@ -25,7 +26,7 @@ public class MessengerRestController {
             Message message = ParsingUtil.parseEventFromJson(json);
             Thread thread = new Thread(new SendAnswerThread(message));
             thread.start();
-//            logsService.saveLog(new Logs("LOGGING: " + json));
+            logsService.saveLog(new Logs("LOGGING: " + json));
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
             e.printStackTrace();
