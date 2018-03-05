@@ -34,7 +34,7 @@ public class AppointmentRestController {
         try {
             Appointment appointment = ParsingUtil.parseJsonToDomainObject(json, Appointment.class);
             appointmentsService.save(appointment);
-            return ResponseEntity.status(HttpStatus.OK).body(json);
+            return ResponseEntity.status(HttpStatus.OK).body(appointment);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

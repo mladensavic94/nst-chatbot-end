@@ -63,6 +63,27 @@ public class Appointment implements Serializable{
         return status;
     }
 
+    public Appointment(OfficeHours officeHours, String studentID, Integer length, Status status) {
+        this.officeHours = officeHours;
+        this.studentID = studentID;
+        this.length = length;
+        this.status = status;
+    }
+
+    public Appointment() {
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "id=" + id +
+                ", officeHours=" + officeHours +
+                ", studentID='" + studentID + '\'' +
+                ", length=" + length +
+                ", status=" + status +
+                '}';
+    }
+
     public void setStatus(Status status) {
         this.status = status;
     }

@@ -33,6 +33,16 @@ public class OfficeHours {
     public OfficeHours() {
     }
 
+    @Override
+    public String toString() {
+        return "OfficeHours{" +
+                "id=" + id +
+                ", professor=" + professor +
+                ", beginTime=" + beginTime +
+                ", endTime=" + endTime +
+                '}';
+    }
+
     public Integer getId() {
         return id;
     }
