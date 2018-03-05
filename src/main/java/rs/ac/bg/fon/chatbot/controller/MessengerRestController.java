@@ -26,7 +26,7 @@ public class MessengerRestController {
             Message message = ParsingUtil.parseEventFromJson(json);
             Thread thread = new Thread(new SendAnswerThread(message));
             thread.start();
-            logsService.saveLog(new Logs("LOGGING: " + json));
+//            logsService.saveLog(new Logs("LOGGING: " + json));
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
             e.printStackTrace();
