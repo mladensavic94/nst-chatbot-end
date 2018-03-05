@@ -1,6 +1,7 @@
 package rs.ac.bg.fon.chatbot.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -40,7 +41,7 @@ public class AppointmentRestController {
         final  String URL = "https://graph.facebook.com/v2.6/"+ userID+ "?fields=first_name,last_name&access_token=" + TOKEN;
 
         RestTemplate getUserInfo = new RestTemplate();
-        ResponseEntity<String> json = getUserInfo.getForEntity(URL, String.class);
+        ResponseEntity<String> json = getUserInfo.exchange(URL, HttpMethod.GET, null, String.class);
         System.out.println(json.toString());
         return null;
 
