@@ -47,7 +47,9 @@ public class ParsingUtil {
    }
 
    public static String setJsonField(String json, String paramName, String paramVal){
-       JsonObject object = Json.parse(json).asObject();
+       com.eclipsesource.json.JsonArray array = Json.parse(json).asArray();
+       JsonObject object = new JsonObject();
+       object.add("appointmets", array);
        object.add(paramName,paramVal);
        return object.asString();
    }
