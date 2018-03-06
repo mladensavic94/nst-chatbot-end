@@ -51,7 +51,7 @@ public class ParsingUtil {
        JsonObject object = new JsonObject();
        object.add("appointmets", array);
        object.add(paramName,paramVal);
-       return object.asString();
+       return object.toString();
    }
 
 
