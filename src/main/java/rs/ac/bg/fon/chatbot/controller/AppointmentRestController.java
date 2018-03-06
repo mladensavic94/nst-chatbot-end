@@ -29,8 +29,7 @@ public class AppointmentRestController {
             Iterable<Appointment> serviceAllByEmail = appointmentsService.findAllByEmail(email);
             String response = ParsingUtil.parseListToJson(serviceAllByEmail);
             Map<String, String> userInfo = getUserInfo(serviceAllByEmail.iterator().next().getStudentID());
-            response = ParsingUtil.setJsonField(response,"first_name", userInfo.get("first_name"));
-            response = ParsingUtil.setJsonField(response,"last_name", userInfo.get("last_name"));
+            response = ParsingUtil.setJsonField(response,userInfo);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }catch (Exception e){
             e.printStackTrace();
