@@ -50,7 +50,7 @@ public class ParsingUtil {
     public static String setJsonField(String json, Map<String, String> userInfo) {
         com.eclipsesource.json.JsonArray array = Json.parse(json).asArray();
         JsonObject object = new JsonObject();
-        object.add("appointmets", array);
+        object.add("appointments", array);
         for (String key : userInfo.keySet()) {
             object.add(key, userInfo.get(key));
         }

@@ -27,6 +27,9 @@ public class Appointment implements Serializable{
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Column(name = "name")
+    private String name;
+
     public Integer getId() {
         return id;
     }
@@ -63,14 +66,23 @@ public class Appointment implements Serializable{
         return status;
     }
 
-    public Appointment(OfficeHours officeHours, String studentID, Integer length, Status status) {
+    public Appointment(OfficeHours officeHours, String studentID, Integer length, Status status, String name) {
         this.officeHours = officeHours;
         this.studentID = studentID;
         this.length = length;
         this.status = status;
+        this.name = name;
     }
 
     public Appointment() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
