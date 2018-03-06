@@ -13,6 +13,7 @@ import rs.ac.bg.fon.chatbot.db.domain.Appointment;
 import rs.ac.bg.fon.chatbot.db.services.AppointmentsService;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -28,6 +29,8 @@ public class AppointmentRestController {
             Iterable<Appointment> serviceAllByEmail = appointmentsService.findAllByEmail(email);
             String response = ParsingUtil.parseListToJson(serviceAllByEmail);
             Map<String, String> userInfo = getUserInfo(serviceAllByEmail.iterator().next().getStudentID());
+            response = ParsingUtil.setJsonField(response,"first_name", userInfo.get("first_name"));
+            response = ParsingUtil.setJsonField(response,"last_name", userInfo.get("last_name"));
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }catch (Exception e){
             e.printStackTrace();
@@ -38,14 +41,15 @@ public class AppointmentRestController {
     private Map<String,String> getUserInfo(String userID) {
         final  String TOKEN = "EAAZATKY8ZBibMBAEsVy3ZA4F73jSboFAfukwl9Qa66VfFtXiAR7TTYRcSLjBjryTBZAu88j3ZAocIXyX2VdXe2EgVVUw0BdUXsiXdWEKodcr1Dh11LrUDNrTi2aTW3FKLCbVHtSRgRRR6uQJ3Jd4C47RvIibFS7wLu6xTFW6c2e9FQQ0qSsjE";
         final  String URL = "https://graph.facebook.com/v2.6/"+ userID+ "?fields=first_name,last_name&access_token=" + TOKEN;
-        System.out.println(URL);
         RestTemplate getUserInfo = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<?> requestEntity = new HttpEntity<>(headers);
         ResponseEntity<String> json = getUserInfo.exchange(URL, HttpMethod.GET, requestEntity, String.class);
-        System.out.println(json.getBody());
-        return null;
+        Map<String, String> map = new HashMap<>();
+        map.put("first_name", ParsingUtil.getJsonField(json.getBody(), "first_name"));
+        map.put("last_name", ParsingUtil.getJsonField(json.getBody(), "last_name"));
+        return map;
 
     }
 

@@ -41,5 +41,16 @@ public class ParsingUtil {
        return gson.fromJson(json, tClass);
    }
 
+   public static String getJsonField(String json, String paramName){
+       JsonObject object = Json.parse(json).asObject();
+       return object.get(paramName).asString();
+   }
+
+   public static String setJsonField(String json, String paramName, String paramVal){
+       JsonObject object = Json.parse(json).asObject();
+       object.add(paramName,paramVal);
+       return object.asString();
+   }
+
 
 }
