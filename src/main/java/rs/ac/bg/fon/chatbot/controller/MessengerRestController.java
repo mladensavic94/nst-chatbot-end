@@ -24,8 +24,7 @@ public class MessengerRestController {
     public ResponseEntity<Object> receiveMessage(@RequestBody String json) {
         try {
             Message message = ParsingUtil.parseEventFromJson(json);
-            responseService.setMessage(message);
-            responseService.run();
+            responseService.run(message);
 //            logsService.saveLog(new Logs("LOGGING: " + json));
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
