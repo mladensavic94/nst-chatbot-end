@@ -19,6 +19,7 @@ public class MessengerRestController {
     @Autowired
     ResponseService responseService;
 
+
     @RequestMapping(value = "/chatbot", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> receiveMessage(@RequestBody String json) {
         try {
