@@ -53,9 +53,9 @@ public class ResponseService {
         jsonObject.set("messaging_type", "RESPONSE");
         jsonObject.set("recipient", new JsonObject().set("id", message.getSenderID()));
         String text = parseAppointmentFromMessage((String) message.getText());
-        String response = ParsingUtil.getJsonFieldArray(ParsingUtil.getJsonField(ParsingUtil.getJsonField(text, "entities"), "intent"), "value");
-        response += ParsingUtil.getJsonFieldArray(ParsingUtil.getJsonField(ParsingUtil.getJsonField(text, "entities"), "contact"), "value");
-        response += ParsingUtil.getJsonFieldArray(ParsingUtil.getJsonField(ParsingUtil.getJsonField(text, "entities"), "datetime"), "value");
+        String response = ParsingUtil.getJsonField(ParsingUtil.getJsonField(ParsingUtil.getJsonFieldArray(text, "entities"), "intent"), "value");
+        response += ParsingUtil.getJsonField(ParsingUtil.getJsonField(ParsingUtil.getJsonFieldArray(text, "entities"), "contact"), "value");
+        response += ParsingUtil.getJsonField(ParsingUtil.getJsonField(ParsingUtil.getJsonFieldArray(text, "entities"), "datetime"), "value");
         jsonObject.set("message", new JsonObject().set("text", response));
         return jsonObject.toString();
     }
