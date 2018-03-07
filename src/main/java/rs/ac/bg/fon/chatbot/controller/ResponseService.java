@@ -53,11 +53,32 @@ public class ResponseService {
         jsonObject.set("messaging_type", "RESPONSE");
         jsonObject.set("recipient", new JsonObject().set("id", message.getSenderID()));
         String text = parseAppointmentFromMessage((String) message.getText());
-        String response = ParsingUtil.getJsonObject(text, "entities");
-        response = ParsingUtil.getJsonArray(response, "intent", 0);
-        response = ParsingUtil.getJsonField(response, "value");
+        String response = parseIntent(text);
+        response += "\n datum: " + parseDate(text);
+        response += "\n profesor: " + parseProfessor(text);
         jsonObject.set("message", new JsonObject().set("text", response));
         return jsonObject.toString();
+    }
+
+    private String parseProfessor(String text) {
+        String professor = ParsingUtil.getJsonObject(text, "entities");
+        professor = ParsingUtil.getJsonArray(professor, "contact", 0);
+        professor = ParsingUtil.getJsonField(professor, "value");
+        return professor;
+    }
+
+    private String parseDate(String text) {
+        String date = ParsingUtil.getJsonObject(text, "entities");
+        date = ParsingUtil.getJsonArray(date, "intent", 0);
+        date = ParsingUtil.getJsonField(date, "value");
+        return date;
+    }
+
+    private String parseIntent(String text) {
+        String response = ParsingUtil.getJsonObject(text, "entities");
+        response = ParsingUtil.getJsonArray(response, "datetime", 0);
+        response = ParsingUtil.getJsonField(response, "value");
+        return response;
     }
 
     private String getTextFromEnum(Level firstMissing) {
