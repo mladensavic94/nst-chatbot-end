@@ -51,7 +51,7 @@ public class ResponseService {
         JsonObject jsonObject = new JsonObject();
         jsonObject.set("messaging_type", "RESPONSE");
         jsonObject.set("recipient", new JsonObject().set("id", message.getSenderID()));
-        String text = parseAppointmentFromMessage(message);
+        String text = parseAppointmentFromMessage((String) message.getText());
         jsonObject.set("message", new JsonObject().set("text", text));
         return jsonObject.toString();
     }
@@ -74,7 +74,7 @@ public class ResponseService {
         if (appointment == null) {
             appointment = new Appointment();
         }
-        parseAppointmentFromMessage((String) message.getText());
+//        parseAppointmentFromMessage(message.getText());
 
         appointmentCollection.put(message.getSenderID(), appointment);
     }
