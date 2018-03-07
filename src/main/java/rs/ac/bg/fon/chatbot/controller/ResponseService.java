@@ -1,11 +1,14 @@
-package rs.ac.bg.fon.chatbot;
+package rs.ac.bg.fon.chatbot.controller;
 
 import com.eclipsesource.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import rs.ac.bg.fon.chatbot.CommunicationLevelHolder;
 import rs.ac.bg.fon.chatbot.db.domain.Level;
 import rs.ac.bg.fon.chatbot.db.domain.Message;
 
@@ -13,7 +16,8 @@ import java.util.EnumSet;
 
 import static rs.ac.bg.fon.chatbot.db.domain.Level.DATUM;
 
-public class SendAnswerThread implements Runnable {
+@Service
+public class ResponseService {
 
     private final static String TOKEN = "EAAZATKY8ZBibMBAEsVy3ZA4F73jSboFAfukwl9Qa66VfFtXiAR7TTYRcSLjBjryTBZAu88j3ZAocIXyX2VdXe2EgVVUw0BdUXsiXdWEKodcr1Dh11LrUDNrTi2aTW3FKLCbVHtSRgRRR6uQJ3Jd4C47RvIibFS7wLu6xTFW6c2e9FQQ0qSsjE";
     private final static String URL = "https://graph.facebook.com/v2.6/me/messages?access_token=" + TOKEN;
@@ -23,11 +27,6 @@ public class SendAnswerThread implements Runnable {
     CommunicationLevelHolder communicationLevelHolder;
 
 
-    public SendAnswerThread(Message message) {
-        this.message = message;
-    }
-
-    @Override
     public void run() {
         String response = generateAnswer();
         sendResponse(response);
@@ -59,5 +58,9 @@ public class SendAnswerThread implements Runnable {
             case PROFESOR: return "Koji profesor?";
             default: return "";
         }
+    }
+
+    public void setMessage(Message message) {
+        this.message = message;
     }
 }

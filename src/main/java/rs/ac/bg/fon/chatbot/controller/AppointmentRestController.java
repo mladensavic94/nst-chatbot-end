@@ -27,7 +27,6 @@ public class AppointmentRestController {
     public ResponseEntity<Object> getAllAppointments(@RequestParam String email){
         try{
             Iterable<Appointment> serviceAllByEmail = appointmentsService.findAllByEmail(email);
-            serviceAllByEmail.forEach(appointment -> appointment.setName(getUserInfo(serviceAllByEmail.iterator().next().getStudentID())));
             String response = ParsingUtil.parseListToJson(serviceAllByEmail);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }catch (Exception e){
@@ -57,7 +56,7 @@ public class AppointmentRestController {
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<?> requestEntity = new HttpEntity<>(headers);
         ResponseEntity<String> json = getUserInfo.exchange(URL, HttpMethod.GET, requestEntity, String.class);
-        String response =  ParsingUtil.getJsonField(json.getBody(), "first_name");
+        String response =  ParsingUtil.getJsonField(json.getBody(), "first_name") + " ";
         response += ParsingUtil.getJsonField(json.getBody(), "last_name");
         return response;
 

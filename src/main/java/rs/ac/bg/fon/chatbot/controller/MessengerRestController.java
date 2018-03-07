@@ -7,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.bg.fon.chatbot.ParsingUtil;
-import rs.ac.bg.fon.chatbot.SendAnswerThread;
-import rs.ac.bg.fon.chatbot.db.domain.Logs;
 import rs.ac.bg.fon.chatbot.db.services.LogsService;
 import rs.ac.bg.fon.chatbot.db.domain.Message;
 
@@ -18,14 +16,15 @@ public class MessengerRestController {
 
     @Autowired
     LogsService logsService;
-
+    @Autowired
+    ResponseService responseService;
 
     @RequestMapping(value = "/chatbot", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> receiveMessage(@RequestBody String json) {
         try {
             Message message = ParsingUtil.parseEventFromJson(json);
-            Thread thread = new Thread(new SendAnswerThread(message));
-            thread.start();
+            responseService.setMessage(message);
+            responseService.run();
 //            logsService.saveLog(new Logs("LOGGING: " + json));
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
