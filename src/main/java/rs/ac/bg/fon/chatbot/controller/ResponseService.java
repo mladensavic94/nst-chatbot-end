@@ -74,12 +74,12 @@ public class ResponseService {
         if (appointment == null) {
             appointment = new Appointment();
         }
-        parseAppointmentFromMessage(message.getText());
+        parseAppointmentFromMessage((String) message.getText());
 
         appointmentCollection.put(message.getSenderID(), appointment);
     }
 
-    private String parseAppointmentFromMessage(Object text) {
+    private String parseAppointmentFromMessage(String text) {
         RestTemplate getUserInfo = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer D5Y74IMSC5YWUFNJUC477S5GLTXGWDSG");
