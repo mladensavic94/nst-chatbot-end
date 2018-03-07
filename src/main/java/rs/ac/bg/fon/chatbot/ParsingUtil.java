@@ -51,9 +51,9 @@ public class ParsingUtil {
         return object.get(paramName).asObject().toString();
     }
 
-    public static String getJsonArray(String json, String paramName, int index) {
-        JsonObject object = Json.parse(json).asArray().get(index).asObject();
-        return object.get(paramName).asString();
+    public static String getJsonArray(String json, String paramName) {
+        JsonObject object = Json.parse(json).asObject();
+        return object.get(paramName).asArray().toString();
     }
     public static String setJsonField(String json, Map<String, String> userInfo) {
         com.eclipsesource.json.JsonArray array = Json.parse(json).asArray();
