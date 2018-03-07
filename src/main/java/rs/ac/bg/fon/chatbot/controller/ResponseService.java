@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import rs.ac.bg.fon.chatbot.CommunicationLevelHolder;
+import rs.ac.bg.fon.chatbot.ParsingUtil;
 import rs.ac.bg.fon.chatbot.db.domain.Appointment;
 import rs.ac.bg.fon.chatbot.db.domain.Level;
 import rs.ac.bg.fon.chatbot.db.domain.Message;
@@ -52,6 +53,9 @@ public class ResponseService {
         jsonObject.set("messaging_type", "RESPONSE");
         jsonObject.set("recipient", new JsonObject().set("id", message.getSenderID()));
         String text = parseAppointmentFromMessage((String) message.getText());
+        text = ParsingUtil.getJsonFieldArray(ParsingUtil.getJsonField(ParsingUtil.getJsonField(text, "entities"), "intent"), "value");
+        text += ParsingUtil.getJsonFieldArray(ParsingUtil.getJsonField(ParsingUtil.getJsonField(text, "entities"), "contact"), "value");
+        text += ParsingUtil.getJsonFieldArray(ParsingUtil.getJsonField(ParsingUtil.getJsonField(text, "entities"), "datetime"), "value");
         jsonObject.set("message", new JsonObject().set("text", text));
         return jsonObject.toString();
     }
