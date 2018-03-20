@@ -19,13 +19,17 @@ import rs.ac.bg.fon.chatbot.db.services.ProfessorService;
 public class OfficeHoursRestController {
 
 
+    private final OfficeHoursService officeHoursService;
+    private final ProfessorService professorService;
+
     @Autowired
-    OfficeHoursService officeHoursService;
-    @Autowired
-    ProfessorService professorService;
+    public OfficeHoursRestController(OfficeHoursService officeHoursService, ProfessorService professorService) {
+        this.officeHoursService = officeHoursService;
+        this.professorService = professorService;
+    }
 
     @RequestMapping(value = "/officehours", method = RequestMethod.GET)
-    public ResponseEntity<Object> getOfficeHoursForProfessor(@RequestParam String email){
+    public ResponseEntity<Object> getOfficeHoursForProfessor(@RequestParam String email) {
         try {
             String response = ParsingUtil.parseListToJson(officeHoursService.findAllByProfessorId(email));
             System.out.println(response);
@@ -37,7 +41,7 @@ public class OfficeHoursRestController {
     }
 
     @RequestMapping(value = "/officehours", method = RequestMethod.POST)
-    public ResponseEntity<Object> postOfficeHours(@RequestBody String json){
+    public ResponseEntity<Object> postOfficeHours(@RequestBody String json) {
         try {
             OfficeHours officeHours = ParsingUtil.parseJsonToDomainObject(json, OfficeHours.class);
             professorService.saveProfessor(officeHours.getProfessor());

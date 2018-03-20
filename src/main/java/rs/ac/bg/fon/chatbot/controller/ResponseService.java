@@ -1,12 +1,17 @@
 package rs.ac.bg.fon.chatbot.controller;
 
 import com.eclipsesource.json.JsonObject;
+import com.github.messenger4j.Messenger;
+import com.github.messenger4j.exception.MessengerApiException;
+import com.github.messenger4j.exception.MessengerIOException;
+import com.github.messenger4j.send.MessagePayload;
+import com.github.messenger4j.send.message.TextMessage;
+import com.github.messenger4j.webhook.event.TextMessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import rs.ac.bg.fon.chatbot.CommunicationLevelHolder;
 import rs.ac.bg.fon.chatbot.ParsingUtil;
 import rs.ac.bg.fon.chatbot.db.domain.Appointment;
 import rs.ac.bg.fon.chatbot.db.domain.Level;
@@ -15,37 +20,34 @@ import rs.ac.bg.fon.chatbot.db.domain.Message;
 import java.util.HashMap;
 import java.util.Map;
 
+import static rs.ac.bg.fon.chatbot.config.Constants.*;
+
 @Service
 public class ResponseService {
 
-    private final static String TOKEN = "EAAZATKY8ZBibMBAEsVy3ZA4F73jSboFAfukwl9Qa66VfFtXiAR7TTYRcSLjBjryTBZAu88j3ZAocIXyX2VdXe2EgVVUw0BdUXsiXdWEKodcr1Dh11LrUDNrTi2aTW3FKLCbVHtSRgRRR6uQJ3Jd4C47RvIibFS7wLu6xTFW6c2e9FQQ0qSsjE";
-    private final static String URL_FACEBOOK = "https://graph.facebook.com/v2.6/me/messages?access_token=" + TOKEN;
-    private final static String WIT_AI_VERSION = "20180307";
-    private final static String URL_WIT_AI = "https://api.wit.ai/message?v=" + WIT_AI_VERSION + "&q=";
+
     private static Map<String, Appointment> appointmentCollection;
-
-    static {
-        appointmentCollection = new HashMap<>();
-    }
-
+    private Messenger messenger;
 
     @Autowired
-    CommunicationLevelHolder communicationLevelHolder;
-
-
-    @Async
-    public void run(Message message) {
-        add(message);
-        String response = generateAnswer(message);
-        sendResponse(response);
+    public ResponseService(Messenger messenger) {
+        appointmentCollection = new HashMap<>();
+        this.messenger = messenger;
     }
 
-    private void sendResponse(String response) {
-        RestTemplate sendAnswer = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> entity = new HttpEntity<>(response, headers);
-        sendAnswer.postForLocation(URL_FACEBOOK, entity);
+    @Async
+    public void run(TextMessageEvent messageEvent) {
+//        add(message);
+//        String response = generateAnswer(message);
+        sendResponse(messageEvent.senderId(), messageEvent.text());
+    }
+
+    private void sendResponse(String sender, String text) {
+        try {
+            messenger.send(MessagePayload.create(sender, TextMessage.create(text)));
+        } catch (MessengerApiException | MessengerIOException e) {
+            e.printStackTrace();
+        }
     }
 
     private String generateAnswer(Message message) {
@@ -69,14 +71,14 @@ public class ResponseService {
 
     private String parseDate(String text) {
         String date = ParsingUtil.getJsonObject(text, "entities");
-        date = ParsingUtil.getJsonArray(date, "intent", 0);
+        date = ParsingUtil.getJsonArray(date, "datetime", 0);
         date = ParsingUtil.getJsonField(date, "value");
         return date;
     }
 
     private String parseIntent(String text) {
         String response = ParsingUtil.getJsonObject(text, "entities");
-        response = ParsingUtil.getJsonArray(response, "datetime", 0);
+        response = ParsingUtil.getJsonArray(response, "intent", 0);
         response = ParsingUtil.getJsonField(response, "value");
         return response;
     }

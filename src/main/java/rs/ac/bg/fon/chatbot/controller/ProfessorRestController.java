@@ -13,8 +13,13 @@ import rs.ac.bg.fon.chatbot.db.services.ProfessorService;
 @RequestMapping("/rest")
 public class ProfessorRestController {
 
-    @Autowired
+    final
     ProfessorService professorService;
+
+    @Autowired
+    public ProfessorRestController(ProfessorService professorService) {
+        this.professorService = professorService;
+    }
 
     @RequestMapping(value = "/professors", method = RequestMethod.GET)
     public ResponseEntity<Object> getAllProfessors() {

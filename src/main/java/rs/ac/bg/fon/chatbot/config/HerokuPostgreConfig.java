@@ -1,26 +1,25 @@
 package rs.ac.bg.fon.chatbot.config;
 
-import ch.qos.logback.core.db.dialect.PostgreSQLDialect;
-import com.google.gson.Gson;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import com.github.messenger4j.Messenger;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.jpa.JpaDialect;
-import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
+
+import static rs.ac.bg.fon.chatbot.config.Constants.APP_SECRET;
+import static rs.ac.bg.fon.chatbot.config.Constants.TOKEN;
 
 @Configuration
 @ComponentScan(basePackages = "rs.ac.bg.fon.chatbot")
@@ -60,6 +59,11 @@ public class HerokuPostgreConfig {
         executor.setThreadNamePrefix("ResponseThread");
         executor.initialize();
         return executor;
+    }
+
+    @Bean
+    public Messenger getMessenger(){
+        return Messenger.create(TOKEN,APP_SECRET, "verifyToken");
     }
 
 
