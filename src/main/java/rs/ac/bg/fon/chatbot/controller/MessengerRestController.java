@@ -1,6 +1,10 @@
 package rs.ac.bg.fon.chatbot.controller;
 
 import com.github.messenger4j.Messenger;
+import com.github.messenger4j.exception.MessengerApiException;
+import com.github.messenger4j.exception.MessengerIOException;
+import com.github.messenger4j.send.MessagePayload;
+import com.github.messenger4j.send.message.TextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,10 +37,14 @@ public class MessengerRestController {
             messenger.onReceiveEvents(json, Optional.empty(),event -> {
                 if(event.isTextMessageEvent()){
                     responseService.run(event.asTextMessageEvent());
+                }else{
+                    try {
+                        messenger.send(MessagePayload.create(event.senderId(), TextMessage.create("Trenutno su samo tekstualne poruke podrzane!!")));
+                    } catch (MessengerApiException | MessengerIOException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
-//            Message message = ParsingUtil.parseEventFromJson(json);
-//            responseService.run(message);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
             e.printStackTrace();
