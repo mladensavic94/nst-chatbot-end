@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.Optional;
+
 import static java.util.Optional.of;
 
 @Controller
@@ -31,8 +33,7 @@ public class MessengerRestController {
     @RequestMapping(value = "/chatbot", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> receiveMessage(@RequestBody String json) {
         try {
-            String sha = "sha1=" + DigestUtils.sha1Hex(json);
-            messenger.onReceiveEvents(json, of(sha), event -> {
+            messenger.onReceiveEvents(json, Optional.empty(),event -> {
                 if(event.isTextMessageEvent()){
                     responseService.run(event.asTextMessageEvent());
                 }
