@@ -1,7 +1,6 @@
 package rs.ac.bg.fon.chatbot.controller;
 
 import com.github.messenger4j.Messenger;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Optional;
-
-import static java.util.Optional.of;
 
 @Controller
 @RequestMapping("/rest")
