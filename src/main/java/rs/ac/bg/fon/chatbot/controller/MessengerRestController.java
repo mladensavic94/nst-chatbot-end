@@ -35,7 +35,7 @@ public class MessengerRestController {
     @RequestMapping(value = "/chatbot", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> receiveMessage(@RequestBody String json) {
         try {
-            messenger.onReceiveEvents(json, of(null), event -> {
+            messenger.onReceiveEvents(json, of("ja si jebi mater"), event -> {
                 if(event.isTextMessageEvent()){
                     responseService.run(event.asTextMessageEvent());
                 }
