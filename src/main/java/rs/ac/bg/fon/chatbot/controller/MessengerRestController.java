@@ -1,6 +1,7 @@
 package rs.ac.bg.fon.chatbot.controller;
 
 import com.github.messenger4j.Messenger;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,11 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import rs.ac.bg.fon.chatbot.ParsingUtil;
-import rs.ac.bg.fon.chatbot.db.domain.Message;
-import rs.ac.bg.fon.chatbot.db.services.LogsService;
-
-import java.util.Optional;
 
 import static java.util.Optional.of;
 
@@ -35,7 +31,8 @@ public class MessengerRestController {
     @RequestMapping(value = "/chatbot", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> receiveMessage(@RequestBody String json) {
         try {
-            messenger.onReceiveEvents(json, of("ja si jebi mater"), event -> {
+            String sha = "sha1=" + DigestUtils.sha1Hex(json);
+            messenger.onReceiveEvents(json, of(sha), event -> {
                 if(event.isTextMessageEvent()){
                     responseService.run(event.asTextMessageEvent());
                 }
