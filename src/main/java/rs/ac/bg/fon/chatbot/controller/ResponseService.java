@@ -7,18 +7,20 @@ import com.github.messenger4j.send.MessagePayload;
 import com.github.messenger4j.send.message.TextMessage;
 import com.github.messenger4j.webhook.event.TextMessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import rs.ac.bg.fon.chatbot.ParsingUtil;
 import rs.ac.bg.fon.chatbot.db.domain.Appointment;
-import rs.ac.bg.fon.chatbot.db.domain.Message;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static rs.ac.bg.fon.chatbot.config.Constants.*;
+import static rs.ac.bg.fon.chatbot.config.Constants.URL_WIT_AI;
 
 @Service
 public class ResponseService {
@@ -35,8 +37,14 @@ public class ResponseService {
 
     @Async
     public void run(TextMessageEvent messageEvent) {
-        String response = generateAnswer(messageEvent.text());
-        sendResponse(messageEvent.senderId(), response);
+        String response = null;
+        try {
+            response = generateAnswer(messageEvent.text());
+            sendResponse(messageEvent.senderId(), response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void sendResponse(String sender, String text) {
@@ -47,9 +55,10 @@ public class ResponseService {
         }
     }
 
-    private String generateAnswer(String text) {
+    private String generateAnswer(String text) throws Exception {
         String appointment = callToWIT_AI(text);
-        String response = parseIntent(appointment);
+        String response;
+        response = parseIntent(appointment);
         if (response.equals("request")) {
             response = "\n datum: " + parseDate(appointment);
             response += "\n profesor: " + parseProfessor(appointment);
@@ -60,42 +69,54 @@ public class ResponseService {
 
     private String parseProfessor(String text) {
         String professor = null;
-        if (text != null) {
-            professor = ParsingUtil.getJsonObject(text, "entities");
-            if (professor != null) {
-                professor = ParsingUtil.getJsonArray(professor, "contact", 0);
-                if (professor != null)
-                    professor = ParsingUtil.getJsonField(professor, "value");
+        try {
+            if (text != null) {
+                professor = ParsingUtil.getJsonObject(text, "entities");
+                if (professor != null) {
+                    professor = ParsingUtil.getJsonArray(professor, "contact", 0);
+                    if (professor != null)
+                        professor = ParsingUtil.getJsonField(professor, "value");
+                }
             }
+            return professor;
+        } catch (Exception e) {
+            throw e;
         }
-        return professor;
     }
 
     private String parseDate(String text) {
         String date = null;
-        if (text != null) {
-            date = ParsingUtil.getJsonObject(text, "entities");
-            if (date != null) {
-                date = ParsingUtil.getJsonArray(date, "datetime", 0);
-                if (date != null)
-                    date = ParsingUtil.getJsonField(date, "value");
+        try {
+            if (text != null) {
+                date = ParsingUtil.getJsonObject(text, "entities");
+                if (date != null) {
+                    date = ParsingUtil.getJsonArray(date, "datetime", 0);
+                    if (date != null)
+                        date = ParsingUtil.getJsonField(date, "value");
+                }
             }
+            return date;
+        } catch (Exception e) {
+            throw e;
         }
-        return date;
     }
 
     private String parseIntent(String text) {
         String response = null;
-        if (text != null) {
-            response = ParsingUtil.getJsonObject(text, "entities");
-            if (response != null) {
-                response = ParsingUtil.getJsonArray(response, "intent", 0);
-                if (response != null)
-                    response = ParsingUtil.getJsonField(response, "value");
+        try {
+            if (text != null) {
+                response = ParsingUtil.getJsonObject(text, "entities");
+                if (response != null) {
+                    response = ParsingUtil.getJsonArray(response, "intent", 0);
+                    if (response != null)
+                        response = ParsingUtil.getJsonField(response, "value");
+                }
             }
+            return response;
+        } catch (Exception e) {
+            throw e;
         }
 
-        return response;
     }
 
 
