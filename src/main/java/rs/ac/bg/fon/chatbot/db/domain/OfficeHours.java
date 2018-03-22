@@ -1,5 +1,7 @@
 package rs.ac.bg.fon.chatbot.db.domain;
 
+import org.springframework.data.repository.cdi.Eager;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -24,7 +26,7 @@ public class OfficeHours {
     @Column(name = "end_time")
     private Date endTime;
 
-    @OneToMany(mappedBy = "officeHours")
+    @OneToMany(mappedBy = "officeHours", fetch = FetchType.EAGER)
     private List<Appointment> listOfAppointments;
 
     public OfficeHours(Professor professor, Date beginTime, Date endTime, List<Appointment> listOfAppointments) {
