@@ -13,7 +13,7 @@ public class Appointment implements Serializable{
     @Column(name = "idappointment")
     private Integer id;
 
-    @OneToOne(cascade = {CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "idofficehours")
     private OfficeHours officeHours;
 
