@@ -2,11 +2,12 @@ package rs.ac.bg.fon.chatbot.db.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "professor", schema = "public")
-public class Professor implements Serializable{
+public class Professor implements Serializable {
 
     @Id
     @GeneratedValue(generator = "sidprofessor")
@@ -26,15 +27,27 @@ public class Professor implements Serializable{
     @Column(name = "last_name")
     private String lastName;
 
+    @OneToMany(mappedBy = "professor")
+    private List<OfficeHours> listOfOfficeHours;
+
+
     public Professor() {
     }
 
-    public Professor(Integer idprof, String email, String password, String firstName, String lastName) {
-        this.idprofessor = idprof;
+    public Professor(String email, String password, String firstName, String lastName, List<OfficeHours> listOfOfficeHours) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.listOfOfficeHours = listOfOfficeHours;
+    }
+
+    public List<OfficeHours> getListOfOfficeHours() {
+        return listOfOfficeHours;
+    }
+
+    public void setListOfOfficeHours(List<OfficeHours> listOfOfficeHours) {
+        this.listOfOfficeHours = listOfOfficeHours;
     }
 
     public Integer getIdprofessor() {

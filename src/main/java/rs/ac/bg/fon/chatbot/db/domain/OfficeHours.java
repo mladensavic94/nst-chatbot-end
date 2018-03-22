@@ -2,6 +2,7 @@ package rs.ac.bg.fon.chatbot.db.domain;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "office_hours", schema = "public")
@@ -13,7 +14,7 @@ public class OfficeHours {
     @Column(name = "idofficehours")
     private Integer id;
 
-    @OneToOne(cascade = {CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "idprofessor")
     private Professor professor;
 
@@ -23,11 +24,14 @@ public class OfficeHours {
     @Column(name = "end_time")
     private Date endTime;
 
-    public OfficeHours(Integer id, Professor professor, Date beginTime, Date endTime) {
-        this.id = id;
+    @OneToMany(mappedBy = "officeHours")
+    private List<Appointment> listOfAppointments;
+
+    public OfficeHours(Professor professor, Date beginTime, Date endTime, List<Appointment> listOfAppointments) {
         this.professor = professor;
         this.beginTime = beginTime;
         this.endTime = endTime;
+        this.listOfAppointments = listOfAppointments;
     }
 
     public OfficeHours() {
@@ -41,6 +45,14 @@ public class OfficeHours {
                 ", beginTime=" + beginTime +
                 ", endTime=" + endTime +
                 '}';
+    }
+
+    public List<Appointment> getListOfAppointments() {
+        return listOfAppointments;
+    }
+
+    public void setListOfAppointments(List<Appointment> listOfAppointments) {
+        this.listOfAppointments = listOfAppointments;
     }
 
     public Integer getId() {

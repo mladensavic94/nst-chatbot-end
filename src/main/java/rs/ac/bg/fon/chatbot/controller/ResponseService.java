@@ -64,7 +64,7 @@ public class ResponseService {
         } catch (Exception e) {
             System.out.println("Intent not parsed");
         }
-        if (response.equals("request")) {
+        if (response != null && response.equals("request")) {
             try {
                 response = "\n datum: " + parseDate(appointment);
             } catch (Exception e) {
@@ -75,6 +75,8 @@ public class ResponseService {
             } catch (Exception e) {
                 System.out.println("Professor not parsed");
             }
+        }else{
+            response = "Jos sam prilicno glup bot, moraces da sacekas za naprednije stvari :)";
         }
 
         return response;
