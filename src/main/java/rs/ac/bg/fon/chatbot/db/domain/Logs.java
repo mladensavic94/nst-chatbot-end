@@ -12,7 +12,7 @@ public class Logs{
     @Id
     @GeneratedValue(generator = "sidlogs")
     @SequenceGenerator(name = "sidlogs", sequenceName = "sidlogs")
-    @Column(name = "\"IDLog\"")
+    @Column(name = "idlog")
     private int id;
     private String log;
 

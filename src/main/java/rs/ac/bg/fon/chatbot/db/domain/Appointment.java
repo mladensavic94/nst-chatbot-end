@@ -20,7 +20,7 @@ public class Appointment implements Serializable{
     @Column(name = "student_facebookid")
     private String studentID;
 
-    @Column(name = "length_in_mins")
+    @Column(name = "length")
     private Integer length;
 
     @Column(name = "status")
