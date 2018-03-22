@@ -13,7 +13,7 @@ import rs.ac.bg.fon.chatbot.db.services.ProfessorService;
 @RequestMapping("/rest")
 public class ProfessorRestController {
 
-    final
+    private final
     ProfessorService professorService;
 
     @Autowired

@@ -17,7 +17,7 @@ public class Appointment implements Serializable{
     @JoinColumn(name = "idofficehours")
     private OfficeHours officeHours;
 
-    @Column(name = "student_facebookid")
+    @Column(name = "studentID")
     private String studentID;
 
     @Column(name = "length")
@@ -27,7 +27,7 @@ public class Appointment implements Serializable{
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column(name = "name")
+    @Column(name = "studentnName")
     private String name;
 
     public Integer getId() {
