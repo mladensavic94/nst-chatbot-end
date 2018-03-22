@@ -55,13 +55,26 @@ public class ResponseService {
         }
     }
 
-    private String generateAnswer(String text) throws Exception {
+    private String generateAnswer(String text) {
         String appointment = callToWIT_AI(text);
-        String response;
-        response = parseIntent(appointment);
+        System.out.println("Response from Wit.ai: " + appointment);
+        String response = null;
+        try {
+            response = parseIntent(appointment);
+        } catch (Exception e) {
+            System.out.println("Intent not parsed");
+        }
         if (response.equals("request")) {
-            response = "\n datum: " + parseDate(appointment);
-            response += "\n profesor: " + parseProfessor(appointment);
+            try {
+                response = "\n datum: " + parseDate(appointment);
+            } catch (Exception e) {
+                System.out.println("Date not parsed");
+            }
+            try {
+                response += "\n profesor: " + parseProfessor(appointment);
+            } catch (Exception e) {
+                System.out.println("Professor not parsed");
+            }
         }
 
         return response;
@@ -69,53 +82,44 @@ public class ResponseService {
 
     private String parseProfessor(String text) {
         String professor = null;
-        try {
-            if (text != null) {
-                professor = ParsingUtil.getJsonObject(text, "entities");
-                if (professor != null) {
-                    professor = ParsingUtil.getJsonArray(professor, "contact", 0);
-                    if (professor != null)
-                        professor = ParsingUtil.getJsonField(professor, "value");
-                }
+        if (text != null) {
+            professor = ParsingUtil.getJsonObject(text, "entities");
+            if (professor != null) {
+                professor = ParsingUtil.getJsonArray(professor, "contact", 0);
+                if (professor != null)
+                    professor = ParsingUtil.getJsonField(professor, "value");
             }
-            return professor;
-        } catch (Exception e) {
-            throw e;
         }
+
+        return professor;
+
     }
 
     private String parseDate(String text) {
         String date = null;
-        try {
-            if (text != null) {
-                date = ParsingUtil.getJsonObject(text, "entities");
-                if (date != null) {
-                    date = ParsingUtil.getJsonArray(date, "datetime", 0);
-                    if (date != null)
-                        date = ParsingUtil.getJsonField(date, "value");
-                }
+        if (text != null) {
+            date = ParsingUtil.getJsonObject(text, "entities");
+            if (date != null) {
+                date = ParsingUtil.getJsonArray(date, "datetime", 0);
+                if (date != null)
+                    date = ParsingUtil.getJsonField(date, "value");
             }
-            return date;
-        } catch (Exception e) {
-            throw e;
         }
+        return date;
+
     }
 
     private String parseIntent(String text) {
         String response = null;
-        try {
-            if (text != null) {
-                response = ParsingUtil.getJsonObject(text, "entities");
-                if (response != null) {
-                    response = ParsingUtil.getJsonArray(response, "intent", 0);
-                    if (response != null)
-                        response = ParsingUtil.getJsonField(response, "value");
-                }
+        if (text != null) {
+            response = ParsingUtil.getJsonObject(text, "entities");
+            if (response != null) {
+                response = ParsingUtil.getJsonArray(response, "intent", 0);
+                if (response != null)
+                    response = ParsingUtil.getJsonField(response, "value");
             }
-            return response;
-        } catch (Exception e) {
-            throw e;
         }
+        return response;
 
     }
 
