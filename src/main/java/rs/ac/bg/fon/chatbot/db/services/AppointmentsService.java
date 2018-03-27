@@ -25,9 +25,12 @@ public class AppointmentsService {
         return appointmentsRepository.findAll();
     }
 
-    public void save(Appointment appointment){
-        OfficeHours officeHours = officeHoursRepository.findOne(appointment.getOfficeHours().getId());
-        appointment.setOfficeHours(officeHours);
+    public void save(Appointment appointment) {
+        OfficeHours officeHours;
+        if (appointment.getOfficeHours() != null) {
+            officeHours = officeHoursRepository.findOne(appointment.getOfficeHours().getId());
+            appointment.setOfficeHours(officeHours);
+        }
         appointmentsRepository.save(appointment);
     }
 
@@ -36,7 +39,7 @@ public class AppointmentsService {
     }
 
 
-    public Appointment findByStudentID(String id){
+    public Appointment findByStudentID(String id) {
         return appointmentsRepository.findByStudentIDOrderByIdDesc(id);
     }
 }

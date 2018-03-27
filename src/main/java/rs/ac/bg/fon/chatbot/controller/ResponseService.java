@@ -78,10 +78,10 @@ public class ResponseService {
         if (response != null && response.equals("request")) {
             appointment = new Appointment();
             try {
-                response += "\n profesor: " + parseProfessor(appointmentString);
+//                response += "\n profesor: " + parseProfessor(appointmentString);
                 Professor professor = findProfessorUsingLeveD(parseProfessor(appointmentString));
                 try {
-                    response = "\n datum: " + parseDate(appointmentString);
+//                    response = "\n datum: " + parseDate(appointmentString);
                     appointment.setOfficeHours(getOfficeHoursByDateForProfessor(professor, parseDate(appointmentString)));
                     response = appointment.toString();
                 } catch (Exception e) {
