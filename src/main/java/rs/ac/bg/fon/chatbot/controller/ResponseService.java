@@ -85,9 +85,11 @@ public class ResponseService {
                     appointment.setOfficeHours(getOfficeHoursByDateForProfessor(professor, parseDate(appointmentString)));
                     response = appointment.toString();
                 } catch (Exception e) {
+                    e.printStackTrace();
                     System.out.println("Date not parsed");
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.println("Professor not parsed");
             }
 
@@ -116,7 +118,6 @@ public class ResponseService {
         if (professors == null) {
             professorService.findAll().forEach(professors::add);
         }
-
         return professors.get(0);
     }
 
