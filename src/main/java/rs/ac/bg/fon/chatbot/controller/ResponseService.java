@@ -22,6 +22,7 @@ import rs.ac.bg.fon.chatbot.db.services.ProfessorService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -116,6 +117,7 @@ public class ResponseService {
 
     private Professor findProfessorUsingLeveD(String s) {
         if (professors == null) {
+            professors = new ArrayList<>();
             professorService.findAll().forEach(professors::add);
         }
         return professors.get(0);
