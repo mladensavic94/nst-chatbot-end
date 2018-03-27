@@ -11,7 +11,7 @@ public class Appointment implements Serializable{
     @GeneratedValue(generator = "sidappointment")
     @SequenceGenerator(name = "sidappointment", sequenceName = "sidappointment")
     @Column(name = "idappointment")
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "idofficehours")
@@ -30,11 +30,11 @@ public class Appointment implements Serializable{
     @Column(name = "studentname")
     private String name;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
