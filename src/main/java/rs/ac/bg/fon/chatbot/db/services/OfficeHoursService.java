@@ -3,13 +3,18 @@ package rs.ac.bg.fon.chatbot.db.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.bg.fon.chatbot.db.domain.OfficeHours;
-import rs.ac.bg.fon.chatbot.db.repositories.OfficeHoursRepository;
+import rs.ac.bg.fon.chatbot.db.services.repositories.OfficeHoursRepository;
 
-@Service("officehoursservice")
+@Service
 public class OfficeHoursService {
 
-    @Autowired
+    private final
     OfficeHoursRepository officeHoursRepository;
+
+    @Autowired
+    public OfficeHoursService(OfficeHoursRepository officeHoursRepository) {
+        this.officeHoursRepository = officeHoursRepository;
+    }
 
     public void saveOfficeHours(OfficeHours officeHours) {
         officeHoursRepository.save(officeHours);

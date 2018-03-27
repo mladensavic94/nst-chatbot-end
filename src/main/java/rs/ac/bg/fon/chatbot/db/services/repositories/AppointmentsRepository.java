@@ -1,4 +1,4 @@
-package rs.ac.bg.fon.chatbot.db.repositories;
+package rs.ac.bg.fon.chatbot.db.services.repositories;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -8,4 +8,7 @@ public interface AppointmentsRepository extends CrudRepository<Appointment, Inte
 
     @Query("select a from Appointment a where a.officeHours.professor.email = ?1 order by a.officeHours.beginTime desc")
     Iterable<Appointment> findAllByEmail(String email);
+
+    Appointment findByStudentIDOrderByIdDesc(String studentid);
+
 }

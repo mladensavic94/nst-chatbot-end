@@ -94,4 +94,15 @@ public class Professor implements Serializable {
     public boolean equals(Object o) {
         return Objects.equals(this.idprofessor, ((Professor) o).idprofessor);
     }
+
+    @Override
+    public String toString() {
+        return "Professor{" +
+                "idprofessor=" + idprofessor +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 }

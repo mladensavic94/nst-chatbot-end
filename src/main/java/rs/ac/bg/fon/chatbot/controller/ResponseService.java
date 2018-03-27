@@ -14,25 +14,35 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import rs.ac.bg.fon.chatbot.ParsingUtil;
 import rs.ac.bg.fon.chatbot.db.domain.Appointment;
+import rs.ac.bg.fon.chatbot.db.domain.OfficeHours;
+import rs.ac.bg.fon.chatbot.db.domain.Professor;
+import rs.ac.bg.fon.chatbot.db.services.AppointmentsService;
+import rs.ac.bg.fon.chatbot.db.services.ProfessorService;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
+import static rs.ac.bg.fon.chatbot.ParsingUtil.*;
 import static rs.ac.bg.fon.chatbot.config.Constants.URL_WIT_AI;
 
 @Service
 public class ResponseService {
 
 
-    private static Map<String, Appointment> appointmentCollection;
     private Messenger messenger;
+    private ProfessorService professorService;
+    private AppointmentsService appointmentsService;
+    static List<Professor> professors;
 
     @Autowired
-    public ResponseService(Messenger messenger) {
-        appointmentCollection = new HashMap<>();
+    public ResponseService(Messenger messenger, ProfessorService professorService, AppointmentsService appointmentsService) {
         this.messenger = messenger;
+        this.professorService = professorService;
+        this.appointmentsService = appointmentsService;
     }
 
     @Async
@@ -56,73 +66,58 @@ public class ResponseService {
     }
 
     private String generateAnswer(String text) {
-        String appointment = callToWIT_AI(text);
-        System.out.println("Response from Wit.ai: " + appointment);
+        String appointmentString = callToWIT_AI(text);
+        Appointment appointment = null;
+        System.out.println("Response from Wit.ai: " + appointmentString);
         String response = null;
         try {
-            response = parseIntent(appointment);
+            response = parseIntent(appointmentString);
         } catch (Exception e) {
             System.out.println("Intent not parsed");
         }
         if (response != null && response.equals("request")) {
+            appointment = new Appointment();
             try {
-                response = "\n datum: " + parseDate(appointment);
-            } catch (Exception e) {
-                System.out.println("Date not parsed");
-            }
-            try {
-                response += "\n profesor: " + parseProfessor(appointment);
+                response += "\n profesor: " + parseProfessor(appointmentString);
+                Professor professor = findProfessorUsingLeveD(parseProfessor(appointmentString));
+                try {
+                    response = "\n datum: " + parseDate(appointmentString);
+                    appointment.setOfficeHours(getOfficeHoursByDateForProfessor(professor, parseDate(appointmentString)));
+                    response = appointment.toString();
+                } catch (Exception e) {
+                    System.out.println("Date not parsed");
+                }
             } catch (Exception e) {
                 System.out.println("Professor not parsed");
             }
-        }else{
+
+        } else {
             response = "Jos sam prilicno glup bot, moraces da sacekas za naprednije stvari :)";
         }
-
+        if (appointment != null) appointmentsService.save(appointment);
         return response;
     }
 
-    private String parseProfessor(String text) {
-        String professor = null;
-        if (text != null) {
-            professor = ParsingUtil.getJsonObject(text, "entities");
-            if (professor != null) {
-                professor = ParsingUtil.getJsonArray(professor, "contact", 0);
-                if (professor != null)
-                    professor = ParsingUtil.getJsonField(professor, "value");
-            }
+    private OfficeHours getOfficeHoursByDateForProfessor(Professor professor, String s) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+        try {
+            Date date = df.parse(s);
+            Optional<OfficeHours> officeHours1 = professor.getListOfOfficeHours().stream().filter(officeHours -> {
+                return officeHours.getBeginTime().after(date) && officeHours.getEndTime().before(date);
+            }).findFirst();
+            return officeHours1.get();
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
-        return professor;
-
+        return null;
     }
 
-    private String parseDate(String text) {
-        String date = null;
-        if (text != null) {
-            date = ParsingUtil.getJsonObject(text, "entities");
-            if (date != null) {
-                date = ParsingUtil.getJsonArray(date, "datetime", 0);
-                if (date != null)
-                    date = ParsingUtil.getJsonField(date, "value");
-            }
+    private Professor findProfessorUsingLeveD(String s) {
+        if (professors == null) {
+            professorService.findAll().forEach(professors::add);
         }
-        return date;
 
-    }
-
-    private String parseIntent(String text) {
-        String response = null;
-        if (text != null) {
-            response = ParsingUtil.getJsonObject(text, "entities");
-            if (response != null) {
-                response = ParsingUtil.getJsonArray(response, "intent", 0);
-                if (response != null)
-                    response = ParsingUtil.getJsonField(response, "value");
-            }
-        }
-        return response;
-
+        return professors.get(0);
     }
 
 

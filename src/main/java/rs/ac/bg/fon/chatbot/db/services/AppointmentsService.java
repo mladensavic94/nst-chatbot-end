@@ -4,16 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.bg.fon.chatbot.db.domain.Appointment;
 import rs.ac.bg.fon.chatbot.db.domain.OfficeHours;
-import rs.ac.bg.fon.chatbot.db.repositories.AppointmentsRepository;
-import rs.ac.bg.fon.chatbot.db.repositories.OfficeHoursRepository;
+import rs.ac.bg.fon.chatbot.db.services.repositories.AppointmentsRepository;
+import rs.ac.bg.fon.chatbot.db.services.repositories.OfficeHoursRepository;
 
-@Service("appointmentService")
+@Service
 public class AppointmentsService {
 
-    @Autowired
+    private final
     AppointmentsRepository appointmentsRepository;
-    @Autowired
+    private final
     OfficeHoursRepository officeHoursRepository;
+
+    @Autowired
+    public AppointmentsService(AppointmentsRepository appointmentsRepository, OfficeHoursRepository officeHoursRepository) {
+        this.appointmentsRepository = appointmentsRepository;
+        this.officeHoursRepository = officeHoursRepository;
+    }
 
     public Iterable<Appointment> findAll() {
         return appointmentsRepository.findAll();
@@ -27,5 +33,10 @@ public class AppointmentsService {
 
     public Iterable<Appointment> findAllByEmail(String email) {
         return appointmentsRepository.findAllByEmail(email);
+    }
+
+
+    public Appointment findByStudentID(String id){
+        return appointmentsRepository.findByStudentIDOrderByIdDesc(id);
     }
 }

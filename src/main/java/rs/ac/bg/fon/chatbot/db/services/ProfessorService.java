@@ -4,13 +4,18 @@ package rs.ac.bg.fon.chatbot.db.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.bg.fon.chatbot.db.domain.Professor;
-import rs.ac.bg.fon.chatbot.db.repositories.ProfessorRepository;
+import rs.ac.bg.fon.chatbot.db.services.repositories.ProfessorRepository;
 
-@Service("professorService")
+@Service
 public class ProfessorService {
 
-    @Autowired
+    private final
     ProfessorRepository professorRepository;
+
+    @Autowired
+    public ProfessorService(ProfessorRepository professorRepository) {
+        this.professorRepository = professorRepository;
+    }
 
     public void saveProfessor(Professor professor) {
         professorRepository.save(professor);
