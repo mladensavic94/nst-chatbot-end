@@ -44,7 +44,6 @@ public class ProfessorService {
             double lastname2lastname = jaroWinklerDistance.apply(professor.getLastName(), profInfo[1]);
             double maxDistIme = Math.max(name2name, name2lastname);
             double maxDistPrezime = Math.max(lastname2name, lastname2lastname);
-            System.out.println(professorString + " dist: " + (maxDistIme + maxDistPrezime) / 2);
             if (max < (maxDistIme + maxDistPrezime) / 2) {
                 max = (maxDistIme + maxDistPrezime) / 2;
                 result = professor;
