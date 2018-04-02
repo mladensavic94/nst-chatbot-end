@@ -88,8 +88,12 @@ public class ResponseService {
             getUserNameAndLastName(event, appointment);
             try {
                 Professor professor = professorService.findProfessorUsingStringDistance(parseProfessor(appointmentString));
+                response = "Profesor " + professor.getLastName() + " ima konsultacije " + professor.getListOfOfficeHours();
                 try {
-                    appointment.setOfficeHours(getOfficeHoursByDateForProfessor(professor, parseDate(appointmentString)));
+                    OfficeHours officeHours = officeHoursService.getOfficeHoursByDateForProfessor(professor, parseDate(appointmentString));
+                    if (officeHours == null)
+                        response = "U tom terminu nema konsultacija";
+                    appointment.setOfficeHours(officeHours);
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("Date not parsed");
@@ -97,6 +101,7 @@ public class ResponseService {
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("Professor not parsed");
+
             }
 
         } else {
@@ -104,7 +109,6 @@ public class ResponseService {
         }
         if (appointment != null) {
             appointmentsService.save(appointment);
-            response = appointment.toString();
         }
         return response;
     }
@@ -117,21 +121,6 @@ public class ResponseService {
         } catch (MessengerApiException e) {
             e.printStackTrace();
         }
-    }
-
-    private OfficeHours getOfficeHoursByDateForProfessor(Professor professor, String s) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-        try {
-            Date date = df.parse(s);
-            System.out.println(date);
-            for (OfficeHours officeHours : officeHoursService.findAllByProfessorId(professor.getEmail())) {
-                if(officeHours.getBeginTime().before(date) && officeHours.getEndTime().after(date))
-                    return officeHours;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
 
