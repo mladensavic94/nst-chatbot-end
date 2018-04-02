@@ -75,6 +75,7 @@ public class Appointment implements Serializable{
     }
 
     public Appointment() {
+        this.status = Status.OPEN;
     }
 
     public String getName() {

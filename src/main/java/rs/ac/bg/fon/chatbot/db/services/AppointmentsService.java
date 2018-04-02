@@ -40,6 +40,6 @@ public class AppointmentsService {
 
 
     public Appointment findByStudentID(String id) {
-        return appointmentsRepository.findByStudentIDOrderByIdDesc(id);
+        return appointmentsRepository.findByStudentID(id);
     }
 }

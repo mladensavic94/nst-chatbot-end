@@ -1,10 +1,12 @@
 package rs.ac.bg.fon.chatbot.controller;
 
+import antlr.debug.MessageEvent;
 import com.github.messenger4j.Messenger;
 import com.github.messenger4j.exception.MessengerApiException;
 import com.github.messenger4j.exception.MessengerIOException;
 import com.github.messenger4j.send.MessagePayload;
 import com.github.messenger4j.send.message.TextMessage;
+import com.github.messenger4j.userprofile.UserProfile;
 import com.github.messenger4j.webhook.event.TextMessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -50,7 +52,7 @@ public class ResponseService {
     public void run(TextMessageEvent messageEvent) {
         String response = null;
         try {
-            response = generateAnswer(messageEvent.text());
+            response = generateAnswer(messageEvent);
             sendResponse(messageEvent.senderId(), response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,8 +68,8 @@ public class ResponseService {
         }
     }
 
-    private String generateAnswer(String text) {
-        String appointmentString = callToWIT_AI(text);
+    private String generateAnswer(TextMessageEvent event) throws MessengerIOException {
+        String appointmentString = callToWIT_AI(event.text());
         Appointment appointment = null;
         System.out.println("Response from Wit.ai: " + appointmentString);
         String response = null;
@@ -77,12 +79,12 @@ public class ResponseService {
             System.out.println("Intent not parsed");
         }
         if (response != null && response.equals("request")) {
-            appointment = new Appointment();
+            appointment = getAppointmentForStudent(event.senderId());
+            appointment.setStudentID(event.senderId());
+            getUserNameAndLastName(event, appointment);
             try {
-//                response += "\n profesor: " + parseProfessor(appointmentString);
                 Professor professor = findProfessorUsingLeveD(parseProfessor(appointmentString));
                 try {
-//                    response = "\n datum: " + parseDate(appointmentString);
                     appointment.setOfficeHours(getOfficeHoursByDateForProfessor(professor, parseDate(appointmentString)));
                     response = appointment.toString();
                 } catch (Exception e) {
@@ -101,6 +103,26 @@ public class ResponseService {
         return response;
     }
 
+    private Appointment getAppointmentForStudent(String s) {
+        Appointment appointment;
+
+        appointment = appointmentsService.findByStudentID(s);
+
+        if (appointment == null) appointment = new Appointment();
+
+        return appointment;
+    }
+
+    private void getUserNameAndLastName(TextMessageEvent event, Appointment appointment) throws MessengerIOException {
+        try {
+            UserProfile userProfile = messenger.queryUserProfile(event.senderId());
+            appointment.setName(userProfile.firstName() + " " + userProfile.lastName());
+
+        } catch (MessengerApiException e) {
+            e.printStackTrace();
+        }
+    }
+
     private OfficeHours getOfficeHoursByDateForProfessor(Professor professor, String s) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
         try {
@@ -109,7 +131,7 @@ public class ResponseService {
                 return officeHours.getBeginTime().after(date) && officeHours.getEndTime().before(date);
             }).findFirst();
             return officeHours1.get();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
