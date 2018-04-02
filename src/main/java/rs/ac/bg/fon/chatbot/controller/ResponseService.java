@@ -119,6 +119,7 @@ public class ResponseService {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
         try {
             Date date = df.parse(s);
+            professor.getListOfOfficeHours().get(0);
             Optional<OfficeHours> officeHours1 = professor.getListOfOfficeHours().stream().filter(officeHours -> {
                 return officeHours.getBeginTime().after(date) && officeHours.getEndTime().before(date);
             }).findFirst();

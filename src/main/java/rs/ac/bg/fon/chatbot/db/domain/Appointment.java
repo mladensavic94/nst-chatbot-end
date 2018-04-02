@@ -44,6 +44,7 @@ public class Appointment implements Serializable{
 
     public void setOfficeHours(OfficeHours officeHours) {
         this.officeHours = officeHours;
+        checkForStatusChange();
     }
 
     public String getStudentID() {
@@ -52,6 +53,7 @@ public class Appointment implements Serializable{
 
     public void setStudentID(String studentID) {
         this.studentID = studentID;
+        checkForStatusChange();
     }
 
     public Integer getLength() {
@@ -84,6 +86,7 @@ public class Appointment implements Serializable{
 
     public void setName(String name) {
         this.name = name;
+        checkForStatusChange();
     }
 
     @Override
@@ -100,5 +103,11 @@ public class Appointment implements Serializable{
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public void checkForStatusChange(){
+        if(officeHours != null && studentID != null){
+            status = Status.FULL;
+        }
     }
 }
