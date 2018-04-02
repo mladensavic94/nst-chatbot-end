@@ -103,6 +103,10 @@ public class ResponseService {
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("Professor not parsed");
+                response = "Kod kog profesora zelite na konsultacije?";
+                if(e.getMessage().equals("UNKNOWN")){
+                    response = "Profesor mozda nije na spisku registrovanih profesora";
+                }
 
             }
 
