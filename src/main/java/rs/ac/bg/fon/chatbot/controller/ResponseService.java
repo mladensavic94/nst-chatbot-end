@@ -88,7 +88,8 @@ public class ResponseService {
             appointment.setStudentID(event.senderId());
             getUserNameAndLastName(event, appointment);
             try {
-                Professor professor = professorService.findProfessorUsingStringDistance(parseProfessor(appointmentString));
+                String professorString = parseProfessor(appointmentString);
+                Professor professor = professorService.findProfessorUsingStringDistance(professorString);
                 List<OfficeHours> officeHoursForProfessor = officeHoursService.getOfficeHoursForProfessor(professor);
                 response = "Profesor " + professor.getLastName() + " sledece konsultacije ima " + officeHoursForProfessor.get(0).getBeginTime();
                 try {
