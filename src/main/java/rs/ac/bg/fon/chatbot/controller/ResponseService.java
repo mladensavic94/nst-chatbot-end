@@ -88,9 +88,10 @@ public class ResponseService {
             getUserNameAndLastName(event, appointment);
             try {
                 Professor professor = professorService.findProfessorUsingStringDistance(parseProfessor(appointmentString));
-                response = "Profesor " + professor.getLastName() + " ima konsultacije " + professor.getListOfOfficeHours();
+                List<OfficeHours> officeHoursForProfessor = officeHoursService.getOfficeHoursForProfessor(professor);
+                response = "Profesor " + professor.getLastName() + " ima konsultacije " + officeHoursForProfessor;
                 try {
-                    OfficeHours officeHours = officeHoursService.getOfficeHoursByDateForProfessor(professor, parseDate(appointmentString));
+                    OfficeHours officeHours = officeHoursService.filterByDate(officeHoursForProfessor, parseDate(appointmentString));
                     if (officeHours == null)
                         response = "U tom terminu nema konsultacija";
                     appointment.setOfficeHours(officeHours);

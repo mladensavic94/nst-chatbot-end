@@ -9,6 +9,7 @@ import rs.ac.bg.fon.chatbot.db.services.repositories.OfficeHoursRepository;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class OfficeHoursService {
@@ -33,12 +34,16 @@ public class OfficeHoursService {
         return officeHoursRepository.findAllByProfessorEmail(email);
     }
 
-    public OfficeHours getOfficeHoursByDateForProfessor(Professor professor, String s) throws Exception {
+    public List<OfficeHours> getOfficeHoursForProfessor(Professor professor) {
+        return officeHoursRepository.findAllByProfessorEmail(professor.getEmail());
+    }
+
+    public OfficeHours filterByDate(List<OfficeHours> officeHoursForProfessor, String s) throws Exception {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
         try {
             Date date = df.parse(s);
             System.out.println(date);
-            for (OfficeHours officeHours : officeHoursRepository.findAllByProfessorEmail(professor.getEmail())) {
+            for (OfficeHours officeHours : officeHoursForProfessor) {
                 if (officeHours.getBeginTime().before(date) && officeHours.getEndTime().after(date))
                     return officeHours;
             }
