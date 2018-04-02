@@ -123,10 +123,11 @@ public class ResponseService {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
         try {
             Date date = df.parse(s);
-            Optional<OfficeHours> officeHours1 = StreamSupport.stream(officeHoursService.findAllByProfessorId(professor.getEmail()).spliterator(), false).filter(officeHours -> {
-                return officeHours.getBeginTime().before(date) && officeHours.getEndTime().after(date);
-            }).findFirst();
-            return officeHours1.get();
+            System.out.println(date);
+            for (OfficeHours officeHours : officeHoursService.findAllByProfessorId(professor.getEmail())) {
+                if(officeHours.getBeginTime().before(date) && officeHours.getEndTime().after(date))
+                    return officeHours;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
