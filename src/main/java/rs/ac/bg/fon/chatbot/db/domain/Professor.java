@@ -27,8 +27,8 @@ public class Professor implements Serializable {
     @Column(name = "last_name")
     private String lastName;
 
-    @OneToMany(mappedBy = "professor", fetch = FetchType.EAGER)
-    private List<OfficeHours> listOfOfficeHours;
+    @OneToMany(mappedBy = "professor", fetch = FetchType.LAZY)
+    private transient List<OfficeHours> listOfOfficeHours;
 
 
     public Professor() {

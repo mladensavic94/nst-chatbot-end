@@ -20,6 +20,7 @@ import rs.ac.bg.fon.chatbot.db.domain.Appointment;
 import rs.ac.bg.fon.chatbot.db.domain.OfficeHours;
 import rs.ac.bg.fon.chatbot.db.domain.Professor;
 import rs.ac.bg.fon.chatbot.db.services.AppointmentsService;
+import rs.ac.bg.fon.chatbot.db.services.OfficeHoursService;
 import rs.ac.bg.fon.chatbot.db.services.ProfessorService;
 
 import java.text.DateFormat;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 import static rs.ac.bg.fon.chatbot.ParsingUtil.*;
 import static rs.ac.bg.fon.chatbot.config.Constants.URL_WIT_AI;
@@ -39,14 +41,16 @@ public class ResponseService {
     private Messenger messenger;
     private ProfessorService professorService;
     private AppointmentsService appointmentsService;
-    private static List<Professor> professors;
+    private OfficeHoursService officeHoursService;
 
     @Autowired
-    public ResponseService(Messenger messenger, ProfessorService professorService, AppointmentsService appointmentsService) {
+    public ResponseService(Messenger messenger, ProfessorService professorService, AppointmentsService appointmentsService, OfficeHoursService officeHoursService) {
         this.messenger = messenger;
         this.professorService = professorService;
         this.appointmentsService = appointmentsService;
+        this.officeHoursService = officeHoursService;
     }
+
 
     @Async
     public void run(TextMessageEvent messageEvent) {
@@ -119,8 +123,8 @@ public class ResponseService {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
         try {
             Date date = df.parse(s);
-            Optional<OfficeHours> officeHours1 = professor.getListOfOfficeHours().stream().filter(officeHours -> {
-                return officeHours.getBeginTime().after(date) && officeHours.getEndTime().before(date);
+            Optional<OfficeHours> officeHours1 = StreamSupport.stream(officeHoursService.findAllByProfessorId(professor.getEmail()).spliterator(), false).filter(officeHours -> {
+                return officeHours.getBeginTime().before(date) && officeHours.getEndTime().after(date);
             }).findFirst();
             return officeHours1.get();
         } catch (Exception e) {
