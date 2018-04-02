@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import rs.ac.bg.fon.chatbot.db.domain.Appointment;
 import rs.ac.bg.fon.chatbot.db.domain.OfficeHours;
 import rs.ac.bg.fon.chatbot.db.domain.Professor;
+import rs.ac.bg.fon.chatbot.db.domain.Status;
 import rs.ac.bg.fon.chatbot.db.services.AppointmentsService;
 import rs.ac.bg.fon.chatbot.db.services.OfficeHoursService;
 import rs.ac.bg.fon.chatbot.db.services.ProfessorService;
@@ -89,7 +90,7 @@ public class ResponseService {
             try {
                 Professor professor = professorService.findProfessorUsingStringDistance(parseProfessor(appointmentString));
                 List<OfficeHours> officeHoursForProfessor = officeHoursService.getOfficeHoursForProfessor(professor);
-                response = "Profesor " + professor.getLastName() + " ima konsultacije " + officeHoursForProfessor;
+                response = "Profesor " + professor.getLastName() + " sledece konsultacije ima " + officeHoursForProfessor.get(0).getBeginTime();
                 try {
                     OfficeHours officeHours = officeHoursService.filterByDate(officeHoursForProfessor, parseDate(appointmentString));
                     if (officeHours == null)
@@ -110,6 +111,9 @@ public class ResponseService {
         }
         if (appointment != null) {
             appointmentsService.save(appointment);
+            if(appointment.getStatus().equals(Status.FULL)){
+                response = "Konsultacije poslate profesoru na odobrenje";
+            }
         }
         return response;
     }

@@ -35,7 +35,7 @@ public class OfficeHoursService {
     }
 
     public List<OfficeHours> getOfficeHoursForProfessor(Professor professor) {
-        return officeHoursRepository.findAllByProfessorEmail(professor.getEmail());
+        return officeHoursRepository.findAllByProfessorEmail(professor.getEmail(), new Date());
     }
 
     public OfficeHours filterByDate(List<OfficeHours> officeHoursForProfessor, String s) throws Exception {
