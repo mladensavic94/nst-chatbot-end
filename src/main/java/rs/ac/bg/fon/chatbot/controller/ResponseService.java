@@ -39,7 +39,7 @@ public class ResponseService {
     private Messenger messenger;
     private ProfessorService professorService;
     private AppointmentsService appointmentsService;
-    static List<Professor> professors;
+    private static List<Professor> professors;
 
     @Autowired
     public ResponseService(Messenger messenger, ProfessorService professorService, AppointmentsService appointmentsService) {
@@ -79,14 +79,13 @@ public class ResponseService {
             System.out.println("Intent not parsed");
         }
         if (response != null && response.equals("request")) {
-            appointment = getAppointmentForStudent(event.senderId());
+            appointment = appointmentsService.findByStudentID(event.senderId());
             appointment.setStudentID(event.senderId());
             getUserNameAndLastName(event, appointment);
             try {
-                Professor professor = findProfessorUsingLeveD(parseProfessor(appointmentString));
+                Professor professor = professorService.findProfessorUsingStringDistance(parseProfessor(appointmentString));
                 try {
                     appointment.setOfficeHours(getOfficeHoursByDateForProfessor(professor, parseDate(appointmentString)));
-                    response = appointment.toString();
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("Date not parsed");
@@ -99,18 +98,11 @@ public class ResponseService {
         } else {
             response = "Jos sam prilicno glup bot, moraces da sacekas za naprednije stvari :)";
         }
-        if (appointment != null) appointmentsService.save(appointment);
+        if (appointment != null) {
+            appointmentsService.save(appointment);
+            response = appointment.toString();
+        }
         return response;
-    }
-
-    private Appointment getAppointmentForStudent(String s) {
-        Appointment appointment;
-
-        appointment = appointmentsService.findByStudentID(s);
-
-        if (appointment == null) appointment = new Appointment();
-
-        return appointment;
     }
 
     private void getUserNameAndLastName(TextMessageEvent event, Appointment appointment) throws MessengerIOException {
@@ -135,14 +127,6 @@ public class ResponseService {
             e.printStackTrace();
         }
         return null;
-    }
-
-    private Professor findProfessorUsingLeveD(String s) {
-        if (professors == null) {
-            professors = new ArrayList<>();
-            professorService.findAll().forEach(professors::add);
-        }
-        return professors.get(0);
     }
 
 

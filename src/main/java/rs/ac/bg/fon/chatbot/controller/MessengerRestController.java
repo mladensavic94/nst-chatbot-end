@@ -4,7 +4,10 @@ import com.github.messenger4j.Messenger;
 import com.github.messenger4j.exception.MessengerApiException;
 import com.github.messenger4j.exception.MessengerIOException;
 import com.github.messenger4j.send.MessagePayload;
+import com.github.messenger4j.send.SenderActionPayload;
 import com.github.messenger4j.send.message.TextMessage;
+import com.github.messenger4j.send.senderaction.SenderAction;
+import com.github.messenger4j.webhook.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,6 +38,7 @@ public class MessengerRestController {
     public ResponseEntity<Object> receiveMessage(@RequestBody String json) {
         try {
             messenger.onReceiveEvents(json, Optional.empty(),event -> {
+                sendSeen(event);
                 if(event.isTextMessageEvent()){
                     responseService.run(event.asTextMessageEvent());
                 }else{
@@ -49,6 +53,14 @@ public class MessengerRestController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.OK).build();
+        }
+    }
+
+    private void sendSeen(Event event) {
+        try {
+            messenger.send(SenderActionPayload.create(event.senderId(), SenderAction.MARK_SEEN));
+        } catch (MessengerApiException | MessengerIOException e) {
+            e.printStackTrace();
         }
     }
 }

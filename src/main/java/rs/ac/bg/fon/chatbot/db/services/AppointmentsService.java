@@ -40,6 +40,12 @@ public class AppointmentsService {
 
 
     public Appointment findByStudentID(String id) {
-        return appointmentsRepository.findByStudentID(id);
+        Appointment appointment;
+
+        appointment = appointmentsRepository.findByStudentID(id);
+
+        if (appointment == null) appointment = new Appointment();
+
+        return appointment;
     }
 }

@@ -94,6 +94,7 @@ public class Appointment implements Serializable{
                 ", studentID='" + studentID + '\'' +
                 ", length=" + length +
                 ", status=" + status +
+                ", name=" + name +
                 '}';
     }
 
