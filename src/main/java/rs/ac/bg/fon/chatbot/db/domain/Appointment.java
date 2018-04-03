@@ -119,7 +119,7 @@ public class Appointment implements Serializable{
     }
 
     public void checkForStatusChange(){
-        if(officeHours != null && studentID != null){
+        if(officeHours != null && studentID != null && professor != null){
             status = Status.FULL;
         }
     }
