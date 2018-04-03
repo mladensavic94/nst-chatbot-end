@@ -77,7 +77,6 @@ public class ResponseService {
         String appointmentString = callToWIT_AI(event.text());
         Appointment appointment = null;
         Professor professor = null;
-        List<OfficeHours> officeHoursForProfessor = null;
         System.out.println("Response from Wit.ai: " + appointmentString);
         String response = null;
         try {
@@ -93,14 +92,13 @@ public class ResponseService {
                 String professorString = parseProfessor(appointmentString);
                 professor = professorService.findProfessorUsingStringDistance(professorString);
                 appointment.setProfessor(professor);
-                officeHoursForProfessor = officeHoursService.getOfficeHoursForProfessor(professor);
-                response = "Profesor " + professor.getLastName() + " sledece konsultacije ima " + officeHoursForProfessor.get(0).getBeginTime();
+                response = "Kog dana zelite kod prof. " + professor.getLastName() + " na konsultacije";
             } catch (Exception e) {
                 e.printStackTrace();
                 response = "Kod kog profesora zelite na konsultacije?";
             }
             try {
-                OfficeHours officeHours = officeHoursService.filterByDate(officeHoursForProfessor, parseDate(appointmentString), professor);
+                OfficeHours officeHours = officeHoursService.filterByDate(parseDate(appointmentString), professor);
                 if (officeHours == null)
                     response = "U tom terminu nema konsultacija";
                 //Ovde bi trebalo da kazem kad ima!

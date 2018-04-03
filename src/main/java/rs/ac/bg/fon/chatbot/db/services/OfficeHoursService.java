@@ -38,20 +38,22 @@ public class OfficeHoursService {
         return officeHoursRepository.findAllByProfessorEmail(professor.getEmail(), new Date());
     }
 
-    public OfficeHours filterByDate(List<OfficeHours> officeHoursForProfessor, String s, Professor professor) throws Exception {
-        if (officeHoursForProfessor == null)
-            officeHoursForProfessor = officeHoursRepository.findAllByProfessorEmail(professor.getEmail());
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-        try {
-            Date date = df.parse(s);
-            System.out.println(date);
-            for (OfficeHours officeHours : officeHoursForProfessor) {
-                if (officeHours.getBeginTime().before(date) && officeHours.getEndTime().after(date))
-                    return officeHours;
+    public OfficeHours filterByDate(String s, Professor professor) throws Exception {
+        if (professor != null) {
+            List<OfficeHours> officeHoursForProfessor = officeHoursRepository.findAllByProfessorEmail(professor.getEmail());
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+            try {
+                Date date = df.parse(s);
+                System.out.println(date);
+                for (OfficeHours officeHours : officeHoursForProfessor) {
+                    if (officeHours.getBeginTime().before(date) && officeHours.getEndTime().after(date))
+                        return officeHours;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
         return null;
     }
 }
