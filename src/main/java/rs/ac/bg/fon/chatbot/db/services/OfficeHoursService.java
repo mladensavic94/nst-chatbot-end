@@ -42,7 +42,6 @@ public class OfficeHoursService {
         if (professor != null) {
             List<OfficeHours> officeHoursForProfessor = officeHoursRepository.findAllById(professor.getIdprofessor());
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-            System.out.println(officeHoursForProfessor.size() + "asdasd");
             try {
                 Date date = df.parse(s);
                 System.out.println(date);
@@ -54,7 +53,6 @@ public class OfficeHoursService {
                 e.printStackTrace();
             }
         }
-
-        throw new RuntimeException("jebi ga");
+        return null;
     }
 }
