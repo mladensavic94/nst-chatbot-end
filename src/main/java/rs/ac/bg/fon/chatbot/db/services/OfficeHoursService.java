@@ -54,6 +54,6 @@ public class OfficeHoursService {
             }
         }
 
-        return null;
+        throw new RuntimeException("jebi ga");
     }
 }
