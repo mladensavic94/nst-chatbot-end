@@ -30,7 +30,8 @@ public class Appointment implements Serializable{
     @Column(name = "studentname")
     private String name;
 
-    @Column(name = "idprofessor")
+    @OneToOne
+    @JoinColumn(name = "idprofessor")
     private Professor professor;
 
     public Long getId() {
