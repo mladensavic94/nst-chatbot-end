@@ -40,7 +40,7 @@ public class OfficeHoursService {
 
     public OfficeHours filterByDate(String s, Professor professor) throws Exception {
         if (professor != null) {
-            List<OfficeHours> officeHoursForProfessor = officeHoursRepository.findAllByProfessorEmail(professor.getEmail());
+            List<OfficeHours> officeHoursForProfessor = officeHoursRepository.findAllById(professor.getIdprofessor());
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
             try {
                 Date date = df.parse(s);

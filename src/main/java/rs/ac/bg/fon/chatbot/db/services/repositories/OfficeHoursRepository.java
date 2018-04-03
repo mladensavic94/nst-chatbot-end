@@ -14,4 +14,7 @@ public interface OfficeHoursRepository extends CrudRepository<OfficeHours, Long>
 
     @Query("select o from OfficeHours o, Professor p where o.professor = p and p.email = ?1 and o.beginTime > ?2")
     List<OfficeHours> findAllByProfessorEmail(String email, Date date);
+
+    @Query("select o from OfficeHours o where o.professor.id = ?1")
+    List<OfficeHours> findAllById(Long id);
 }

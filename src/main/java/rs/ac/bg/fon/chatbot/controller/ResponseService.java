@@ -94,7 +94,7 @@ public class ResponseService {
                 appointment.setProfessor(professor);
                 response = "Kog dana zelite kod prof. " + professor.getLastName() + " na konsultacije";
             } catch (Exception e) {
-                e.printStackTrace();
+//                e.printStackTrace();
                 response = "Kod kog profesora zelite na konsultacije?";
             }
             try {
