@@ -98,8 +98,7 @@ public class ResponseService {
                 response = "Kod kog profesora zelite na konsultacije?";
             }
             try {
-                System.out.println(appointment.getProfessor());
-                OfficeHours officeHours = officeHoursService.filterByDate(parseDate(appointmentString), professor);
+                OfficeHours officeHours = officeHoursService.filterByDate(parseDate(appointmentString), appointment.getProfessor());
                 if (officeHours == null)
                     response = "U tom terminu nema konsultacija";
                 //Ovde bi trebalo da kazem kad ima!
