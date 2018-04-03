@@ -86,7 +86,7 @@ public class ResponseService {
             System.out.println("Intent not parsed");
         }
         appointment = appointmentsService.findByStudentID(event.senderId());
-        if (response != null && response.equals("request") || appointment.getId() == 0) {
+        if ((response != null && response.equals("request")) || appointment.getId() != 0) {
             appointment.setStudentID(event.senderId());
             getUserNameAndLastName(event, appointment);
             try {
