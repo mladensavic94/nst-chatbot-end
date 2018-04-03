@@ -38,7 +38,9 @@ public class OfficeHoursService {
         return officeHoursRepository.findAllByProfessorEmail(professor.getEmail(), new Date());
     }
 
-    public OfficeHours filterByDate(List<OfficeHours> officeHoursForProfessor, String s) throws Exception {
+    public OfficeHours filterByDate(List<OfficeHours> officeHoursForProfessor, String s, Professor professor) throws Exception {
+        if (officeHoursForProfessor == null)
+            officeHoursForProfessor = officeHoursRepository.findAllByProfessorEmail(professor.getEmail());
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
         try {
             Date date = df.parse(s);
@@ -50,6 +52,6 @@ public class OfficeHoursService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        throw new Exception("UKNOWN");
+        return null;
     }
 }

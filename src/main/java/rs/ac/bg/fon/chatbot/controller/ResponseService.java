@@ -76,6 +76,8 @@ public class ResponseService {
     private String generateAnswer(TextMessageEvent event) throws MessengerIOException {
         String appointmentString = callToWIT_AI(event.text());
         Appointment appointment = null;
+        Professor professor = null;
+        List<OfficeHours> officeHoursForProfessor = null;
         System.out.println("Response from Wit.ai: " + appointmentString);
         String response = null;
         try {
@@ -84,31 +86,28 @@ public class ResponseService {
             System.out.println("Intent not parsed");
         }
         appointment = appointmentsService.findByStudentID(event.senderId());
-        if (response != null && response.equals("request") || appointment != null) {
+        if (response != null && response.equals("request") || appointment.getId() == 0) {
             appointment.setStudentID(event.senderId());
             getUserNameAndLastName(event, appointment);
             try {
                 String professorString = parseProfessor(appointmentString);
-                Professor professor = professorService.findProfessorUsingStringDistance(professorString);
-                List<OfficeHours> officeHoursForProfessor = officeHoursService.getOfficeHoursForProfessor(professor);
+                professor = professorService.findProfessorUsingStringDistance(professorString);
+                appointment.setProfessor(professor);
+                officeHoursForProfessor = officeHoursService.getOfficeHoursForProfessor(professor);
                 response = "Profesor " + professor.getLastName() + " sledece konsultacije ima " + officeHoursForProfessor.get(0).getBeginTime();
-                try {
-                    OfficeHours officeHours = officeHoursService.filterByDate(officeHoursForProfessor, parseDate(appointmentString));
-                    if (officeHours == null)
-                        response = "U tom terminu nema konsultacija";
-                    appointment.setOfficeHours(officeHours);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("Date not parsed");
-                }
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("Professor not parsed");
                 response = "Kod kog profesora zelite na konsultacije?";
-                if(e.getMessage() != null && e.getMessage().equals("UNKNOWN")){
-                    response = "Profesor mozda nije na spisku registrovanih profesora";
-                }
-
+            }
+            try {
+                OfficeHours officeHours = officeHoursService.filterByDate(officeHoursForProfessor, parseDate(appointmentString), professor);
+                if (officeHours == null)
+                    response = "U tom terminu nema konsultacija";
+                //Ovde bi trebalo da kazem kad ima!
+                appointment.setOfficeHours(officeHours);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Date not parsed");
             }
 
         } else {

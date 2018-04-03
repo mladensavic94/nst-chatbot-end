@@ -30,6 +30,9 @@ public class Appointment implements Serializable{
     @Column(name = "studentname")
     private String name;
 
+    @Column(name = "idprofessor")
+    private Professor professor;
+
     public Long getId() {
         return id;
     }
@@ -68,12 +71,22 @@ public class Appointment implements Serializable{
         return status;
     }
 
-    public Appointment(OfficeHours officeHours, String studentID, Integer length, Status status, String name) {
+    public Appointment(OfficeHours officeHours, String studentID, Integer length, Status status, String name, Professor professor) {
         this.officeHours = officeHours;
         this.studentID = studentID;
         this.length = length;
         this.status = status;
         this.name = name;
+        this.professor = professor;
+    }
+
+    public Professor getProfessor() {
+
+        return professor;
+    }
+
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
     }
 
     public Appointment() {
