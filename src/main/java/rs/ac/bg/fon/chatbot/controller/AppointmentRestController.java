@@ -61,18 +61,18 @@ public class AppointmentRestController {
             Appointment appointment = ParsingUtil.parseJsonToDomainObject(json, Appointment.class);
             Status status = appointment.getStatus();
             appointment = appointmentsService.findById(appointment.getId());
-            System.out.println(appointment);
             if (appointment != null) {
                 String message;
                 if (status.equals(Status.ACCEPTED)) {
                     message = "Vas zahtev za konsultacije je prihvacen";
-                    appointment.setStatus(Status.ACCEPTED);
+                    appointment.setStatus(Status.valueOf("ACCEPTED"));
                 } else {
                     message = "Vas zahtev za konsultacije je odbijen";
-                    appointment.setStatus(Status.DENIED);
+                    appointment.setStatus(Status.valueOf("DENIED"));
                 }
                 responseService.sendResponse(appointment.getStudentID(), message);
-                appointmentsService.save(appointment);
+                System.out.println(appointment);
+                appointment = appointmentsService.save(appointment);
             } else throw new Exception();
             return ResponseEntity.status(HttpStatus.OK).body(appointment);
         } catch (Exception e) {

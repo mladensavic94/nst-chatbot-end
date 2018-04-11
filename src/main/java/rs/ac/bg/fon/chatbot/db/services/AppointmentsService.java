@@ -25,13 +25,13 @@ public class AppointmentsService {
         return appointmentsRepository.findAll();
     }
 
-    public void save(Appointment appointment) {
+    public Appointment save(Appointment appointment) {
         OfficeHours officeHours;
         if (appointment.getOfficeHours() != null) {
             officeHours = officeHoursRepository.findOne(appointment.getOfficeHours().getId());
             appointment.setOfficeHours(officeHours);
         }
-        appointmentsRepository.save(appointment);
+        return appointmentsRepository.save(appointment);
     }
 
     public Iterable<Appointment> findAllByEmail(String email) {
