@@ -62,7 +62,7 @@ public class AppointmentRestController {
             String message;
             if(appointment.getStatus().equals(Status.ACCEPTED))
                 message = "Vas zahtev za konsultacije je prihvacen";
-            message = "Vas zahtev za konsultacije je odbijen";
+            else message = "Vas zahtev za konsultacije je odbijen";
             responseService.sendResponse(appointment.getStudentID(), message);
             return ResponseEntity.status(HttpStatus.OK).body(appointment);
         } catch (Exception e) {
