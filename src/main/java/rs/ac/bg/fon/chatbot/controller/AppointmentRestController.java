@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import rs.ac.bg.fon.chatbot.ParsingUtil;
 import rs.ac.bg.fon.chatbot.db.domain.Appointment;
+import rs.ac.bg.fon.chatbot.db.domain.Status;
 import rs.ac.bg.fon.chatbot.db.services.AppointmentsService;
 
 import java.util.Arrays;
@@ -20,8 +21,14 @@ import java.util.Map;
 @RequestMapping("/rest")
 public class AppointmentRestController {
 
+    private final AppointmentsService appointmentsService;
+    private final ResponseService responseService;
+
     @Autowired
-    AppointmentsService appointmentsService;
+    public AppointmentRestController(AppointmentsService appointmentsService, ResponseService responseService) {
+        this.appointmentsService = appointmentsService;
+        this.responseService = responseService;
+    }
 
     @RequestMapping(value = "/appointments", method = RequestMethod.GET)
     public ResponseEntity<Object> getAllAppointments(@RequestParam String email){
@@ -35,8 +42,6 @@ public class AppointmentRestController {
         }
     }
 
-
-
     @RequestMapping(value = "/appointments/save", method = RequestMethod.POST)
     public ResponseEntity<Object> saveAppointment(@RequestBody String json){
         try {
@@ -48,18 +53,22 @@ public class AppointmentRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
-    private String getUserInfo(String userID) {
-        final  String TOKEN = "EAAZATKY8ZBibMBAEsVy3ZA4F73jSboFAfukwl9Qa66VfFtXiAR7TTYRcSLjBjryTBZAu88j3ZAocIXyX2VdXe2EgVVUw0BdUXsiXdWEKodcr1Dh11LrUDNrTi2aTW3FKLCbVHtSRgRRR6uQJ3Jd4C47RvIibFS7wLu6xTFW6c2e9FQQ0qSsjE";
-        final  String URL = "https://graph.facebook.com/v2.6/"+ userID+ "?fields=first_name,last_name&access_token=" + TOKEN;
-        RestTemplate getUserInfo = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        HttpEntity<?> requestEntity = new HttpEntity<>(headers);
-        ResponseEntity<String> json = getUserInfo.exchange(URL, HttpMethod.GET, requestEntity, String.class);
-        String response =  ParsingUtil.getJsonField(json.getBody(), "first_name") + " ";
-        response += ParsingUtil.getJsonField(json.getBody(), "last_name");
-        return response;
 
+    @RequestMapping(value = "/appointments/update", method = RequestMethod.POST)
+    public ResponseEntity<Object> updateAppointment(@RequestBody String json){
+        try {
+            Appointment appointment = ParsingUtil.parseJsonToDomainObject(json, Appointment.class);
+            appointmentsService.save(appointment);
+            String message;
+            if(appointment.getStatus().equals(Status.ACCEPTED))
+                message = "Vas zahtev za konsultacije je prihvacen";
+            message = "Vas zahtev za konsultacije je odbijen";
+            responseService.sendResponse(appointment.getStudentID(), message);
+            return ResponseEntity.status(HttpStatus.OK).body(appointment);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
 }

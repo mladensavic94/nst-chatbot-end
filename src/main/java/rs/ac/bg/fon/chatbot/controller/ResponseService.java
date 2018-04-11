@@ -1,6 +1,5 @@
 package rs.ac.bg.fon.chatbot.controller;
 
-import antlr.debug.MessageEvent;
 import com.github.messenger4j.Messenger;
 import com.github.messenger4j.exception.MessengerApiException;
 import com.github.messenger4j.exception.MessengerIOException;
@@ -23,14 +22,6 @@ import rs.ac.bg.fon.chatbot.db.domain.Status;
 import rs.ac.bg.fon.chatbot.db.services.AppointmentsService;
 import rs.ac.bg.fon.chatbot.db.services.OfficeHoursService;
 import rs.ac.bg.fon.chatbot.db.services.ProfessorService;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.StreamSupport;
 
 import static rs.ac.bg.fon.chatbot.ParsingUtil.*;
 import static rs.ac.bg.fon.chatbot.config.Constants.URL_WIT_AI;
@@ -57,6 +48,7 @@ public class ResponseService {
     public void run(TextMessageEvent messageEvent) {
         String response = null;
         try {
+            //TODO generate message payload with quick reply
             response = generateAnswer(messageEvent);
             sendResponse(messageEvent.senderId(), response);
         } catch (Exception e) {
@@ -65,7 +57,7 @@ public class ResponseService {
 
     }
 
-    private void sendResponse(String sender, String text) {
+    public void sendResponse(String sender, String text) {
         try {
             messenger.send(MessagePayload.create(sender, TextMessage.create(text)));
         } catch (MessengerApiException | MessengerIOException e) {
@@ -75,47 +67,64 @@ public class ResponseService {
 
     private String generateAnswer(TextMessageEvent event) throws MessengerIOException {
         String appointmentString = callToWIT_AI(event.text());
-        Appointment appointment = null;
-        Professor professor = null;
+        Appointment appointment;
         System.out.println("Response from Wit.ai: " + appointmentString);
-        String response = null;
-        try {
-            response = parseIntent(appointmentString);
-        } catch (Exception e) {
-            System.out.println("Intent not parsed");
-        }
+        String response;
+        response = getResponseBasedOnIntent(appointmentString);
         appointment = appointmentsService.findByStudentID(event.senderId());
         if ((response != null && response.equals("request")) || appointment.getId() != 0) {
             appointment.setStudentID(event.senderId());
             getUserNameAndLastName(event, appointment);
-            try {
-                String professorString = parseProfessor(appointmentString);
-                professor = professorService.findProfessorUsingStringDistance(professorString);
-                appointment.setProfessor(professor);
-                response = "Kog dana zelite kod prof. " + professor.getLastName() + " na konsultacije";
-            } catch (Exception e) {
-//                e.printStackTrace();
-                response = "Kod kog profesora zelite na konsultacije?";
-            }
-            try {
-                OfficeHours officeHours = officeHoursService.filterByDate(parseDate(appointmentString), appointment.getProfessor());
-                if (officeHours == null)
-                    response = "U tom terminu nema konsultacija";
-                //Ovde bi trebalo da kazem kad ima!
-                appointment.setOfficeHours(officeHours);
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("Date not parsed");
+            response = getResponseBasedOnProfessorParameter(appointmentString, appointment);
+            response = getResponseBasedOnDateParameter(appointmentString, appointment);
+            appointmentsService.save(appointment);
+            if (appointment.getStatus().equals(Status.FULL)) {
+                response = "Zahtev za konsultacije poslat profesoru na odobrenje";
             }
 
         } else {
             response = "Jos sam prilicno glup bot, moraces da sacekas za naprednije stvari :)";
         }
-        if (appointment != null) {
-            appointmentsService.save(appointment);
-            if(appointment.getStatus().equals(Status.FULL)){
-                response = "Konsultacije poslate profesoru na odobrenje";
-            }
+
+        return response;
+    }
+
+    private String getResponseBasedOnDateParameter(String appointmentString, Appointment appointment) {
+        String response = null;
+        try {
+            OfficeHours officeHours = officeHoursService.filterByDate(parseDate(appointmentString), appointment.getProfessor());
+            if (officeHours == null)
+                response = "U tom terminu nema konsultacija";
+            //Ovde bi trebalo da kazem kad ima!
+            appointment.setOfficeHours(officeHours);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Date not parsed");
+        }
+        return response;
+    }
+
+    private String getResponseBasedOnProfessorParameter(String appointmentString, Appointment appointment) {
+        Professor professor;
+        String response;
+        try {
+            String professorString = parseProfessor(appointmentString);
+            professor = professorService.findProfessorUsingStringDistance(professorString);
+            appointment.setProfessor(professor);
+            response = "Kog dana zelite kod prof. " + professor.getLastName() + " na konsultacije";
+        } catch (Exception e) {
+//                e.printStackTrace();
+            response = "Kod kog profesora zelite na konsultacije?";
+        }
+        return response;
+    }
+
+    private String getResponseBasedOnIntent(String appointmentString) {
+        String response = null;
+        try {
+            response = parseIntent(appointmentString);
+        } catch (Exception e) {
+            System.out.println("Intent not parsed");
         }
         return response;
     }
