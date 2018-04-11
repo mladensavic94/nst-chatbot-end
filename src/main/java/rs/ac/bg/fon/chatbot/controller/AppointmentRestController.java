@@ -57,6 +57,7 @@ public class AppointmentRestController {
     @RequestMapping(value = "/appointments/update", method = RequestMethod.POST)
     public ResponseEntity<Object> updateAppointment(@RequestBody String json){
         try {
+            System.out.println(json);
             Appointment appointment = ParsingUtil.parseJsonToDomainObject(json, Appointment.class);
             appointmentsService.save(appointment);
             System.out.println(appointment);
