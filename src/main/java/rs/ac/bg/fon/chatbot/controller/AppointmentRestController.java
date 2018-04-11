@@ -62,16 +62,18 @@ public class AppointmentRestController {
             Status status = appointment.getStatus();
             appointment = appointmentsService.findById(appointment.getId());
             System.out.println(appointment);
-            String message;
-            if (status.equals(Status.ACCEPTED)) {
-                message = "Vas zahtev za konsultacije je prihvacen";
-                appointment.setStatus(Status.ACCEPTED);
-            } else {
-                message = "Vas zahtev za konsultacije je odbijen";
-                appointment.setStatus(Status.DENIED);
-            }
-            responseService.sendResponse(appointment.getStudentID(), message);
-            appointmentsService.save(appointment);
+            if (appointment != null) {
+                String message;
+                if (status.equals(Status.ACCEPTED)) {
+                    message = "Vas zahtev za konsultacije je prihvacen";
+                    appointment.setStatus(Status.ACCEPTED);
+                } else {
+                    message = "Vas zahtev za konsultacije je odbijen";
+                    appointment.setStatus(Status.DENIED);
+                }
+                responseService.sendResponse(appointment.getStudentID(), message);
+                appointmentsService.save(appointment);
+            } else throw new Exception();
             return ResponseEntity.status(HttpStatus.OK).body(appointment);
         } catch (Exception e) {
             e.printStackTrace();
