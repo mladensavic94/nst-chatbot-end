@@ -48,4 +48,8 @@ public class AppointmentsService {
 
         return appointment;
     }
+
+    public Appointment findById(Long id) {
+        return appointmentsRepository.findOne(id);
+    }
 }

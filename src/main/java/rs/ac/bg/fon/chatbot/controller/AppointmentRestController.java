@@ -59,13 +59,16 @@ public class AppointmentRestController {
         try {
             System.out.println(json);
             Appointment appointment = ParsingUtil.parseJsonToDomainObject(json, Appointment.class);
-            appointmentsService.save(appointment);
+            Status status = appointment.getStatus();
+            appointment = appointmentsService.findById(appointment.getId());
             System.out.println(appointment);
             String message;
-            if(appointment.getStatus().equals(Status.ACCEPTED))
+            if(status.equals(Status.ACCEPTED))
                 message = "Vas zahtev za konsultacije je prihvacen";
             else message = "Vas zahtev za konsultacije je odbijen";
             responseService.sendResponse(appointment.getStudentID(), message);
+            appointment.setStatus(status);
+            appointmentsService.save(appointment);
             return ResponseEntity.status(HttpStatus.OK).body(appointment);
         } catch (Exception e) {
             e.printStackTrace();
