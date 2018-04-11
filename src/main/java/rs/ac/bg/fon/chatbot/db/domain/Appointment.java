@@ -115,6 +115,34 @@ public class Appointment implements Serializable{
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Appointment that = (Appointment) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (officeHours != null ? !officeHours.equals(that.officeHours) : that.officeHours != null) return false;
+        if (studentID != null ? !studentID.equals(that.studentID) : that.studentID != null) return false;
+        if (length != null ? !length.equals(that.length) : that.length != null) return false;
+        if (status != that.status) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        return professor != null ? professor.equals(that.professor) : that.professor == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (officeHours != null ? officeHours.hashCode() : 0);
+        result = 31 * result + (studentID != null ? studentID.hashCode() : 0);
+        result = 31 * result + (length != null ? length.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (professor != null ? professor.hashCode() : 0);
+        return result;
+    }
+
     public void setStatus(Status status) {
         this.status = status;
     }
