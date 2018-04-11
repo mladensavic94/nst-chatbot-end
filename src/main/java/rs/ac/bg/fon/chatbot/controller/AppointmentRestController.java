@@ -59,6 +59,7 @@ public class AppointmentRestController {
         try {
             Appointment appointment = ParsingUtil.parseJsonToDomainObject(json, Appointment.class);
             appointmentsService.save(appointment);
+            System.out.println(appointment);
             String message;
             if(appointment.getStatus().equals(Status.ACCEPTED))
                 message = "Vas zahtev za konsultacije je prihvacen";
