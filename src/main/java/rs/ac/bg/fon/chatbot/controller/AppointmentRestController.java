@@ -73,6 +73,7 @@ public class AppointmentRestController {
                 responseService.sendResponse(appointment.getStudentID(), message);
                 System.out.println(appointment);
                 appointment = appointmentsService.save(appointment);
+                System.out.println(appointment);
             } else throw new Exception();
             return ResponseEntity.status(HttpStatus.OK).body(appointment);
         } catch (Exception e) {
