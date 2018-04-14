@@ -76,7 +76,10 @@ public class ResponseService {
             appointment.setStudentID(event.senderId());
             getUserNameAndLastName(event, appointment);
             response = getResponseBasedOnProfessorParameter(appointmentString, appointment);
-            response = getResponseBasedOnDateParameter(appointmentString, appointment);
+            String dateMessage = getResponseBasedOnDateParameter(appointmentString, appointment);
+            if(dateMessage != null){
+                response = dateMessage;
+            }
             appointmentsService.save(appointment);
             if (appointment.getStatus().equals(Status.FULL)) {
                 response = "Zahtev za konsultacije poslat profesoru na odobrenje";
