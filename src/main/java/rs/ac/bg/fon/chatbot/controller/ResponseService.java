@@ -80,6 +80,7 @@ public class ResponseService {
             appointmentsService.save(appointment);
             if (appointment.getStatus().equals(Status.FULL)) {
                 response = "Zahtev za konsultacije poslat profesoru na odobrenje";
+                response += "\nProfesor: "+ appointment.getProfessor().getLastName() + " " + appointment.getProfessor().getFirstName() + "\nDatum: " + appointment.getOfficeHours().getBeginTime();
             }
 
         } else {
@@ -110,10 +111,14 @@ public class ResponseService {
         try {
             String professorString = parseProfessor(appointmentString);
             professor = professorService.findProfessorUsingStringDistance(professorString);
-            appointment.setProfessor(professor);
-            response = "Kog dana zelite kod prof. " + professor.getLastName() + " na konsultacije";
+            if(professor != null){
+                appointment.setProfessor(professor);
+                response = "Kog dana zelite kod prof. " + professor.getLastName() + " na konsultacije";
+            }else{
+                response = "Profesor koga trazite ne postoji u sistemu.";
+            }
         } catch (Exception e) {
-//                e.printStackTrace();
+                e.printStackTrace();
             response = "Kod kog profesora zelite na konsultacije?";
         }
         return response;

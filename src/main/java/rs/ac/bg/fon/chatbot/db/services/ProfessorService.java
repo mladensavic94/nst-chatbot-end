@@ -38,10 +38,10 @@ public class ProfessorService {
         double max = Double.MIN_VALUE;
         for (Professor professor : findAll()) {
             String[] profInfo = professorString.split(" ");
-            double name2name = jaroWinklerDistance.apply(professor.getFirstName(), profInfo[0]);
-            double name2lastname = jaroWinklerDistance.apply(professor.getFirstName(), profInfo[1]);
-            double lastname2name = jaroWinklerDistance.apply(professor.getLastName(), profInfo[0]);
-            double lastname2lastname = jaroWinklerDistance.apply(professor.getLastName(), profInfo[1]);
+            double name2name = jaroWinklerDistance.apply(professor.getFirstName().toLowerCase(), profInfo[0].toLowerCase());
+            double name2lastname = jaroWinklerDistance.apply(professor.getFirstName().toLowerCase(), profInfo[1].toLowerCase());
+            double lastname2name = jaroWinklerDistance.apply(professor.getLastName().toLowerCase(), profInfo[0].toLowerCase());
+            double lastname2lastname = jaroWinklerDistance.apply(professor.getLastName().toLowerCase(), profInfo[1].toLowerCase());
             double maxDistIme = Math.max(name2name, name2lastname);
             double maxDistPrezime = Math.max(lastname2name, lastname2lastname);
             if (max < (maxDistIme + maxDistPrezime) / 2) {
@@ -52,7 +52,7 @@ public class ProfessorService {
         if (max > threshold) {
             return result;
         } else {
-            throw new Exception("UNKOWN");
+           return null;
         }
     }
 
