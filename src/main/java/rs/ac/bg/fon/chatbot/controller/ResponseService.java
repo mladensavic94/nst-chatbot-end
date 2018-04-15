@@ -23,6 +23,8 @@ import rs.ac.bg.fon.chatbot.db.services.AppointmentsService;
 import rs.ac.bg.fon.chatbot.db.services.OfficeHoursService;
 import rs.ac.bg.fon.chatbot.db.services.ProfessorService;
 
+import java.util.Date;
+
 import static rs.ac.bg.fon.chatbot.ParsingUtil.*;
 import static rs.ac.bg.fon.chatbot.config.Constants.URL_WIT_AI;
 
@@ -83,7 +85,7 @@ public class ResponseService {
             appointmentsService.save(appointment);
             if (appointment.getStatus().equals(Status.FULL)) {
                 response = "Zahtev za konsultacije poslat profesoru na odobrenje";
-                response += "\nProfesor: "+ appointment.getProfessor().getLastName() + " " + appointment.getProfessor().getFirstName() + "\nDatum: " + appointment.getOfficeHours().getBeginTime();
+                response += "\nProfesor: "+ appointment.getProfessor().getLastName() + " " + appointment.getProfessor().getFirstName() + "\nDatum: " + appointment.getDateAndTime();
             }
 
         } else {
@@ -96,11 +98,12 @@ public class ResponseService {
     private String getResponseBasedOnDateParameter(String appointmentString, Appointment appointment) {
         String response = null;
         try {
-            OfficeHours officeHours = officeHoursService.filterByDate(parseDate(appointmentString), appointment.getProfessor());
+            Date date = parseDate(appointmentString);
+            OfficeHours officeHours = officeHoursService.filterByDate(date, appointment.getProfessor());
             if (officeHours == null)
                 response = "U tom terminu nema konsultacija";
             //Ovde bi trebalo da kazem kad ima!
-            appointment.setOfficeHours(officeHours);
+            appointment.setDateAndTime(date);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Date not parsed");
@@ -119,6 +122,7 @@ public class ResponseService {
                 response = "Kog dana zelite kod prof. " + professor.getLastName() + " na konsultacije";
             }else{
                 response = "Profesor koga trazite ne postoji u sistemu.";
+                appointment.setProfessor(null);
             }
         } catch (Exception e) {
                 e.printStackTrace();

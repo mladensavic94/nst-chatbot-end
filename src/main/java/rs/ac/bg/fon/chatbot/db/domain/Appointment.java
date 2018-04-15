@@ -2,6 +2,7 @@ package rs.ac.bg.fon.chatbot.db.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "appointment", schema = "public")
@@ -13,9 +14,8 @@ public class Appointment implements Serializable{
     @Column(name = "idappointment")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "idofficehours")
-    private OfficeHours officeHours;
+    @Column(name = "date")
+    private Date dateAndTime;
 
     @Column(name = "studentid")
     private String studentID;
@@ -42,15 +42,6 @@ public class Appointment implements Serializable{
         this.id = id;
     }
 
-    public OfficeHours getOfficeHours() {
-        return officeHours;
-    }
-
-    public void setOfficeHours(OfficeHours officeHours) {
-        this.officeHours = officeHours;
-        checkForStatusChange();
-    }
-
     public String getStudentID() {
         return studentID;
     }
@@ -72,8 +63,8 @@ public class Appointment implements Serializable{
         return status;
     }
 
-    public Appointment(OfficeHours officeHours, String studentID, Integer length, Status status, String name, Professor professor) {
-        this.officeHours = officeHours;
+    public Appointment(Date dateAndTime, String studentID, Integer length, Status status, String name, Professor professor) {
+        this.dateAndTime = dateAndTime;
         this.studentID = studentID;
         this.length = length;
         this.status = status;
@@ -107,11 +98,12 @@ public class Appointment implements Serializable{
     public String toString() {
         return "Appointment{" +
                 "id=" + id +
-                ", officeHours=" + officeHours +
+                ", dateAndTime=" + dateAndTime +
                 ", studentID='" + studentID + '\'' +
                 ", length=" + length +
                 ", status=" + status +
-                ", name=" + name +
+                ", name='" + name + '\'' +
+                ", professor=" + professor +
                 '}';
     }
 
@@ -123,7 +115,7 @@ public class Appointment implements Serializable{
         Appointment that = (Appointment) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (officeHours != null ? !officeHours.equals(that.officeHours) : that.officeHours != null) return false;
+        if (dateAndTime != null ? !dateAndTime.equals(that.dateAndTime) : that.dateAndTime != null) return false;
         if (studentID != null ? !studentID.equals(that.studentID) : that.studentID != null) return false;
         if (length != null ? !length.equals(that.length) : that.length != null) return false;
         if (status != that.status) return false;
@@ -134,7 +126,7 @@ public class Appointment implements Serializable{
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (officeHours != null ? officeHours.hashCode() : 0);
+        result = 31 * result + (dateAndTime != null ? dateAndTime.hashCode() : 0);
         result = 31 * result + (studentID != null ? studentID.hashCode() : 0);
         result = 31 * result + (length != null ? length.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
@@ -143,12 +135,20 @@ public class Appointment implements Serializable{
         return result;
     }
 
+    public Date getDateAndTime() {
+        return dateAndTime;
+    }
+
+    public void setDateAndTime(Date dateAndTime) {
+        this.dateAndTime = dateAndTime;
+    }
+
     public void setStatus(Status status) {
         this.status = status;
     }
 
     public void checkForStatusChange(){
-        if(officeHours != null && studentID != null && professor != null){
+        if(dateAndTime != null && studentID != null && professor != null){
             status = Status.FULL;
         }
     }

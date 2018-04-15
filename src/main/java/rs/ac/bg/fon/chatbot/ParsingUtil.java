@@ -4,6 +4,11 @@ import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
 import com.google.gson.Gson;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 public class ParsingUtil {
 
 
@@ -51,17 +56,19 @@ public class ParsingUtil {
 
     }
 
-    public static String parseDate(String text) {
-        String date = null;
+    public static Date parseDate(String text) throws ParseException {
+        String dateString = null;
         if (text != null) {
-            date = ParsingUtil.getJsonObject(text, "entities");
-            if (date != null) {
-                date = ParsingUtil.getJsonArray(date, "datetime", 0);
-                if (date != null)
-                    date = ParsingUtil.getJsonField(date, "value");
+            dateString = ParsingUtil.getJsonObject(text, "entities");
+            if (dateString != null) {
+                dateString = ParsingUtil.getJsonArray(dateString, "datetime", 0);
+                if (dateString != null){
+                    dateString = ParsingUtil.getJsonField(dateString, "value");
+                    return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").parse(dateString);
+                }
             }
         }
-        return date;
+        return null;
 
     }
 
