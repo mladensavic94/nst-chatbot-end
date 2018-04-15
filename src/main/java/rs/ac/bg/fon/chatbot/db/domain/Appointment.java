@@ -36,7 +36,7 @@ public class Appointment implements Serializable{
 
     @ManyToOne
     @JoinColumn(name = "idofficehours")
-    private transient OfficeHours officeHours;
+    private OfficeHours officeHours;
 
     public Long getId() {
         return id;

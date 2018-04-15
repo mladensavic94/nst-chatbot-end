@@ -27,7 +27,7 @@ public class OfficeHours {
     private Date endTime;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "officeHours")
-    private List<Appointment> listOfAppointments;
+    private transient List<Appointment> listOfAppointments;
 
     public OfficeHours(Professor professor, Date beginTime, Date endTime, List<Appointment> listOfAppointments) {
         this.professor = professor;
