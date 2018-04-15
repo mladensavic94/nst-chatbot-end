@@ -6,7 +6,7 @@ import rs.ac.bg.fon.chatbot.db.domain.Appointment;
 
 public interface AppointmentsRepository extends CrudRepository<Appointment, Long> {
 
-    @Query("select a from Appointment a where a.officeHours.professor.email = ?1 order by a.officeHours.beginTime desc")
+    @Query("select a from Appointment a where a.professor.email = ?1 order by a.dateAndTime desc")
     Iterable<Appointment> findAllByEmail(String email);
 
     @Query("select a from Appointment a where a.studentID = ?1 and a.status = 'OPEN'")
