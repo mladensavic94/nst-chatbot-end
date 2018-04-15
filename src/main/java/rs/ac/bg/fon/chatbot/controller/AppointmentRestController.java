@@ -73,7 +73,6 @@ public class AppointmentRestController {
                 responseService.sendResponse(appointment.getStudentID(), message);
                 System.out.println(appointment);
                 appointment = appointmentsService.save(appointment);
-                entityManager.flush();
                 entityManager.clear();
                 System.out.println(appointment);
             } else throw new Exception();
