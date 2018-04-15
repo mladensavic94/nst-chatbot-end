@@ -14,7 +14,7 @@ public class Appointment implements Serializable{
     @Column(name = "idappointment")
     private Long id;
 
-    @Column(name = "dateAndTime")
+    @Column(name = "timestamp")
     private Date dateAndTime;
 
     @Column(name = "studentid")
