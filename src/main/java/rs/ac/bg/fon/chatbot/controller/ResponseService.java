@@ -104,6 +104,7 @@ public class ResponseService {
                 response = "U tom terminu nema konsultacija";
             //Ovde bi trebalo da kazem kad ima!
             appointment.setDateAndTime(date);
+            appointment.setOfficeHours(officeHours);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Date not parsed");

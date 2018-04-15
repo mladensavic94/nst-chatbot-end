@@ -108,6 +108,7 @@ public class Appointment implements Serializable{
 
     public void setDateAndTime(Date dateAndTime) {
         this.dateAndTime = dateAndTime;
+        checkForStatusChange();
     }
 
     public void setStatus(Status status) {
