@@ -12,13 +12,10 @@ public class AppointmentsService {
 
     private final
     AppointmentsRepository appointmentsRepository;
-    private final
-    OfficeHoursRepository officeHoursRepository;
 
     @Autowired
-    public AppointmentsService(AppointmentsRepository appointmentsRepository, OfficeHoursRepository officeHoursRepository) {
+    public AppointmentsService(AppointmentsRepository appointmentsRepository) {
         this.appointmentsRepository = appointmentsRepository;
-        this.officeHoursRepository = officeHoursRepository;
     }
 
     public Iterable<Appointment> findAll() {
@@ -26,11 +23,6 @@ public class AppointmentsService {
     }
 
     public Appointment save(Appointment appointment) {
-        OfficeHours officeHours;
-        if (appointment.getOfficeHours() != null) {
-            officeHours = officeHoursRepository.findOne(appointment.getOfficeHours().getId());
-            appointment.setOfficeHours(officeHours);
-        }
         return appointmentsRepository.save(appointment);
     }
 
