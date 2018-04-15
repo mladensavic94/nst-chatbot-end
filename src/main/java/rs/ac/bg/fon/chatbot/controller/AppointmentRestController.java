@@ -21,13 +21,13 @@ public class AppointmentRestController {
 
     private final AppointmentsService appointmentsService;
     private final ResponseService responseService;
-    @Autowired
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     @Autowired
-    public AppointmentRestController(AppointmentsService appointmentsService, ResponseService responseService) {
+    public AppointmentRestController(AppointmentsService appointmentsService, ResponseService responseService, EntityManager entityManager) {
         this.appointmentsService = appointmentsService;
         this.responseService = responseService;
+        this.entityManager = entityManager;
     }
 
     @RequestMapping(value = "/appointments", method = RequestMethod.GET)
@@ -64,19 +64,18 @@ public class AppointmentRestController {
             if (appointment != null) {
                 String message;
                 if (status.equals(Status.ACCEPTED)) {
-                    message = "Vas zahtev za konsultacije je prihvacen";
+                    message = "Vas zahtev za konsultacije je prihvacen!\nDetalji: -> datum " + appointment.getDateAndTime()+ " profesor: " +appointment.getProfessor().getLastName() + " " + appointment.getProfessor().getFirstName();
                     appointment.setStatus(Status.valueOf("ACCEPTED"));
                 } else {
-                    message = "Vas zahtev za konsultacije je odbijen";
+                    message = "Vas zahtev za konsultacije je odbijen!\nDetalji: -> datum " + appointment.getDateAndTime()+ " profesor: " +appointment.getProfessor().getLastName() + " " + appointment.getProfessor().getFirstName();
                     appointment.setStatus(Status.valueOf("DENIED"));
                 }
                 responseService.sendResponse(appointment.getStudentID(), message);
                 System.out.println(appointment);
                 appointment = appointmentsService.save(appointment);
                 entityManager.clear();
-                System.out.println(appointment);
             } else throw new Exception();
-            return ResponseEntity.status(HttpStatus.OK).body(appointment);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

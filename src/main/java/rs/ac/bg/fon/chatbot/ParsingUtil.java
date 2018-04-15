@@ -8,13 +8,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import rs.ac.bg.fon.chatbot.db.domain.RecursiveJson;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class ParsingUtil {
-
 
     public static String parseListToJson(Iterable<?> list) {
         Gson gson = new GsonBuilder().setExclusionStrategies(new JSONExclusionStrategy()).create();
@@ -35,6 +34,7 @@ public class ParsingUtil {
         JsonObject object = Json.parse(json).asObject();
         return object.get(paramName).asString();
     }
+
     public static String getJsonObject(String json, String paramName) {
         JsonObject object = Json.parse(json).asObject();
         return object.get(paramName).asObject().toString();
@@ -66,7 +66,7 @@ public class ParsingUtil {
             dateString = ParsingUtil.getJsonObject(text, "entities");
             if (dateString != null) {
                 dateString = ParsingUtil.getJsonArray(dateString, "datetime", 0);
-                if (dateString != null){
+                if (dateString != null) {
                     dateString = ParsingUtil.getJsonField(dateString, "value");
                     return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").parse(dateString);
                 }
@@ -89,18 +89,42 @@ public class ParsingUtil {
         return response;
 
     }
-private static class JSONExclusionStrategy implements ExclusionStrategy{
 
-    @Override
-    public boolean shouldSkipField(FieldAttributes fieldAttributes) {
-        return fieldAttributes.getAnnotation(RecursiveJson.class) != null;
+    public static String chageDateFormatUSAToEur(String inputDate) {
+        try {
+            DateFormat string2Date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+            Date input = string2Date.parse(inputDate);
+            DateFormat date2String = new SimpleDateFormat("HH:mm dd-MM-yyyy");
+            return date2String.format(input);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return inputDate;
+    }
+    public static String chageDateFormatEurToUSA(String inputDate) {
+        try {
+            DateFormat string2Date = new SimpleDateFormat("HH:mm dd-MM-yyyy");
+            Date input = string2Date.parse(inputDate);
+            DateFormat date2String = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+            return date2String.format(input);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return inputDate;
     }
 
-    @Override
-    public boolean shouldSkipClass(Class<?> aClass) {
-        return false;
+    private static class JSONExclusionStrategy implements ExclusionStrategy {
+
+        @Override
+        public boolean shouldSkipField(FieldAttributes fieldAttributes) {
+            return fieldAttributes.getAnnotation(RecursiveJson.class) != null;
+        }
+
+        @Override
+        public boolean shouldSkipClass(Class<?> aClass) {
+            return false;
+        }
     }
-}
 
 
 }
