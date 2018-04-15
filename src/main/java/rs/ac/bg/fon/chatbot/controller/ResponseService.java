@@ -47,7 +47,7 @@ public class ResponseService {
 
 
     @Async
-    public void run(TextMessageEvent messageEvent) {
+    void run(TextMessageEvent messageEvent) {
         try {
             //TODO generate message payload with quick reply
             String response = generateAnswer(messageEvent);
