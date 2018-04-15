@@ -38,7 +38,7 @@ public class Appointment implements Serializable{
 
     @ManyToOne
     @JoinColumn(name = "idofficehours")
-    @Expose(serialize = false)
+    @RecursiveJson
     private OfficeHours officeHours;
 
     public Long getId() {

@@ -2,7 +2,11 @@ package rs.ac.bg.fon.chatbot;
 
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import rs.ac.bg.fon.chatbot.db.domain.RecursiveJson;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,7 +17,7 @@ public class ParsingUtil {
 
 
     public static String parseListToJson(Iterable<?> list) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setExclusionStrategies(new JSONExclusionStrategy()).create();
         return gson.toJson(list);
     }
 
@@ -85,7 +89,18 @@ public class ParsingUtil {
         return response;
 
     }
+private static class JSONExclusionStrategy implements ExclusionStrategy{
 
+    @Override
+    public boolean shouldSkipField(FieldAttributes fieldAttributes) {
+        return fieldAttributes.getAnnotation(RecursiveJson.class) != null;
+    }
+
+    @Override
+    public boolean shouldSkipClass(Class<?> aClass) {
+        return false;
+    }
+}
 
 
 }
