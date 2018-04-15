@@ -1,7 +1,5 @@
 package rs.ac.bg.fon.chatbot.db.domain;
 
-import com.google.gson.annotations.Expose;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;

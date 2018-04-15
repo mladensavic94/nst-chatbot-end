@@ -1,7 +1,5 @@
 package rs.ac.bg.fon.chatbot.db.domain;
 
-import org.springframework.data.repository.cdi.Eager;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +16,7 @@ public class OfficeHours {
 
     @ManyToOne
     @JoinColumn(name = "idprofessor")
+    @RecursiveJson
     private Professor professor;
 
     @Column(name = "begin_time")
@@ -26,14 +25,14 @@ public class OfficeHours {
     @Column(name = "end_time")
     private Date endTime;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "officeHours")
-    private List<Appointment> listOfAppointments;
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY, mappedBy = "officeHours")
+    private List<Appointment> appointments;
 
-    public OfficeHours(Professor professor, Date beginTime, Date endTime, List<Appointment> listOfAppointments) {
+    public OfficeHours(Professor professor, Date beginTime, Date endTime, List<Appointment> appointments) {
         this.professor = professor;
         this.beginTime = beginTime;
         this.endTime = endTime;
-        this.listOfAppointments = listOfAppointments;
+        this.appointments = appointments;
     }
 
     public OfficeHours() {
@@ -49,12 +48,12 @@ public class OfficeHours {
                 '}';
     }
 
-    public List<Appointment> getListOfAppointments() {
-        return listOfAppointments;
+    public List<Appointment> getAppointments() {
+        return appointments;
     }
 
-    public void setListOfAppointments(List<Appointment> listOfAppointments) {
-        this.listOfAppointments = listOfAppointments;
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
     }
 
     public Long getId() {

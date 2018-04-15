@@ -48,10 +48,9 @@ public class ResponseService {
 
     @Async
     public void run(TextMessageEvent messageEvent) {
-        String response = null;
         try {
             //TODO generate message payload with quick reply
-            response = generateAnswer(messageEvent);
+            String response = generateAnswer(messageEvent);
             sendResponse(messageEvent.senderId(), response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,7 +58,7 @@ public class ResponseService {
 
     }
 
-    public void sendResponse(String sender, String text) {
+    void sendResponse(String sender, String text) {
         try {
             messenger.send(MessagePayload.create(sender, TextMessage.create(text)));
         } catch (MessengerApiException | MessengerIOException e) {
@@ -100,8 +99,11 @@ public class ResponseService {
         try {
             Date date = parseDate(appointmentString);
             OfficeHours officeHours = officeHoursService.filterByDate(date, appointment.getProfessor());
-            if (officeHours == null)
-                response = "U tom terminu nema konsultacija";
+            if (officeHours == null){
+                officeHours = officeHoursService.findAllByProfessorId(appointment.getProfessor().getEmail()).iterator().next();
+                response = "U tom terminu nema konsultacija. Trenutno aktivne su u periodu od " + officeHours.getBeginTime() + " do " + officeHours.getEndTime()+ ".";
+
+            }
             //Ovde bi trebalo da kazem kad ima!
             appointment.setDateAndTime(date);
             appointment.setOfficeHours(officeHours);
