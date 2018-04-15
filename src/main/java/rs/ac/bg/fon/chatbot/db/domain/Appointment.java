@@ -34,6 +34,7 @@ public class Appointment implements Serializable{
 
     @OneToOne
     @JoinColumn(name = "idprofessor")
+    @RecursiveJson
     private Professor professor;
 
     @ManyToOne
