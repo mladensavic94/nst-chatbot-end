@@ -1,5 +1,7 @@
 package rs.ac.bg.fon.chatbot.db.domain;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -36,6 +38,7 @@ public class Appointment implements Serializable{
 
     @ManyToOne
     @JoinColumn(name = "idofficehours")
+    @Expose(serialize = false)
     private OfficeHours officeHours;
 
     public Long getId() {
