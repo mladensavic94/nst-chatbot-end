@@ -21,7 +21,7 @@ public class ParsingUtil {
     }
 
     public static String parseDomainObjectToJson(Object object) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setExclusionStrategies(new JSONExclusionStrategy()).create();
         return gson.toJson(object);
     }
 
