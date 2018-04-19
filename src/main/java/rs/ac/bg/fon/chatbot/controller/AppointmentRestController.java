@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import rs.ac.bg.fon.chatbot.ParsingUtil;
 import rs.ac.bg.fon.chatbot.db.domain.Appointment;
 import rs.ac.bg.fon.chatbot.db.domain.Status;
@@ -54,6 +51,7 @@ public class AppointmentRestController {
         }
     }
 
+    @CrossOrigin(origins = "http://109.245.111.100")
     @RequestMapping(value = "/appointments/update", method = RequestMethod.POST)
     public ResponseEntity<Object> updateAppointment(@RequestBody String json) {
         try {
