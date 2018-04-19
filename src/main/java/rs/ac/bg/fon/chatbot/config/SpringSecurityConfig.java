@@ -31,7 +31,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/").permitAll().and()
                 .csrf().disable();
-        http.cors();
+        http.cors().configurationSource(corsConfigurationSource());
     }
 
     @Bean
