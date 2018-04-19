@@ -51,7 +51,6 @@ public class AppointmentRestController {
         }
     }
 
-    @CrossOrigin(origins = "http://109.245.111.100")
     @RequestMapping(value = "/appointments/update", method = RequestMethod.POST)
     public ResponseEntity<Object> updateAppointment(@RequestBody String json) {
         try {
