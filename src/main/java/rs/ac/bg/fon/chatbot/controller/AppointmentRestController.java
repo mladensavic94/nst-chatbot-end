@@ -11,6 +11,7 @@ import rs.ac.bg.fon.chatbot.db.domain.Status;
 import rs.ac.bg.fon.chatbot.db.services.AppointmentsService;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/rest")
@@ -51,7 +52,8 @@ public class AppointmentRestController {
         }
     }
 
-    @RequestMapping(value = "/appointments/update", method = {RequestMethod.OPTIONS, RequestMethod.POST})
+    @CrossOrigin
+    @RequestMapping(value = "/appointments/update", method = RequestMethod.POST)
     public ResponseEntity<Object> updateAppointment(@RequestBody String json) {
         try {
             System.out.println(json);
@@ -77,6 +79,14 @@ public class AppointmentRestController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    @RequestMapping(value= "/**", method=RequestMethod.OPTIONS)
+    public void corsHeaders(HttpServletResponse response) {
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.addHeader("Access-Control-Allow-Headers", "origin, content-type, accept, x-requested-with");
+        response.addHeader("Access-Control-Max-Age", "3600");
     }
 
 }
