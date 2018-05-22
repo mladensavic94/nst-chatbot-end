@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import rs.ac.bg.fon.chatbot.db.domain.Professor;
 
@@ -18,17 +19,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-
-
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
-
 
     private AuthenticationManager authenticationManager;
 
     public AuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-
     }
 
     @Override
@@ -46,10 +42,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         String token = Jwts.builder()
-                .setSubject(((org.springframework.security.core.userdetails.User) authResult.getPrincipal()).getUsername())
+                .setSubject(((User) authResult.getPrincipal()).getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + TokenConstants.EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, TokenConstants.SECRET.getBytes())
                 .compact();
+        response.addHeader("Access-Control-Expose-Headers", "Authorization");
         response.addHeader(TokenConstants.HEADER_STRING, TokenConstants.TOKEN_PREFIX + token);
     }
 }
