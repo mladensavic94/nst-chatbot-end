@@ -8,4 +8,7 @@ public interface ProfessorRepository extends CrudRepository<Professor, Long>{
 
     @Query("select p from Professor p where p.email=?1 and p.password=?2")
     Professor findByUsernameAndPassword(String email, String password);
+
+    @Query("select p from Professor p where p.email=?1")
+    Professor findByUsername(String s);
 }

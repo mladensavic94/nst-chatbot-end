@@ -3,12 +3,18 @@ package rs.ac.bg.fon.chatbot.db.services;
 
 import org.apache.commons.text.similarity.JaroWinklerDistance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import rs.ac.bg.fon.chatbot.db.domain.Professor;
 import rs.ac.bg.fon.chatbot.db.services.repositories.ProfessorRepository;
 
+import java.util.ArrayList;
+
 @Service
-public class ProfessorService {
+public class ProfessorService implements UserDetailsService {
 
     private final
     ProfessorRepository professorRepository;
@@ -52,8 +58,15 @@ public class ProfessorService {
         if (max > threshold) {
             return result;
         } else {
-           return null;
+            return null;
         }
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        Professor professor = professorRepository.findByUsername(s);
+        if (professor != null)
+            return new User(professor.getEmail(), professor.getPassword(), new ArrayList<>());
+        throw new UsernameNotFoundException(professor.getEmail());
+    }
 }
