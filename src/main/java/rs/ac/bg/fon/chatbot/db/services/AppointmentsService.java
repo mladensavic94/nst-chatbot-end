@@ -44,4 +44,8 @@ public class AppointmentsService {
     public Appointment findById(Long id) {
         return appointmentsRepository.findOne(id);
     }
+
+    public void deleteByStudentID(String s) {
+        appointmentsRepository.deleteByStudentID(s);
+    }
 }

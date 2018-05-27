@@ -14,4 +14,6 @@ public interface AppointmentsRepository extends CrudRepository<Appointment, Long
     @Query("select a from Appointment a where a.studentID = ?1 and a.status = 'OPEN'")
     Appointment findByStudentID(String studentid);
 
+    @Query("delete from Appointment a where a.studentID = ?1 and a.status= 'OPEN'")
+    void deleteByStudentID(String s);
 }

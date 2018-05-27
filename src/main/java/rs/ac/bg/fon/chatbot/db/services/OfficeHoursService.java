@@ -39,9 +39,8 @@ public class OfficeHoursService {
     }
 
     public OfficeHours filterByDate(Date date, Professor professor) throws Exception {
-        System.out.println(professor);
         if (professor != null) {
-            List<OfficeHours> officeHoursForProfessor = officeHoursRepository.findAllById(professor.getIdprofessor());
+            List<OfficeHours> officeHoursForProfessor = getOfficeHoursForProfessor(professor);
             try {
                 for (OfficeHours officeHours : officeHoursForProfessor) {
                     if (officeHours.getBeginTime().before(date) && officeHours.getEndTime().after(date))
