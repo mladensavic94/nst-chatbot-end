@@ -132,8 +132,8 @@ public class ResponseService {
             appointment.setDateAndTime(date);
             appointment.setOfficeHours(officeHours);
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Date not parsed");
+            System.out.println("Date not parsed " +e.getMessage());
+
         }
         return response;
     }
