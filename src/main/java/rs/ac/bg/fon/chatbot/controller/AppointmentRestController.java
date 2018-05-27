@@ -1,5 +1,7 @@
 package rs.ac.bg.fon.chatbot.controller;
 
+import com.github.messenger4j.send.MessagePayload;
+import com.github.messenger4j.send.message.TextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,7 +71,7 @@ public class AppointmentRestController {
                     message = "Vas zahtev za konsultacije je odbijen!\nDetalji: -> datum " + appointment.getDateAndTime()+ " profesor: " +appointment.getProfessor().getLastName() + " " + appointment.getProfessor().getFirstName();
                     appointment.setStatus(Status.valueOf("DENIED"));
                 }
-                responseService.sendResponse(appointment.getStudentID(), message);
+                responseService.sendResponse(MessagePayload.create(appointment.getStudentID(), TextMessage.create(message)));
                 System.out.println(appointment);
                 appointment = appointmentsService.save(appointment);
                 entityManager.clear();
