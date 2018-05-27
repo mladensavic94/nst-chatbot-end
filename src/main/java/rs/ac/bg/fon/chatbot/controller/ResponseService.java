@@ -8,6 +8,7 @@ import com.github.messenger4j.send.message.TextMessage;
 import com.github.messenger4j.send.message.quickreply.QuickReply;
 import com.github.messenger4j.send.message.quickreply.TextQuickReply;
 import com.github.messenger4j.userprofile.UserProfile;
+import com.github.messenger4j.webhook.event.QuickReplyMessageEvent;
 import com.github.messenger4j.webhook.event.TextMessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -57,14 +58,23 @@ public class ResponseService {
     @Async
     void run(TextMessageEvent messageEvent) {
         try {
-            MessagePayload response = generateAnswer(messageEvent);
+            MessagePayload response = generateAnswer(messageEvent.senderId(), messageEvent.text());
             sendResponse(response);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
+    @Async
+    void run(QuickReplyMessageEvent messageEvent) {
+        try {
+            MessagePayload response = generateAnswer(messageEvent.senderId(), messageEvent.text());
+            sendResponse(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+    }
     void sendResponse(MessagePayload message) {
         try {
             messenger.send(message);
@@ -73,20 +83,20 @@ public class ResponseService {
         }
     }
 
-    private MessagePayload generateAnswer(TextMessageEvent event) throws MessengerIOException {
-        if (event.text().equalsIgnoreCase("restart")) {
-            appointmentsService.deleteByStudentID(event.senderId());
-            return MessagePayload.create(event.senderId(), TextMessage.create("Stanje obrisano, mozete poceti iz pocetka"));
+    private MessagePayload generateAnswer(String senderId, String text) throws MessengerIOException {
+        if (text.equalsIgnoreCase("restart")) {
+            appointmentsService.deleteByStudentID(senderId);
+            return MessagePayload.create(senderId, TextMessage.create("Stanje obrisano, mozete poceti iz pocetka"));
         }
-        String appointmentString = callToWIT_AI(event.text());
+        String appointmentString = callToWIT_AI(text);
         Appointment appointment;
         System.out.println("Response from Wit.ai: " + appointmentString);
         TextMessage response;
         String intent = getResponseBasedOnIntent(appointmentString);
-        appointment = appointmentsService.findByStudentID(event.senderId());
+        appointment = appointmentsService.findByStudentID(senderId);
         if ((intent != null && intent.equals("request")) || appointment.getId() != 0) {
-            appointment.setStudentID(event.senderId());
-            getUserNameAndLastName(event, appointment);
+            appointment.setStudentID(senderId);
+            getUserNameAndLastName(senderId, appointment);
             response = getResponseBasedOnProfessorParameter(appointmentString, appointment);
             TextMessage pom = getResponseBasedOnDateParameter(appointmentString, appointment);
             if (pom != null) {
@@ -101,7 +111,7 @@ public class ResponseService {
             response = TextMessage.create("Jos sam prilicno glup bot, moraces da sacekas za naprednije stvari :)");
         }
 
-        return MessagePayload.create(event.senderId(), response);
+        return MessagePayload.create(senderId, response);
     }
 
     private TextMessage getResponseBasedOnDateParameter(String appointmentString, Appointment appointment) {
@@ -171,9 +181,9 @@ public class ResponseService {
         return response;
     }
 
-    private void getUserNameAndLastName(TextMessageEvent event, Appointment appointment) throws MessengerIOException {
+    private void getUserNameAndLastName(String senderId, Appointment appointment) throws MessengerIOException {
         try {
-            UserProfile userProfile = messenger.queryUserProfile(event.senderId());
+            UserProfile userProfile = messenger.queryUserProfile(senderId);
             appointment.setName(userProfile.firstName() + " " + userProfile.lastName());
 
         } catch (MessengerApiException e) {

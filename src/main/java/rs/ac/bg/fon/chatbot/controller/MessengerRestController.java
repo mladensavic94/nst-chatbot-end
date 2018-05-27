@@ -37,11 +37,14 @@ public class MessengerRestController {
     @RequestMapping(value = "/chatbot", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> receiveMessage(@RequestBody String json) {
         try {
-            messenger.onReceiveEvents(json, Optional.empty(),event -> {
+            messenger.onReceiveEvents(json, Optional.empty(), event -> {
                 sendSeen(event);
-                if(event.isTextMessageEvent()){
+
+                if (event.isTextMessageEvent()) {
                     responseService.run(event.asTextMessageEvent());
-                }else{
+                } else if (event.isQuickReplyMessageEvent()) {
+                    responseService.run(event.asQuickReplyMessageEvent());
+                } else {
                     try {
                         messenger.send(MessagePayload.create(event.senderId(), TextMessage.create("Trenutno su samo tekstualne poruke podrzane!!")));
                     } catch (MessengerApiException | MessengerIOException e) {
