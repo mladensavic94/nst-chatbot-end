@@ -1,5 +1,6 @@
 package rs.ac.bg.fon.chatbot.db.services.repositories;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ public interface AppointmentsRepository extends CrudRepository<Appointment, Long
     Appointment findByStudentID(String studentid);
 
     @Transactional
+    @Modifying
     @Query("delete from Appointment a where a.studentID = ?1 and a.status= 'OPEN'")
     void deleteByStudentID(String s);
 }

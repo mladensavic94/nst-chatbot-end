@@ -62,6 +62,7 @@ public class ResponseService {
             sendResponse(response);
         } catch (Exception e) {
             e.printStackTrace();
+            sendResponse(MessagePayload.create(messageEvent.senderId(), TextMessage.create("Ups! " + e.getMessage())));
         }
 
     }
@@ -72,6 +73,7 @@ public class ResponseService {
             sendResponse(response);
         } catch (Exception e) {
             e.printStackTrace();
+            sendResponse(MessagePayload.create(messageEvent.senderId(), TextMessage.create("Ups! " + e.getMessage())));
         }
 
     }
