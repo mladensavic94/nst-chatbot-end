@@ -126,14 +126,17 @@ public class ResponseService {
             Date date = parseDate(appointmentString);
             OfficeHours officeHours = officeHoursService.filterByDate(date, appointment.getProfessor());
             if (officeHours == null) {
-                String text = "U tom terminu nema konsultacija.";
                 List<QuickReply> quickReplies = new ArrayList<>();
                 officeHoursService.findAllByProfessorId(appointment.getProfessor().getEmail())
                         .forEach(officeHours1 -> {
                             if (officeHours1.getBeginTime().after(new Date()))
                                 quickReplies.add(TextQuickReply.create(officeHours1.getBeginTime().toString(), officeHours1.getBeginTime().toString()));
                         });
-                response = TextMessage.create(text, Optional.of(quickReplies), Optional.empty());
+                if (quickReplies.isEmpty()) {
+                    response = TextMessage.create("Profesor trenutno nema zakazanih termina. Mozete se obratiti na: " + appointment.getProfessor().getEmail());
+                } else {
+                    response = TextMessage.create("U tom terminu nema konsultacija.", Optional.of(quickReplies), Optional.empty());
+                }
             }else{
                 appointment.setDateAndTime(date);
                 appointment.setOfficeHours(officeHours);
@@ -160,7 +163,7 @@ public class ResponseService {
                         .forEach(officeHours ->
                                 quickReplies.add(TextQuickReply.create(officeHours.getBeginTime().toString(), "<POSTBACK_PAYLOAD>")));
                 if (quickReplies.isEmpty()) {
-                    response = TextMessage.create(text);
+                    response = TextMessage.create("Profesor trenutno nema zakazanih termina. Mozete se obratiti na: " + appointment.getProfessor().getEmail());
                 } else {
                     response = TextMessage.create(text, Optional.of(quickReplies), Optional.empty());
                 }
