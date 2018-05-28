@@ -134,10 +134,10 @@ public class ResponseService {
                                 quickReplies.add(TextQuickReply.create(officeHours1.getBeginTime().toString(), officeHours1.getBeginTime().toString()));
                         });
                 response = TextMessage.create(text, Optional.of(quickReplies), Optional.empty());
+            }else{
+                appointment.setDateAndTime(date);
+                appointment.setOfficeHours(officeHours);
             }
-            appointment.setDateAndTime(date);
-            appointment.setOfficeHours(officeHours);
-            return response;
         } catch (Exception e) {
             System.out.println("Date not parsed " + e.getMessage());
 
@@ -168,7 +168,6 @@ public class ResponseService {
                 String text = "Profesor koga trazite ne postoji u sistemu.\n Neki od ponudjenih su dati u nastavku:";
                 List<QuickReply> quickReplies = new ArrayList<>();
                 professorService.findAll().forEach(professor1 -> quickReplies.add(TextQuickReply.create(professor1.getLastName() + " " + professor1.getFirstName(), professor1.getLastName() + " " + professor1.getFirstName())));
-                appointment.setProfessor(null);
                 response = TextMessage.create(text, Optional.of(quickReplies), Optional.empty());
             }
         } catch (Exception e) {
