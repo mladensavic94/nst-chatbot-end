@@ -67,6 +67,7 @@ public class ResponseService {
         }
 
     }
+
     @Async
     void run(QuickReplyMessageEvent messageEvent) {
         try {
@@ -79,6 +80,7 @@ public class ResponseService {
         }
 
     }
+
     void sendResponse(MessagePayload message) {
         try {
             messenger.send(message);
@@ -128,15 +130,16 @@ public class ResponseService {
                 List<QuickReply> quickReplies = new ArrayList<>();
                 officeHoursService.findAllByProfessorId(appointment.getProfessor().getEmail())
                         .forEach(officeHours1 -> {
-                            if(officeHours1.getBeginTime().after(new Date()))
+                            if (officeHours1.getBeginTime().after(new Date()))
                                 quickReplies.add(TextQuickReply.create(officeHours1.getBeginTime().toString(), officeHours1.getBeginTime().toString()));
                         });
                 response = TextMessage.create(text, Optional.of(quickReplies), Optional.empty());
             }
             appointment.setDateAndTime(date);
             appointment.setOfficeHours(officeHours);
+            return response;
         } catch (Exception e) {
-            System.out.println("Date not parsed " +e.getMessage());
+            System.out.println("Date not parsed " + e.getMessage());
 
         }
         return response;
@@ -156,9 +159,9 @@ public class ResponseService {
                         .filter(officeHours -> officeHours.getBeginTime().after(new Date()))
                         .forEach(officeHours ->
                                 quickReplies.add(TextQuickReply.create(officeHours.getBeginTime().toString(), "<POSTBACK_PAYLOAD>")));
-                if(quickReplies.isEmpty()){
+                if (quickReplies.isEmpty()) {
                     response = TextMessage.create(text);
-                }else {
+                } else {
                     response = TextMessage.create(text, Optional.of(quickReplies), Optional.empty());
                 }
             } else {
@@ -173,7 +176,6 @@ public class ResponseService {
             String text = "Kod kog profesora zelite na konsultacije?";
             List<QuickReply> quickReplies = new ArrayList<>();
             professorService.findAll().forEach(professor1 -> quickReplies.add(TextQuickReply.create(professor1.getLastName() + " " + professor1.getFirstName(), professor1.getLastName() + " " + professor1.getFirstName())));
-            appointment.setProfessor(null);
             response = TextMessage.create(text, Optional.of(quickReplies), Optional.empty());
         }
         return response;
