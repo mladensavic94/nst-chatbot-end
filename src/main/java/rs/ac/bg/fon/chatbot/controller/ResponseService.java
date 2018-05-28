@@ -37,6 +37,7 @@ import java.util.stream.Stream;
 import static rs.ac.bg.fon.chatbot.ParsingUtil.*;
 import static rs.ac.bg.fon.chatbot.config.Constants.URL_WIT_AI;
 
+@SuppressWarnings("ALL")
 @Service
 public class ResponseService {
 
@@ -74,6 +75,7 @@ public class ResponseService {
         } catch (Exception e) {
             e.printStackTrace();
             sendResponse(MessagePayload.create(messageEvent.senderId(), TextMessage.create("Ups! " + e.getMessage())));
+
         }
 
     }
@@ -154,7 +156,11 @@ public class ResponseService {
                         .filter(officeHours -> officeHours.getBeginTime().after(new Date()))
                         .forEach(officeHours ->
                                 quickReplies.add(TextQuickReply.create(officeHours.getBeginTime().toString(), "<POSTBACK_PAYLOAD>")));
-                response = TextMessage.create(text, Optional.of(quickReplies), Optional.empty());
+                if(quickReplies.isEmpty()){
+                    response = TextMessage.create(text);
+                }else {
+                    response = TextMessage.create(text, Optional.of(quickReplies), Optional.empty());
+                }
             } else {
                 String text = "Profesor koga trazite ne postoji u sistemu.\n Neki od ponudjenih su dati u nastavku:";
                 List<QuickReply> quickReplies = new ArrayList<>();
