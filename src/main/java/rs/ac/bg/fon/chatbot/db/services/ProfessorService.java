@@ -25,7 +25,9 @@ public class ProfessorService implements UserDetailsService {
     }
 
     public void saveProfessor(Professor professor) {
+        System.out.println(professor);
         Professor pom = professorRepository.findOne(professor.getIdprofessor());
+        System.out.println(pom);
         if (pom != null) {
             pom.setEmail(professor.getEmail());
             pom.setFirstName(professor.getFirstName());

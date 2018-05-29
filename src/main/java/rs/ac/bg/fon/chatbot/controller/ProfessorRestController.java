@@ -50,7 +50,7 @@ public class ProfessorRestController {
     public ResponseEntity<Object> saveProfessor(@RequestBody String json){
         try {
             Professor professor = ParsingUtil.parseJsonToDomainObject(json, Professor.class);
-            System.out.println(professor);
+
             professorService.saveProfessor(professor);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
