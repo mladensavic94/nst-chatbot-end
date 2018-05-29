@@ -32,8 +32,8 @@ public class ProfessorService implements UserDetailsService {
         return professorRepository.findAll();
     }
 
-    public Professor findByUsernameAndPassword(String email, String password) {
-        return professorRepository.findByUsernameAndPassword(email, password);
+    public Professor findByEmail(String email) {
+        return professorRepository.findByUsername(email);
     }
 
     public Professor findProfessorUsingStringDistance(String professorString) throws Exception {

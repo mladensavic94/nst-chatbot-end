@@ -34,9 +34,9 @@ public class ProfessorRestController {
     }
 
     @RequestMapping(value = "/professor", method = RequestMethod.GET)
-    public ResponseEntity<Object> getProfessor(@RequestParam String email, @RequestParam String password) {
+    public ResponseEntity<Object> getProfessor(@RequestParam String email) {
         try {
-            String response = ParsingUtil.parseDomainObjectToJson(professorService.findByUsernameAndPassword(email,password));
+            String response = ParsingUtil.parseDomainObjectToJson(professorService.findByEmail(email));
             System.out.println(response);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
