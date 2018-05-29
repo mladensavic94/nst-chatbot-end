@@ -1,5 +1,7 @@
 package rs.ac.bg.fon.chatbot.db.domain;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -28,6 +30,7 @@ public class Professor implements Serializable {
     private String lastName;
 
     @OneToMany(mappedBy = "professor", fetch = FetchType.EAGER)
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<OfficeHours> listOfOfficeHours;
 
 
