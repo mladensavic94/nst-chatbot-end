@@ -32,9 +32,9 @@ public class ProfessorService implements UserDetailsService {
             pom.setLastName(professor.getLastName());
             pom.setPassword(professor.getPassword());
             professor.getListOfOfficeHours().forEach(officeHours -> {
-                System.out.println(officeHours);
-                if(officeHours.getId() == 0){
+                if(officeHours.getId() == null){
                     pom.getListOfOfficeHours().add(officeHours);
+                    officeHours.setProfessor(pom);
                 }
             });
             professorRepository.save(pom);
