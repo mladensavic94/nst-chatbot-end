@@ -25,15 +25,17 @@ public class ProfessorService implements UserDetailsService {
     }
 
     public void saveProfessor(Professor professor) {
-        System.out.println(professor);
         Professor pom = professorRepository.findOne(professor.getIdprofessor());
-        System.out.println(pom);
         if (pom != null) {
             pom.setEmail(professor.getEmail());
             pom.setFirstName(professor.getFirstName());
             pom.setLastName(professor.getLastName());
             pom.setPassword(professor.getPassword());
-            pom.setListOfOfficeHours(professor.getListOfOfficeHours());
+            professor.getListOfOfficeHours().forEach(officeHours -> {
+                if(officeHours.getId() == null){
+                    pom.getListOfOfficeHours().add(officeHours);
+                }
+            });
             professorRepository.save(pom);
             return;
         }
