@@ -105,7 +105,7 @@ public class ResponseService {
                 response = pom;
             }
             if(appointment.getStatus().equals(Status.DESCRIPTION_REQUESTED)){
-                appointment.setDescription(text);
+                appointment.setDescription("pusi kurac baba");
                 System.out.println("Yoooooooooooooooooo");
             }
             if(appointment.getStatus().equals(Status.DESCRIPTION_MISSING)){
@@ -178,7 +178,6 @@ public class ResponseService {
                 response = TextMessage.create(text, Optional.of(quickReplies), Optional.empty());
             }
         } catch (Exception e) {
-            e.printStackTrace();
             String text = "Kod kog profesora zelite na konsultacije?";
             List<QuickReply> quickReplies = new ArrayList<>();
             professorService.findAll().forEach(professor1 -> quickReplies.add(TextQuickReply.create(professor1.getLastName() + " " + professor1.getFirstName(), professor1.getLastName() + " " + professor1.getFirstName())));

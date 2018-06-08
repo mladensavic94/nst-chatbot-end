@@ -18,6 +18,6 @@ public interface AppointmentsRepository extends CrudRepository<Appointment, Long
 
     @Transactional
     @Modifying
-    @Query("delete from Appointment a where a.studentID = ?1 and a.status= 'OPEN'")
+    @Query("delete from Appointment a where a.studentID = ?1 and (a.status = 'OPEN' or a.status = 'DESCRIPTION_REQUESTED' or a.status = 'DESCRIPTION_MISSING')")
     void deleteByStudentID(String s);
 }

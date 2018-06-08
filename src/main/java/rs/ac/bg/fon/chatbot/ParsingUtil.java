@@ -114,7 +114,7 @@ public class ParsingUtil {
     }
 
     public static String formatDate(Date date){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd-MM");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd.MMM");
         return dateFormat.format(date);
     }
 
