@@ -103,10 +103,8 @@ public class ResponseService {
             if (pom != null) {
                 response = pom;
             }
-            System.out.println(intent + appointment);
             if(appointment.getStatus().equals(Status.DESCRIPTION_REQUESTED)){
-                appointment.setDescription("pusi kurac baba");
-                System.out.println("Yoooooooooooooooooo");
+                appointment.setDescription(text);
             }
             if(appointment.getStatus().equals(Status.DESCRIPTION_MISSING)){
                 response = TextMessage.create("Unesite razlog dolaska na konsultacije/prikacite neki fajl.");
