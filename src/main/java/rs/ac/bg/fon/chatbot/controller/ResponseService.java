@@ -95,7 +95,7 @@ public class ResponseService {
         TextMessage response;
         String intent = getResponseBasedOnIntent(appointmentString);
         appointment = appointmentsService.findByStudentID(senderId);
-        System.out.println(intent + appointment);
+
         if ((intent != null && "request".equals(intent)) ||  appointment.getId() != 0) {
             appointment.setStudentID(senderId);
             getUserNameAndLastName(senderId, appointment);
@@ -104,6 +104,7 @@ public class ResponseService {
             if (pom != null) {
                 response = pom;
             }
+            System.out.println(intent + appointment);
             if(appointment.getStatus().equals(Status.DESCRIPTION_REQUESTED)){
                 appointment.setDescription("pusi kurac baba");
                 System.out.println("Yoooooooooooooooooo");
