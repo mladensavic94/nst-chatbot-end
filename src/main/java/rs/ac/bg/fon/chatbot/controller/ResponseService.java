@@ -124,6 +124,10 @@ public class ResponseService {
             if (pom != null) {
                 response = pom;
             }
+            if(appointment.getStatus().equals(Status.DESCRIPTION_MISSING)){
+                response = TextMessage.create("Unesite razlog dolaska na konsultacije/prikacite neki fajl.");
+                appointment.setStatus(Status.DESCRIPTION_REQUESTED);
+            }
             appointmentsService.save(appointment);
             if (appointment.getStatus().equals(Status.FULL)) {
                 response = TextMessage.create("Zahtev za konsultacije poslat profesoru na odobrenje\nProfesor: " + appointment.getProfessor().getLastName() + " " + appointment.getProfessor().getFirstName() + "\nDatum: " + appointment.getDateAndTime());

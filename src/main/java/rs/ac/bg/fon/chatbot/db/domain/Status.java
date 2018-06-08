@@ -11,5 +11,9 @@ public enum Status {
     @SerializedName("FULL")
     FULL,
     @SerializedName("DENIED")
-    DENIED
+    DENIED,
+    @SerializedName("DESCRIPTION_MISSING")
+    DESCRIPTION_MISSING,
+    @SerializedName("DESCRIPTION_REQUESTED")
+    DESCRIPTION_REQUESTED
 }

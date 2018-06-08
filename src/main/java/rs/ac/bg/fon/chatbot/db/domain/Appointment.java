@@ -40,6 +40,9 @@ public class Appointment implements Serializable{
     @RecursiveJson
     private OfficeHours officeHours;
 
+    @Column(name = "description")
+    private String description;
+
     public Long getId() {
         return id;
     }
@@ -69,13 +72,24 @@ public class Appointment implements Serializable{
         return status;
     }
 
-    public Appointment(Date dateAndTime, String studentID, Integer length, Status status, String name, Professor professor) {
+    public Appointment(Date dateAndTime, String studentID, Integer length, Status status, String name, Professor professor, OfficeHours officeHours, String description) {
         this.dateAndTime = dateAndTime;
         this.studentID = studentID;
         this.length = length;
         this.status = status;
         this.name = name;
         this.professor = professor;
+        this.officeHours = officeHours;
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+        checkForStatusChange();
     }
 
     public Professor getProfessor() {
@@ -115,6 +129,9 @@ public class Appointment implements Serializable{
 
     public void checkForStatusChange(){
         if(dateAndTime != null && studentID != null && professor != null){
+            status = Status.DESCRIPTION_MISSING;
+        }
+        if(dateAndTime != null && studentID != null && professor != null && description != null){
             status = Status.FULL;
         }
     }
