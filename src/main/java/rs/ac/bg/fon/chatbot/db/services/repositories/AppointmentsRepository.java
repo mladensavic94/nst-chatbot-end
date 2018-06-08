@@ -13,7 +13,7 @@ public interface AppointmentsRepository extends CrudRepository<Appointment, Long
     @Query("select a from Appointment a where a.professor.email = ?1 order by a.dateAndTime desc")
     List<Appointment> findAllByEmail(String email);
 
-    @Query("select a from Appointment a where a.studentID = ?1 and a.status = 'OPEN'")
+    @Query("select a from Appointment a where a.studentID = ?1 and (a.status = 'OPEN' or a.status = 'DESCRIPTION_REQUESTED' or a.status = 'DESCRIPTION_MISSING')")
     Appointment findByStudentID(String studentid);
 
     @Transactional

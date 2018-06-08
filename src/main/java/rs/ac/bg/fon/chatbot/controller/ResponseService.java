@@ -84,7 +84,7 @@ public class ResponseService {
         else if (event.isAttachmentMessageEvent()) {
             AttachmentMessageEvent attachmentMessageEvent = event.asAttachmentMessageEvent();
             try {
-                MessagePayload response = MessagePayload.create(attachmentMessageEvent.senderId(), TextMessage.create(attachmentMessageEvent.attachments().toString()));
+                MessagePayload response = generateAnswer(attachmentMessageEvent.senderId(), attachmentMessageEvent.toString());
                 sendResponse(response);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -127,6 +127,9 @@ public class ResponseService {
             if(appointment.getStatus().equals(Status.DESCRIPTION_MISSING)){
                 response = TextMessage.create("Unesite razlog dolaska na konsultacije/prikacite neki fajl.");
                 appointment.setStatus(Status.DESCRIPTION_REQUESTED);
+            }
+            if(appointment.getStatus().equals(Status.DESCRIPTION_REQUESTED)){
+                appointment.setDescription(text);
             }
             appointmentsService.save(appointment);
             if (appointment.getStatus().equals(Status.FULL)) {
