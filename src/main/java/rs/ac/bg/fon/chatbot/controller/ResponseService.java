@@ -13,6 +13,7 @@ import com.github.messenger4j.webhook.event.AttachmentMessageEvent;
 import com.github.messenger4j.webhook.event.BaseEvent;
 import com.github.messenger4j.webhook.event.QuickReplyMessageEvent;
 import com.github.messenger4j.webhook.event.TextMessageEvent;
+import com.github.messenger4j.webhook.event.attachment.Attachment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -84,7 +85,12 @@ public class ResponseService {
         else if (event.isAttachmentMessageEvent()) {
             AttachmentMessageEvent attachmentMessageEvent = event.asAttachmentMessageEvent();
             try {
-                MessagePayload response = generateAnswer(attachmentMessageEvent.senderId(), attachmentMessageEvent.toString());
+                String text = "";
+                for (Attachment attachment : attachmentMessageEvent.attachments()) {
+                    text += "link:" + attachment.asRichMediaAttachment().url();
+                }
+                ;
+                MessagePayload response = generateAnswer(attachmentMessageEvent.senderId(), text);
                 sendResponse(response);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -124,12 +130,12 @@ public class ResponseService {
             if (pom != null) {
                 response = pom;
             }
+            if(appointment.getStatus().equals(Status.DESCRIPTION_REQUESTED)){
+                appointment.setDescription(text);
+            }
             if(appointment.getStatus().equals(Status.DESCRIPTION_MISSING)){
                 response = TextMessage.create("Unesite razlog dolaska na konsultacije/prikacite neki fajl.");
                 appointment.setStatus(Status.DESCRIPTION_REQUESTED);
-            }
-            if(appointment.getStatus().equals(Status.DESCRIPTION_REQUESTED)){
-                appointment.setDescription(text);
             }
             appointmentsService.save(appointment);
             if (appointment.getStatus().equals(Status.FULL)) {
