@@ -115,7 +115,7 @@ public class ResponseService {
         TextMessage response;
         String intent = getResponseBasedOnIntent(appointmentString);
         appointment = appointmentsService.findByStudentID(senderId);
-        if ((intent != null && intent.equals("request")) || (appointment != null && appointment.getId() != 0)) {
+        if ((intent != null && "request".equals(intent)) ||  appointment.getId() != 0) {
             appointment.setStudentID(senderId);
             getUserNameAndLastName(senderId, appointment);
             response = getResponseBasedOnProfessorParameter(appointmentString, appointment);
