@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import rs.ac.bg.fon.chatbot.ParsingUtil;
 import rs.ac.bg.fon.chatbot.db.domain.Appointment;
 import rs.ac.bg.fon.chatbot.db.domain.OfficeHours;
 import rs.ac.bg.fon.chatbot.db.domain.Professor;
@@ -63,44 +64,17 @@ public class ResponseService {
     @Async
     void run(Event event) {
         if (event.isTextMessageEvent()) {
-            TextMessageEvent messageEvent = event.asTextMessageEvent();
-            try {
-                MessagePayload response = generateAnswer(messageEvent.senderId(), messageEvent.text());
-                sendResponse(response);
-            } catch (Exception e) {
-                e.printStackTrace();
-                sendResponse(MessagePayload.create(messageEvent.senderId(), TextMessage.create("Ups! " + e.getMessage())));
-            }
+            handleTextMessageEvents(event);
         }
         else if (event.isQuickReplyMessageEvent()) {
-            QuickReplyMessageEvent quickReplyMessageEvent = event.asQuickReplyMessageEvent();
-            try {
-                MessagePayload response = generateAnswer(quickReplyMessageEvent.senderId(), quickReplyMessageEvent.text());
-                sendResponse(response);
-            } catch (Exception e) {
-                e.printStackTrace();
-                sendResponse(MessagePayload.create(quickReplyMessageEvent.senderId(), TextMessage.create("Ups! " + e.getMessage())));
-            }
+            handleQuickReplyMessageEvents(event);
         }
         else if (event.isAttachmentMessageEvent()) {
-            AttachmentMessageEvent attachmentMessageEvent = event.asAttachmentMessageEvent();
-            try {
-                String text = "";
-                for (Attachment attachment : attachmentMessageEvent.attachments()) {
-                    text += "link:" + attachment.asRichMediaAttachment().url();
-                }
-                ;
-                MessagePayload response = generateAnswer(attachmentMessageEvent.senderId(), text);
-                sendResponse(response);
-            } catch (Exception e) {
-                e.printStackTrace();
-                sendResponse(MessagePayload.create(attachmentMessageEvent.senderId(), TextMessage.create("Ups! " + e.getMessage())));
-            }
+            handleAttachmentMessageEvents(event);
         }
 
 
     }
-
 
     void sendResponse(MessagePayload message) {
         try {
@@ -132,6 +106,7 @@ public class ResponseService {
             }
             if(appointment.getStatus().equals(Status.DESCRIPTION_REQUESTED)){
                 appointment.setDescription(text);
+                System.out.println("Yoooooooooooooooooo");
             }
             if(appointment.getStatus().equals(Status.DESCRIPTION_MISSING)){
                 response = TextMessage.create("Unesite razlog dolaska na konsultacije/prikacite neki fajl.");
@@ -159,7 +134,7 @@ public class ResponseService {
                 officeHoursService.findAllByProfessorId(appointment.getProfessor().getEmail())
                         .forEach(officeHours1 -> {
                             if (officeHours1.getBeginTime().after(new Date()))
-                                quickReplies.add(TextQuickReply.create(officeHours1.getBeginTime().toString(), officeHours1.getBeginTime().toString()));
+                                quickReplies.add(TextQuickReply.create(formatDate(officeHours1.getBeginTime()), formatDate(officeHours1.getBeginTime())));
                         });
                 if (quickReplies.isEmpty()) {
                     response = TextMessage.create("Profesor trenutno nema zakazanih termina. Mozete se obratiti na: " + appointment.getProfessor().getEmail());
@@ -241,5 +216,41 @@ public class ResponseService {
         HttpEntity<?> requestEntity = new HttpEntity<>(headers);
         ResponseEntity<String> json = getUserInfo.exchange(URL_WIT_AI + text, HttpMethod.GET, requestEntity, String.class);
         return json.getBody();
+    }
+    private void handleAttachmentMessageEvents(Event event) {
+        AttachmentMessageEvent attachmentMessageEvent = event.asAttachmentMessageEvent();
+        try {
+            String text = "";
+            for (Attachment attachment : attachmentMessageEvent.attachments()) {
+                text += "link:" + attachment.asRichMediaAttachment().url();
+            }
+            MessagePayload response = generateAnswer(attachmentMessageEvent.senderId(), text);
+            sendResponse(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            sendResponse(MessagePayload.create(attachmentMessageEvent.senderId(), TextMessage.create("Ups! " + e.getMessage())));
+        }
+    }
+
+    private void handleQuickReplyMessageEvents(Event event) {
+        QuickReplyMessageEvent quickReplyMessageEvent = event.asQuickReplyMessageEvent();
+        try {
+            MessagePayload response = generateAnswer(quickReplyMessageEvent.senderId(), quickReplyMessageEvent.text());
+            sendResponse(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            sendResponse(MessagePayload.create(quickReplyMessageEvent.senderId(), TextMessage.create("Ups! " + e.getMessage())));
+        }
+    }
+
+    private void handleTextMessageEvents(Event event) {
+        TextMessageEvent messageEvent = event.asTextMessageEvent();
+        try {
+            MessagePayload response = generateAnswer(messageEvent.senderId(), messageEvent.text());
+            sendResponse(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            sendResponse(MessagePayload.create(messageEvent.senderId(), TextMessage.create("Ups! " + e.getMessage())));
+        }
     }
 }

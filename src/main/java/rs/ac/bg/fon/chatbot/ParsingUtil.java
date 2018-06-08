@@ -113,6 +113,11 @@ public class ParsingUtil {
         return inputDate;
     }
 
+    public static String formatDate(Date date){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd-MM");
+        return dateFormat.format(date);
+    }
+
     private static class JSONExclusionStrategy implements ExclusionStrategy {
 
         @Override

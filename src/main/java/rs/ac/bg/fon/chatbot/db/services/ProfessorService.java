@@ -35,6 +35,11 @@ public class ProfessorService implements UserDetailsService {
                 if(officeHours.getId() == null){
                     pom.getListOfOfficeHours().add(officeHours);
                     officeHours.setProfessor(pom);
+                }else{
+                    officeHours.getAppointments().forEach(appointment -> {
+                        appointment.setOfficeHours(officeHours);
+                        appointment.setProfessor(professor);
+                    });
                 }
             });
             professorRepository.save(pom);
