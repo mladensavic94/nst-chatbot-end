@@ -39,18 +39,7 @@ public class MessengerRestController {
         try {
             messenger.onReceiveEvents(json, Optional.empty(), event -> {
                 sendSeen(event);
-
-                if (event.isTextMessageEvent()) {
-                    responseService.run(event.asTextMessageEvent());
-                } else if (event.isQuickReplyMessageEvent()) {
-                    responseService.run(event.asQuickReplyMessageEvent());
-                } else {
-                    try {
-                        messenger.send(MessagePayload.create(event.senderId(), TextMessage.create("Trenutno su samo tekstualne poruke podrzane!!")));
-                    } catch (MessengerApiException | MessengerIOException e) {
-                        e.printStackTrace();
-                    }
-                }
+                responseService.run(event);
             });
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {

@@ -8,6 +8,9 @@ import com.github.messenger4j.send.message.TextMessage;
 import com.github.messenger4j.send.message.quickreply.QuickReply;
 import com.github.messenger4j.send.message.quickreply.TextQuickReply;
 import com.github.messenger4j.userprofile.UserProfile;
+import com.github.messenger4j.webhook.Event;
+import com.github.messenger4j.webhook.event.AttachmentMessageEvent;
+import com.github.messenger4j.webhook.event.BaseEvent;
 import com.github.messenger4j.webhook.event.QuickReplyMessageEvent;
 import com.github.messenger4j.webhook.event.TextMessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,29 +60,41 @@ public class ResponseService {
 
 
     @Async
-    void run(TextMessageEvent messageEvent) {
-        try {
-            MessagePayload response = generateAnswer(messageEvent.senderId(), messageEvent.text());
-            sendResponse(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            sendResponse(MessagePayload.create(messageEvent.senderId(), TextMessage.create("Ups! " + e.getMessage())));
+    void run(Event event) {
+        if (event.isTextMessageEvent()) {
+            TextMessageEvent messageEvent = event.asTextMessageEvent();
+            try {
+                MessagePayload response = generateAnswer(messageEvent.senderId(), messageEvent.text());
+                sendResponse(response);
+            } catch (Exception e) {
+                e.printStackTrace();
+                sendResponse(MessagePayload.create(messageEvent.senderId(), TextMessage.create("Ups! " + e.getMessage())));
+            }
         }
+        else if (event.isQuickReplyMessageEvent()) {
+            QuickReplyMessageEvent quickReplyMessageEvent = event.asQuickReplyMessageEvent();
+            try {
+                MessagePayload response = generateAnswer(quickReplyMessageEvent.senderId(), quickReplyMessageEvent.text());
+                sendResponse(response);
+            } catch (Exception e) {
+                e.printStackTrace();
+                sendResponse(MessagePayload.create(quickReplyMessageEvent.senderId(), TextMessage.create("Ups! " + e.getMessage())));
+            }
+        }
+        else if (event.isAttachmentMessageEvent()) {
+            AttachmentMessageEvent attachmentMessageEvent = event.asAttachmentMessageEvent();
+            try {
+                MessagePayload response = MessagePayload.create(attachmentMessageEvent.senderId(), TextMessage.create(attachmentMessageEvent.attachments().toString()));
+                sendResponse(response);
+            } catch (Exception e) {
+                e.printStackTrace();
+                sendResponse(MessagePayload.create(attachmentMessageEvent.senderId(), TextMessage.create("Ups! " + e.getMessage())));
+            }
+        }
+
 
     }
 
-    @Async
-    void run(QuickReplyMessageEvent messageEvent) {
-        try {
-            MessagePayload response = generateAnswer(messageEvent.senderId(), messageEvent.text());
-            sendResponse(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            sendResponse(MessagePayload.create(messageEvent.senderId(), TextMessage.create("Ups! " + e.getMessage())));
-
-        }
-
-    }
 
     void sendResponse(MessagePayload message) {
         try {
@@ -100,7 +115,7 @@ public class ResponseService {
         TextMessage response;
         String intent = getResponseBasedOnIntent(appointmentString);
         appointment = appointmentsService.findByStudentID(senderId);
-        if ((intent != null && intent.equals("request")) || appointment.getId() != 0) {
+        if ((intent != null && intent.equals("request")) || (appointment != null && appointment.getId() != 0)) {
             appointment.setStudentID(senderId);
             getUserNameAndLastName(senderId, appointment);
             response = getResponseBasedOnProfessorParameter(appointmentString, appointment);
@@ -137,7 +152,7 @@ public class ResponseService {
                 } else {
                     response = TextMessage.create("U tom terminu nema konsultacija.", Optional.of(quickReplies), Optional.empty());
                 }
-            }else{
+            } else {
                 appointment.setDateAndTime(date);
                 appointment.setOfficeHours(officeHours);
             }
