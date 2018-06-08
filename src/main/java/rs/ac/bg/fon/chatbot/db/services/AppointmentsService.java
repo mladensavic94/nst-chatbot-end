@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.bg.fon.chatbot.db.domain.Appointment;
 import rs.ac.bg.fon.chatbot.db.domain.OfficeHours;
+import rs.ac.bg.fon.chatbot.db.domain.Status;
 import rs.ac.bg.fon.chatbot.db.services.repositories.AppointmentsRepository;
 import rs.ac.bg.fon.chatbot.db.services.repositories.OfficeHoursRepository;
 
@@ -36,7 +37,11 @@ public class AppointmentsService {
 
         appointment = appointmentsRepository.findByStudentID(id);
 
-        if (appointment == null) appointment = new Appointment();
+        if (appointment == null) {
+            appointment = new Appointment();
+            appointment.setId(0L);
+            appointment.setStatus(Status.OPEN);
+        }
 
         return appointment;
     }
