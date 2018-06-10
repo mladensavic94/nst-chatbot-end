@@ -3,6 +3,7 @@ package rs.ac.bg.fon.chatbot.db.domain;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "office_hours", schema = "public")
@@ -46,6 +47,24 @@ public class OfficeHours {
                 ", beginTime=" + beginTime +
                 ", endTime=" + endTime +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OfficeHours that = (OfficeHours) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(professor, that.professor) &&
+                Objects.equals(beginTime, that.beginTime) &&
+                Objects.equals(endTime, that.endTime) &&
+                Objects.equals(appointments, that.appointments);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, professor, beginTime, endTime, appointments);
     }
 
     public List<Appointment> getAppointments() {
