@@ -68,7 +68,6 @@ public class AppointmentRestController {
                 updateDateTime(appointment);
                 String message = generateMessageBasedOnStatus(appointment, status);
                 responseService.sendResponse(MessagePayload.create(appointment.getStudentID(), TextMessage.create(message)));
-
                 appointmentsService.save(appointment);
                 entityManager.clear();
             } else throw new Exception();
@@ -81,10 +80,13 @@ public class AppointmentRestController {
 
     private void updateDateTime(Appointment appointment) {
         List<Appointment> appointments = appointmentsService.findAllByOfficeHourId(appointment.getOfficeHours().getId());
+        System.out.println(appointments);
         Calendar cal = Calendar.getInstance();
+        System.out.println(appointment);
         cal.setTime(appointments.get(0).getDateAndTime());
         cal.add(Calendar.MINUTE, appointment.getLength()==null?0:appointment.getLength());
         appointment.setDateAndTime(cal.getTime());
+        System.out.println(appointment);
     }
 
     private String generateMessageBasedOnStatus(Appointment appointment, Status status) {
