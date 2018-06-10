@@ -63,9 +63,10 @@ public class AppointmentRestController {
             System.out.println(json);
             Appointment appointment = ParsingUtil.parseJsonToDomainObject(json, Appointment.class);
             Status status = appointment.getStatus();
+            int length = appointment.getLength();
             appointment = appointmentsService.findById(appointment.getId());
             if (appointment != null) {
-                updateDateTime(appointment);
+                updateDateTime(appointment, length);
                 String message = generateMessageBasedOnStatus(appointment, status);
                 responseService.sendResponse(MessagePayload.create(appointment.getStudentID(), TextMessage.create(message)));
                 appointmentsService.save(appointment);
@@ -78,15 +79,12 @@ public class AppointmentRestController {
         }
     }
 
-    private void updateDateTime(Appointment appointment) {
+    private void updateDateTime(Appointment appointment, int length) {
         List<Appointment> appointments = appointmentsService.findAllByOfficeHourId(appointment.getOfficeHours().getId());
-        System.out.println(appointments);
         Calendar cal = Calendar.getInstance();
-        System.out.println(appointment);
         cal.setTime(appointments.get(0).getDateAndTime());
-        cal.add(Calendar.MINUTE, appointment.getLength()==null?0:appointment.getLength());
+        cal.add(Calendar.MINUTE, length);
         appointment.setDateAndTime(cal.getTime());
-        System.out.println(appointment);
     }
 
     private String generateMessageBasedOnStatus(Appointment appointment, Status status) {
