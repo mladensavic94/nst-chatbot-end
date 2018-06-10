@@ -83,7 +83,7 @@ public class AppointmentRestController {
         List<Appointment> appointments = appointmentsService.findAllByOfficeHourId(appointment.getOfficeHours().getId());
         Calendar cal = Calendar.getInstance();
         cal.setTime(appointments.get(0).getDateAndTime());
-        cal.add(Calendar.MINUTE, appointment.getLength());
+        cal.add(Calendar.MINUTE, appointment.getLength()==null?0:appointment.getLength());
         appointment.setDateAndTime(cal.getTime());
     }
 
