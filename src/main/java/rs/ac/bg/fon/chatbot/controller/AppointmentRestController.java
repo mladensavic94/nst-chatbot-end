@@ -66,7 +66,6 @@ public class AppointmentRestController {
             appointment = appointmentsService.findById(appointment.getId());
             if (appointment != null) {
                 updateDateTime(appointment);
-                System.out.println(appointment);
                 String message = generateMessageBasedOnStatus(appointment, status);
                 responseService.sendResponse(MessagePayload.create(appointment.getStudentID(), TextMessage.create(message)));
 
