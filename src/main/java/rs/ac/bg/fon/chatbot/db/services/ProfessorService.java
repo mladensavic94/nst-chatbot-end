@@ -8,11 +8,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import rs.ac.bg.fon.chatbot.db.domain.OfficeHours;
 import rs.ac.bg.fon.chatbot.db.domain.Professor;
 import rs.ac.bg.fon.chatbot.db.services.repositories.OfficeHoursRepository;
 import rs.ac.bg.fon.chatbot.db.services.repositories.ProfessorRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ProfessorService implements UserDetailsService {
@@ -61,6 +63,12 @@ public class ProfessorService implements UserDetailsService {
                 appointment.setProfessor(professor);
                 appointment.setOfficeHours(officeHours);
             });
+        });
+        List<OfficeHours> allByProfessorEmail = officeHoursRepository.findAllByProfessorEmail(professor.getEmail());
+        allByProfessorEmail.forEach(officeHours -> {
+            if(professor.getListOfOfficeHours().contains(officeHours)){
+                officeHoursRepository.delete(officeHours.getId());
+            }
         });
         professorRepository.save(professor);
     }
