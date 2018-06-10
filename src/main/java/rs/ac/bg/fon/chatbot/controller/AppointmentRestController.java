@@ -85,6 +85,7 @@ public class AppointmentRestController {
         cal.setTime(appointments.get(0).getDateAndTime());
         cal.add(Calendar.MINUTE, length);
         appointment.setDateAndTime(cal.getTime());
+        appointment.setLength(length);
     }
 
     private String generateMessageBasedOnStatus(Appointment appointment, Status status) {
