@@ -107,7 +107,7 @@ public class ResponseService {
                 appointment.setDescription(text);
             }
             if(appointment.getStatus().equals(Status.DESCRIPTION_MISSING)){
-                response = TextMessage.create("Unesite razlog dolaska na konsultacije/prikacite neki fajl.");
+                response = TextMessage.create("Unesite razlog dolaska na konsultacije ili prikacite neki dokument ili zip folder.");
                 appointment.setStatus(Status.DESCRIPTION_REQUESTED);
             }
             appointmentsService.save(appointment);
@@ -219,7 +219,7 @@ public class ResponseService {
         try {
             String text = "";
             for (Attachment attachment : attachmentMessageEvent.attachments()) {
-                text += "link:" + attachment.asRichMediaAttachment().url();
+                text = attachment.asRichMediaAttachment().url().toString();
             }
             MessagePayload response = generateAnswer(attachmentMessageEvent.senderId(), text);
             sendResponse(response);
