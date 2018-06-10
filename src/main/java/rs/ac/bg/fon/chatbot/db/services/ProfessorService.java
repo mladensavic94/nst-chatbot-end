@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import rs.ac.bg.fon.chatbot.db.domain.Professor;
+import rs.ac.bg.fon.chatbot.db.services.repositories.OfficeHoursRepository;
 import rs.ac.bg.fon.chatbot.db.services.repositories.ProfessorRepository;
 
 import java.util.ArrayList;
@@ -18,10 +19,12 @@ public class ProfessorService implements UserDetailsService {
 
     private final
     ProfessorRepository professorRepository;
+    private OfficeHoursRepository officeHoursRepository;
 
     @Autowired
-    public ProfessorService(ProfessorRepository professorRepository) {
+    public ProfessorService(ProfessorRepository professorRepository, OfficeHoursRepository officeHoursRepository) {
         this.professorRepository = professorRepository;
+        this.officeHoursRepository = officeHoursRepository;
     }
 
     public void saveProfessor(Professor professor) {
@@ -49,6 +52,10 @@ public class ProfessorService implements UserDetailsService {
 //            return;
 //        }
         professor.getListOfOfficeHours().forEach(officeHours -> {
+            if (officeHours.getId() == null) {
+                officeHoursRepository.save(officeHours);
+            }
+            officeHours.setProfessor(professor);
             officeHours.getAppointments().forEach(appointment -> {
                 appointment.setProfessor(professor);
                 appointment.setOfficeHours(officeHours);
