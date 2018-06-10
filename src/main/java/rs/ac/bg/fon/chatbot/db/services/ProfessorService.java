@@ -53,6 +53,7 @@ public class ProfessorService implements UserDetailsService {
 //            professorRepository.save(pom);
 //            return;
 //        }
+        System.out.println(professor);
         professor.getListOfOfficeHours().forEach(officeHours -> {
             if (officeHours.getId() == null) {
                 officeHours.setProfessor(professor);
@@ -63,12 +64,6 @@ public class ProfessorService implements UserDetailsService {
                 appointment.setProfessor(professor);
                 appointment.setOfficeHours(officeHours);
             });
-        });
-        List<OfficeHours> allByProfessorEmail = officeHoursRepository.findAllByProfessorEmail(professor.getEmail());
-        allByProfessorEmail.forEach(officeHours -> {
-            if(professor.getListOfOfficeHours().contains(officeHours)){
-                officeHoursRepository.delete(officeHours.getId());
-            }
         });
         professorRepository.save(professor);
     }
