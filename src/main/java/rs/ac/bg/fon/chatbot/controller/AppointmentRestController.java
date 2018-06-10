@@ -14,6 +14,8 @@ import rs.ac.bg.fon.chatbot.db.services.AppointmentsService;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Calendar;
+import java.util.List;
 
 @Controller
 @RequestMapping("/rest")
@@ -63,17 +65,11 @@ public class AppointmentRestController {
             Status status = appointment.getStatus();
             appointment = appointmentsService.findById(appointment.getId());
             if (appointment != null) {
-                String message;
-                if (status.equals(Status.ACCEPTED)) {
-                    message = "Vas zahtev za konsultacije je prihvacen!\nDetalji: -> datum " + appointment.getDateAndTime()+ " profesor: " +appointment.getProfessor().getLastName() + " " + appointment.getProfessor().getFirstName();
-                    appointment.setStatus(Status.valueOf("ACCEPTED"));
-                } else {
-                    message = "Vas zahtev za konsultacije je odbijen!\nDetalji: -> datum " + appointment.getDateAndTime()+ " profesor: " +appointment.getProfessor().getLastName() + " " + appointment.getProfessor().getFirstName();
-                    appointment.setStatus(Status.valueOf("DENIED"));
-                }
+                updateDateTime(appointment);
+                String message = generateMessageBasedOnStatus(appointment, status);
                 responseService.sendResponse(MessagePayload.create(appointment.getStudentID(), TextMessage.create(message)));
-                System.out.println(appointment);
-                appointment = appointmentsService.save(appointment);
+
+                appointmentsService.save(appointment);
                 entityManager.clear();
             } else throw new Exception();
             return ResponseEntity.status(HttpStatus.OK).build();
@@ -81,6 +77,26 @@ public class AppointmentRestController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    private void updateDateTime(Appointment appointment) {
+        List<Appointment> appointments = appointmentsService.findAllByOfficeHourId(appointment.getOfficeHours().getId());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(appointments.get(0).getDateAndTime());
+        cal.add(Calendar.MINUTE, appointment.getLength());
+        appointment.setDateAndTime(cal.getTime());
+    }
+
+    private String generateMessageBasedOnStatus(Appointment appointment, Status status) {
+        String message;
+        if (status.equals(Status.ACCEPTED)) {
+            message = "Vas zahtev za konsultacije je prihvacen!\nDetalji: -> datum " + appointment.getDateAndTime()+ " profesor: " +appointment.getProfessor().getLastName() + " " + appointment.getProfessor().getFirstName();
+            appointment.setStatus(Status.valueOf("ACCEPTED"));
+        } else {
+            message = "Vas zahtev za konsultacije je odbijen!\nDetalji: -> datum " + appointment.getDateAndTime()+ " profesor: " +appointment.getProfessor().getLastName() + " " + appointment.getProfessor().getFirstName();
+            appointment.setStatus(Status.valueOf("DENIED"));
+        }
+        return message;
     }
 
     @RequestMapping(value= "/**", method=RequestMethod.OPTIONS)

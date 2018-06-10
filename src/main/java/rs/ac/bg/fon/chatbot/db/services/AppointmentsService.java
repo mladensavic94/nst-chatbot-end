@@ -8,6 +8,8 @@ import rs.ac.bg.fon.chatbot.db.domain.Status;
 import rs.ac.bg.fon.chatbot.db.services.repositories.AppointmentsRepository;
 import rs.ac.bg.fon.chatbot.db.services.repositories.OfficeHoursRepository;
 
+import java.util.List;
+
 @Service
 public class AppointmentsService {
 
@@ -52,5 +54,9 @@ public class AppointmentsService {
 
     public void deleteByStudentID(String s) {
         appointmentsRepository.deleteByStudentID(s);
+    }
+
+    public List<Appointment> findAllByOfficeHourId(Long id) {
+       return appointmentsRepository.findAllByOfficeHourId(id);
     }
 }

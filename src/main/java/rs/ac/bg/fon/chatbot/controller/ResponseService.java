@@ -140,7 +140,7 @@ public class ResponseService {
                     response = TextMessage.create("U tom terminu nema konsultacija.", Optional.of(quickReplies), Optional.empty());
                 }
             } else {
-                appointment.setDateAndTime(date);
+                appointment.setDateAndTime(officeHours.getBeginTime());
                 appointment.setOfficeHours(officeHours);
             }
         } catch (Exception e) {

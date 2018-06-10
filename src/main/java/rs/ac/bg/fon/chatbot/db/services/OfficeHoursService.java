@@ -43,7 +43,7 @@ public class OfficeHoursService {
             List<OfficeHours> officeHoursForProfessor = getOfficeHoursForProfessor(professor);
             try {
                 for (OfficeHours officeHours : officeHoursForProfessor) {
-                    if (officeHours.getBeginTime().before(date) && officeHours.getEndTime().after(date))
+                    if ((officeHours.getBeginTime().before(date) && officeHours.getEndTime().after(date)) || officeHours.getBeginTime().equals(date))
                         return officeHours;
                 }
             } catch (Exception e) {
