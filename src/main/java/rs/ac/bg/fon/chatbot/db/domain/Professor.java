@@ -29,7 +29,7 @@ public class Professor implements Serializable {
     @Column(name = "last_name")
     private String lastName;
 
-    @OneToMany(mappedBy = "professor", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "professor", fetch = FetchType.EAGER, orphanRemoval = true)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<OfficeHours> listOfOfficeHours;
 
