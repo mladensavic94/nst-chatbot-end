@@ -106,6 +106,7 @@ public class Professor implements Serializable {
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", listOfOfficeHours=" + listOfOfficeHours +
                 '}';
     }
 }
