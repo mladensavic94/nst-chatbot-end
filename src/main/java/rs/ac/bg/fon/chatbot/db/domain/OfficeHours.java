@@ -43,7 +43,6 @@ public class OfficeHours {
     public String toString() {
         return "OfficeHours{" +
                 "id=" + id +
-                ", professor=" + professor +
                 ", beginTime=" + beginTime +
                 ", endTime=" + endTime +
                 '}';
