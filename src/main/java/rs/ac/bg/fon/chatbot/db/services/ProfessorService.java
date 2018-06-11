@@ -30,11 +30,13 @@ public class ProfessorService implements UserDetailsService {
     }
 
     public void saveProfessor(Professor professor) {
+
         if(professor.getListOfOfficeHours() != null){
             professor.getListOfOfficeHours().forEach(officeHours -> {
                 if (officeHours.getId() == null) {
                     officeHours.setProfessor(professor);
                     officeHoursRepository.save(officeHours);
+                    System.out.println(officeHours);
                 }
                 officeHours.setProfessor(professor);
                 if(officeHours.getAppointments() != null){
