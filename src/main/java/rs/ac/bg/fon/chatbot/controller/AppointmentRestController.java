@@ -80,7 +80,7 @@ public class AppointmentRestController {
         }
     }
 
-    @GetMapping
+    @GetMapping(value = "appointments/filter")
     public ResponseEntity<Object> returnAppointmentsForId(@RequestParam String email, @RequestParam int id) {
         try {
             String response;
