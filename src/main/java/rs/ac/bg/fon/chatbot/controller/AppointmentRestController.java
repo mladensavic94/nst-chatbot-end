@@ -66,8 +66,9 @@ public class AppointmentRestController {
             int length = appointment.getLength();
             appointment = appointmentsService.findById(appointment.getId());
             if (appointment != null) {
-                updateDateTime(appointment, length);
+                updateDateTime(appointment);
                 String message = generateMessageBasedOnStatus(appointment, status);
+                appointment.setLength(length);
                 responseService.sendResponse(MessagePayload.create(appointment.getStudentID(), TextMessage.create(message)));
                 appointmentsService.save(appointment);
                 entityManager.clear();
@@ -79,13 +80,12 @@ public class AppointmentRestController {
         }
     }
 
-    private void updateDateTime(Appointment appointment, int length) {
+    private void updateDateTime(Appointment appointment) {
         List<Appointment> appointments = appointmentsService.findAllByOfficeHourId(appointment.getOfficeHours().getId());
         Calendar cal = Calendar.getInstance();
         cal.setTime(appointments.get(0).getDateAndTime());
-        cal.add(Calendar.MINUTE, length);
+        cal.add(Calendar.MINUTE, appointments.get(0).getLength());
         appointment.setDateAndTime(cal.getTime());
-        appointment.setLength(length);
     }
 
     private String generateMessageBasedOnStatus(Appointment appointment, Status status) {

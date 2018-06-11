@@ -14,6 +14,7 @@ import rs.ac.bg.fon.chatbot.db.services.repositories.OfficeHoursRepository;
 import rs.ac.bg.fon.chatbot.db.services.repositories.ProfessorRepository;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -35,7 +36,8 @@ public class ProfessorService implements UserDetailsService {
             professor.getListOfOfficeHours().forEach(officeHours -> {
                 if (officeHours.getId() == null) {
                     officeHours.setProfessor(professor);
-                    officeHoursRepository.save(officeHours);
+
+                    officeHoursRepository.save(changeLocale(officeHours));
                     System.out.println(officeHours);
                 }
                 officeHours.setProfessor(professor);
@@ -48,6 +50,17 @@ public class ProfessorService implements UserDetailsService {
             });
         }
         professorRepository.save(professor);
+    }
+
+    private OfficeHours changeLocale(OfficeHours officeHours) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(officeHours.getBeginTime());
+        cal.add(Calendar.HOUR, 2);
+        officeHours.setBeginTime(cal.getTime());
+        cal.setTime(officeHours.getEndTime());
+        cal.add(Calendar.HOUR, 2);
+        officeHours.setEndTime(cal.getTime());
+        return officeHours;
     }
 
     public Iterable<Professor> findAll() {
