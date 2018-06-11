@@ -53,17 +53,19 @@ public class ProfessorService implements UserDetailsService {
 //            professorRepository.save(pom);
 //            return;
 //        }
-        professor.getListOfOfficeHours().forEach(officeHours -> {
-            if (officeHours.getId() == null) {
+        if(professor.getListOfOfficeHours() != null){
+            professor.getListOfOfficeHours().forEach(officeHours -> {
+                if (officeHours.getId() == null) {
+                    officeHours.setProfessor(professor);
+                    officeHoursRepository.save(officeHours);
+                }
                 officeHours.setProfessor(professor);
-                officeHoursRepository.save(officeHours);
-            }
-            officeHours.setProfessor(professor);
-            officeHours.getAppointments().forEach(appointment -> {
-                appointment.setProfessor(professor);
-                appointment.setOfficeHours(officeHours);
+                officeHours.getAppointments().forEach(appointment -> {
+                    appointment.setProfessor(professor);
+                    appointment.setOfficeHours(officeHours);
+                });
             });
-        });
+        }
         professorRepository.save(professor);
     }
 
