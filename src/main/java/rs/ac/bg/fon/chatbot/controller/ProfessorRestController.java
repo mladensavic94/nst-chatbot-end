@@ -47,7 +47,7 @@ public class ProfessorRestController {
 
 
     @RequestMapping(value = "/professor/save", method = RequestMethod.POST)
-    public ResponseEntity<Object> saveProfessor(@RequestBody String json){
+    public ResponseEntity<Object> saveProfessor(@RequestBody String json) {
         try {
             Professor professor = ParsingUtil.parseJsonToDomainObject(json, Professor.class);
 
@@ -58,4 +58,20 @@ public class ProfessorRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity<Object> saveNewProfessor(@RequestBody String json) {
+        try {
+            Professor professor = ParsingUtil.parseJsonToDomainObject(json, Professor.class);
+            if (professor.getIdprofessor() == null) {
+                professorService.saveProfessor(professor);
+                return ResponseEntity.status(HttpStatus.OK).build();
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
 }
