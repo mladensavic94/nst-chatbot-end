@@ -30,29 +30,6 @@ public class ProfessorService implements UserDetailsService {
     }
 
     public void saveProfessor(Professor professor) {
-//        Professor pom = professorRepository.findOne(professor.getIdprofessor());
-//        if (pom != null) {
-//            pom.setEmail(professor.getEmail());
-//            pom.setFirstName(professor.getFirstName());
-//            pom.setLastName(professor.getLastName());
-//            pom.setPassword(professor.getPassword());
-//            professor.getListOfOfficeHours().forEach(officeHours -> {
-//                if(!pom.getListOfOfficeHours().contains(officeHours)){
-//                    pom.getListOfOfficeHours().remove(officeHours);
-//                }
-//                if(officeHours.getId() == null){
-//                    pom.getListOfOfficeHours().add(officeHours);
-//                    officeHours.setProfessor(pom);
-//                }else{
-//                    officeHours.getAppointments().forEach(appointment -> {
-//                        appointment.setOfficeHours(officeHours);
-//                        appointment.setProfessor(professor);
-//                    });
-//                }
-//            });
-//            professorRepository.save(pom);
-//            return;
-//        }
         if(professor.getListOfOfficeHours() != null){
             professor.getListOfOfficeHours().forEach(officeHours -> {
                 if (officeHours.getId() == null) {
@@ -60,10 +37,12 @@ public class ProfessorService implements UserDetailsService {
                     officeHoursRepository.save(officeHours);
                 }
                 officeHours.setProfessor(professor);
-                officeHours.getAppointments().forEach(appointment -> {
-                    appointment.setProfessor(professor);
-                    appointment.setOfficeHours(officeHours);
-                });
+                if(officeHours.getAppointments() != null){
+                    officeHours.getAppointments().forEach(appointment -> {
+                        appointment.setProfessor(professor);
+                        appointment.setOfficeHours(officeHours);
+                    });
+                }
             });
         }
         professorRepository.save(professor);
