@@ -80,6 +80,23 @@ public class AppointmentRestController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<Object> returnAppointmentsForId(@RequestParam String email, @RequestParam int id) {
+        try {
+            String response;
+            if (id == 0) {
+                response = ParsingUtil.parseDomainObjectToJson(appointmentsService.findAllByEmail(email));
+            }else{
+                response = ParsingUtil.parseDomainObjectToJson(appointmentsService.findAllByOfficeHourId((long) id));
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
     private void updateDateTime(Appointment appointment) {
         List<Appointment> appointments = appointmentsService.findAllByOfficeHourId(appointment.getOfficeHours().getId());
         Calendar cal = Calendar.getInstance();
@@ -91,16 +108,16 @@ public class AppointmentRestController {
     private String generateMessageBasedOnStatus(Appointment appointment, Status status) {
         String message;
         if (status.equals(Status.ACCEPTED)) {
-            message = "Vas zahtev za konsultacije je prihvacen!\nDetalji: -> datum " + appointment.getDateAndTime()+ " profesor: " +appointment.getProfessor().getLastName() + " " + appointment.getProfessor().getFirstName();
+            message = "Vas zahtev za konsultacije je prihvacen!\nDetalji: -> datum " + appointment.getDateAndTime() + " profesor: " + appointment.getProfessor().getLastName() + " " + appointment.getProfessor().getFirstName();
             appointment.setStatus(Status.valueOf("ACCEPTED"));
         } else {
-            message = "Vas zahtev za konsultacije je odbijen!\nDetalji: -> datum " + appointment.getDateAndTime()+ " profesor: " +appointment.getProfessor().getLastName() + " " + appointment.getProfessor().getFirstName();
+            message = "Vas zahtev za konsultacije je odbijen!\nDetalji: -> datum " + appointment.getDateAndTime() + " profesor: " + appointment.getProfessor().getLastName() + " " + appointment.getProfessor().getFirstName();
             appointment.setStatus(Status.valueOf("DENIED"));
         }
         return message;
     }
 
-    @RequestMapping(value= "/**", method=RequestMethod.OPTIONS)
+    @RequestMapping(value = "/**", method = RequestMethod.OPTIONS)
     public void corsHeaders(HttpServletResponse response) {
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");

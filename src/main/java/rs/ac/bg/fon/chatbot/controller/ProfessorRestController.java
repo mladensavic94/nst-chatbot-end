@@ -21,7 +21,7 @@ public class ProfessorRestController {
         this.professorService = professorService;
     }
 
-    @RequestMapping(value = "/professors", method = RequestMethod.GET)
+    @GetMapping(value = "/professors")
     public ResponseEntity<Object> getAllProfessors() {
         try {
             String response = ParsingUtil.parseListToJson(professorService.findAll());
@@ -33,7 +33,7 @@ public class ProfessorRestController {
         }
     }
 
-    @RequestMapping(value = "/professor", method = RequestMethod.GET)
+    @GetMapping(value = "/professor")
     public ResponseEntity<Object> getProfessor(@RequestParam String email) {
         try {
             String response = ParsingUtil.parseDomainObjectToJson(professorService.findByEmail(email));
@@ -46,7 +46,8 @@ public class ProfessorRestController {
     }
 
 
-    @RequestMapping(value = "/professor/save", method = RequestMethod.POST)
+
+    @PostMapping(value = "/professor/save")
     public ResponseEntity<Object> saveProfessor(@RequestBody String json) {
         try {
             Professor professor = ParsingUtil.parseJsonToDomainObject(json, Professor.class);
@@ -59,7 +60,7 @@ public class ProfessorRestController {
         }
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @PostMapping(value = "/register")
     public ResponseEntity<Object> saveNewProfessor(@RequestBody String json) {
         try {
             Professor professor = ParsingUtil.parseJsonToDomainObject(json, Professor.class);
