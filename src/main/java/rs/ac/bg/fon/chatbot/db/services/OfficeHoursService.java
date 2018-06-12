@@ -43,10 +43,7 @@ public class OfficeHoursService {
             List<OfficeHours> officeHoursForProfessor = getOfficeHoursForProfessor(professor);
             try {
                 for (OfficeHours officeHours : officeHoursForProfessor) {
-                    System.out.println("**** " + officeHours.getBeginTime().getTime());
-                    System.out.println("**** " + officeHours.getEndTime().getTime());
-                    System.out.println("**** " + date.getTime());
-                    if ((officeHours.getBeginTime().before(date) && officeHours.getEndTime().after(date)) || officeHours.getBeginTime().equals(date))
+                    if (officeHours.getBeginTime().getTime() <= date.getTime() && officeHours.getEndTime().getTime() > date.getTime())
                         return officeHours;
                 }
             } catch (Exception e) {
