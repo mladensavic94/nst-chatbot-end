@@ -232,7 +232,7 @@ public class ResponseService {
     private void handleQuickReplyMessageEvents(Event event) {
         QuickReplyMessageEvent quickReplyMessageEvent = event.asQuickReplyMessageEvent();
         try {
-            MessagePayload response = generateAnswer(quickReplyMessageEvent.senderId(), quickReplyMessageEvent.text());
+            MessagePayload response = generateAnswer(quickReplyMessageEvent.senderId(), quickReplyMessageEvent.payload());
             sendResponse(response);
         } catch (Exception e) {
             e.printStackTrace();
