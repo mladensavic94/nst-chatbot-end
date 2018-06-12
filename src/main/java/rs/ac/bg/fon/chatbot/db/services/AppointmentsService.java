@@ -68,8 +68,8 @@ public class AppointmentsService {
             appointment.setDateAndTime(appointment.getOfficeHours().getBeginTime());
         }else{
             Calendar cal = Calendar.getInstance();
-            cal.setTime(appointments.get(1).getDateAndTime());
-            cal.add(Calendar.MINUTE, appointments.get(1).getLength());
+            cal.setTime(appointments.get(appointments.size() - 2).getDateAndTime());
+            cal.add(Calendar.MINUTE, appointments.get(appointments.size() - 2).getLength() == null? 0 : appointments.get(appointments.size() - 2).getLength());
             appointment.setDateAndTime(cal.getTime());
         }
     }
