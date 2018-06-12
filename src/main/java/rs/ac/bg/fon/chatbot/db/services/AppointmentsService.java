@@ -63,7 +63,7 @@ public class AppointmentsService {
 
     public void updateDateTime(Appointment appointment) {
         List<Appointment> appointments = findAllByOfficeHourId(appointment.getOfficeHours().getId());
-        if(appointments == null){
+        if(appointments == null || appointments.size() == 1){
             appointment.setDateAndTime(appointment.getOfficeHours().getBeginTime());
         }else{
             Calendar cal = Calendar.getInstance();
