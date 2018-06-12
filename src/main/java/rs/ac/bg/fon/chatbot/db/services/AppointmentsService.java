@@ -8,6 +8,7 @@ import rs.ac.bg.fon.chatbot.db.domain.Status;
 import rs.ac.bg.fon.chatbot.db.services.repositories.AppointmentsRepository;
 import rs.ac.bg.fon.chatbot.db.services.repositories.OfficeHoursRepository;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -58,5 +59,17 @@ public class AppointmentsService {
 
     public List<Appointment> findAllByOfficeHourId(Long id) {
        return appointmentsRepository.findAllByOfficeHourId(id);
+    }
+
+    public void updateDateTime(Appointment appointment) {
+        List<Appointment> appointments = findAllByOfficeHourId(appointment.getOfficeHours().getId());
+        if(appointments == null){
+            appointment.setDateAndTime(appointment.getOfficeHours().getBeginTime());
+        }else{
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(appointments.get(0).getDateAndTime());
+            cal.add(Calendar.MINUTE, appointments.get(0).getLength());
+            appointment.setDateAndTime(cal.getTime());
+        }
     }
 }

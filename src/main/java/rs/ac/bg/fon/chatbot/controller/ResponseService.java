@@ -132,7 +132,7 @@ public class ResponseService {
                 officeHoursService.findAllByProfessorId(appointment.getProfessor().getEmail())
                         .forEach(officeHours1 -> {
                             if (officeHours1.getBeginTime().after(new Date()))
-                                quickReplies.add(TextQuickReply.create(formatDate(officeHours1.getBeginTime()), formatDate(officeHours1.getBeginTime())));
+                                quickReplies.add(TextQuickReply.create(formatDate(officeHours1.getBeginTime()), officeHours1.getBeginTime().toString()));
                         });
                 if (quickReplies.isEmpty()) {
                     response = TextMessage.create("Profesor trenutno nema zakazanih termina. Mozete se obratiti na: " + appointment.getProfessor().getEmail());
@@ -140,8 +140,8 @@ public class ResponseService {
                     response = TextMessage.create("U tom terminu nema konsultacija.", Optional.of(quickReplies), Optional.empty());
                 }
             } else {
-                appointment.setDateAndTime(officeHours.getBeginTime());
                 appointment.setOfficeHours(officeHours);
+                appointmentsService.updateDateTime(appointment);
             }
         } catch (Exception e) {
             System.out.println("Date not parsed " + e.getMessage());
@@ -163,7 +163,7 @@ public class ResponseService {
                 professor.getListOfOfficeHours().stream()
                         .filter(officeHours -> officeHours.getBeginTime().after(new Date()))
                         .forEach(officeHours ->
-                                quickReplies.add(TextQuickReply.create(officeHours.getBeginTime().toString(), "<POSTBACK_PAYLOAD>")));
+                                quickReplies.add(TextQuickReply.create(formatDate(officeHours.getBeginTime()), officeHours.getBeginTime().toString())));
                 if (quickReplies.isEmpty()) {
                     response = TextMessage.create("Profesor trenutno nema zakazanih termina. Mozete se obratiti na: " + appointment.getProfessor().getEmail());
                 } else {
