@@ -40,11 +40,12 @@ public class OfficeHoursService {
 
     public OfficeHours filterByDate(Date date, Professor professor) throws Exception {
         if (professor != null) {
-            System.out.println(professor);
             List<OfficeHours> officeHoursForProfessor = getOfficeHoursForProfessor(professor);
-            System.out.println(officeHoursForProfessor);
             try {
                 for (OfficeHours officeHours : officeHoursForProfessor) {
+                    System.out.println("**** " + officeHours.getBeginTime().getTime());
+                    System.out.println("**** " + officeHours.getEndTime().getTime());
+                    System.out.println("**** " + date.getTime());
                     if ((officeHours.getBeginTime().before(date) && officeHours.getEndTime().after(date)) || officeHours.getBeginTime().equals(date))
                         return officeHours;
                 }

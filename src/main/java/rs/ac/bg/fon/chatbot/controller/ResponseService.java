@@ -126,7 +126,6 @@ public class ResponseService {
         TextMessage response = null;
         try {
             Date date = parseDate(appointmentString);
-            System.out.println(date);
             OfficeHours officeHours = officeHoursService.filterByDate(date, appointment.getProfessor());
             System.out.println(officeHours);
             if (officeHours == null) {
