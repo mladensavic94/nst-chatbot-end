@@ -52,8 +52,7 @@ public class ProfessorRestController {
         try {
             Professor professor = ParsingUtil.parseJsonToDomainObject(json, Professor.class);
 
-            professor = professorService.saveProfessor(professor);
-            return ResponseEntity.status(HttpStatus.OK).body(professor);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
