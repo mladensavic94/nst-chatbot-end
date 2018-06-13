@@ -146,6 +146,7 @@ public class ResponseService {
             }
         } catch (Exception e) {
             System.out.println("Date not parsed " + e.getMessage());
+            e.printStackTrace();
 
         }
         return response;
@@ -181,6 +182,7 @@ public class ResponseService {
             List<QuickReply> quickReplies = new ArrayList<>();
             professorService.findAll().forEach(professor1 -> quickReplies.add(TextQuickReply.create(professor1.getLastName() + " " + professor1.getFirstName(), professor1.getLastName() + " " + professor1.getFirstName())));
             response = TextMessage.create(text, Optional.of(quickReplies), Optional.empty());
+            e.printStackTrace();
         }
         return response;
     }
