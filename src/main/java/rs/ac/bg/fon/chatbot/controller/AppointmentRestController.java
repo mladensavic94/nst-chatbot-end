@@ -73,7 +73,7 @@ public class AppointmentRestController {
                 appointment  = appointmentsService.save(appointment);
                 entityManager.clear();
             } else throw new Exception();
-            return ResponseEntity.status(HttpStatus.OK).body(appointment);
+            return ResponseEntity.status(HttpStatus.OK).body(appointment.getDateAndTime());
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
