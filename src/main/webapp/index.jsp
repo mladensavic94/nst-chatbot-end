@@ -37,57 +37,57 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>/login</td>
-                                        <td>GET</td>
-                                        <td>login putanja - prihvata email i password i vraca token ukoliko je uspesna autentikacija</td>
+                                        <td class="text-center">/login</td>
+                                        <td class="text-center">GET</td>
+                                        <td class="text-center">login putanja - prihvata email i password i vraca token ukoliko je uspesna autentikacija</td>
                                     </tr><tr>
-                                        <td>/rest/register</td>
-                                        <td>POST</td>
-                                        <td>Registracija novog profesora - email, password, ime i prezime</td>
+                                        <td class="text-center">/rest/register</td>
+                                        <td class="text-center">POST</td>
+                                        <td class="text-center">Registracija novog profesora - email, password, ime i prezime</td>
                                     </tr><tr>
-                                        <td>/rest/professors</td>
-                                        <td>GET</td>
-                                        <td>Vraca sve podatke o profesorima - token</td>
+                                        <td class="text-center">/rest/professors</td>
+                                        <td class="text-center">GET</td>
+                                        <td class="text-center">Vraca sve podatke o profesorima - token</td>
                                     </tr><tr>
-                                        <td>/rest/professor</td>
-                                        <td>GET</td>
-                                        <td>Vraca sve podatke o profesoru - email, token</td>
+                                        <td class="text-center">/rest/professor</td>
+                                        <td class="text-center">GET</td>
+                                        <td class="text-center">Vraca sve podatke o profesoru - email, token</td>
                                     </tr><tr>
-                                        <td>/rest/professor/save</td>
-                                        <td>POST</td>
-                                        <td>Vraca sve podatke o profesoru - email, token</td>
+                                        <td class="text-center">/rest/professor/save</td>
+                                        <td class="text-center">POST</td>
+                                        <td class="text-center">Vraca sve podatke o profesoru - email, token</td>
                                     </tr><tr>
-                                        <td>/rest/chatbotVerification</td>
-                                        <td>GET</td>
-                                        <td>Facebook messenger verification</td>
+                                        <td class="text-center">/rest/chatbotVerification</td>
+                                        <td class="text-center">GET</td>
+                                        <td class="text-center">Facebook messenger verification</td>
                                     </tr><tr>
-                                        <td>/rest/chatbot</td>
-                                        <td>POST</td>
-                                        <td>Facebook messenger komunikacioni kanal</td>
+                                        <td class="text-center">/rest/chatbot</td>
+                                        <td class="text-center">POST</td>
+                                        <td class="text-center">Facebook messenger komunikacioni kanal</td>
                                     </tr><tr>
-                                        <td>/rest/officehours</td>
-                                        <td>GET</td>
-                                        <td>Termini konsultacija za profesora - email, token</td>
+                                        <td class="text-center">/rest/officehours</td>
+                                        <td class="text-center">GET</td>
+                                        <td class="text-center">Termini konsultacija za profesora - email, token</td>
                                     </tr><tr>
-                                        <td>/rest/officehours</td>
-                                        <td>POST</td>
-                                        <td>Dodavanje termina konsultacija - termin, token</td>
+                                        <td class="text-center">/rest/officehours</td>
+                                        <td class="text-center">POST</td>
+                                        <td class="text-center">Dodavanje termina konsultacija - termin, token</td>
                                     </tr><tr>
-                                        <td>/rest/appointments</td>
-                                        <td>GET</td>
-                                        <td>Svi zakazani termini za profesora - email, token</td>
+                                        <td class="text-center">/rest/appointments</td>
+                                        <td class="text-center">GET</td>
+                                        <td class="text-center">Svi zakazani termini za profesora - email, token</td>
                                     </tr><tr>
-                                        <td>/rest/appointments/save</td>
-                                        <td>POST</td>
-                                        <td>Dodavanje novog zahteva - zahtev, token</td>
+                                        <td class="text-center">/rest/appointments/save</td>
+                                        <td class="text-center">POST</td>
+                                        <td class="text-center">Dodavanje novog zahteva - zahtev, token</td>
                                     </tr><tr>
-                                        <td>/rest/appointments/update</td>
-                                        <td>POST</td>
-                                        <td>Izmena zahteva - zahtev, token</td>
+                                        <td class="text-center">/rest/appointments/update</td>
+                                        <td class="text-center">POST</td>
+                                        <td class="text-center">Izmena zahteva - zahtev, token</td>
                                     </tr><tr>
-                                        <td>/rest/appointments/filter</td>
-                                        <td>GET</td>
-                                        <td>Filtriranje zahteva po terminu i profesoru - termin id, profesor, token</td>
+                                        <td class="text-center">/rest/appointments/filter</td>
+                                        <td class="text-center">GET</td>
+                                        <td class="text-center">Filtriranje zahteva po terminu i profesoru - termin id, profesor, token</td>
                                     </tr>
                                 </tbody>
                             </table>
