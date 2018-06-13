@@ -118,6 +118,11 @@ public class ParsingUtil {
         return dateFormat.format(date);
     }
 
+    public static String formatDateForWit(Date date){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss.SSS");
+        return dateFormat.format(date);
+    }
+
     private static class JSONExclusionStrategy implements ExclusionStrategy {
 
         @Override
