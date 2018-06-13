@@ -119,7 +119,7 @@ public class ParsingUtil {
     }
 
     public static String formatDateForWit(Date date){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss MM-dd-yyyy");
         return dateFormat.format(date);
     }
 
