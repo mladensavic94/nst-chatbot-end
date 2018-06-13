@@ -133,7 +133,7 @@ public class ResponseService {
                 officeHoursService.findAllByProfessorId(appointment.getProfessor().getEmail())
                         .forEach(officeHours1 -> {
                             if (officeHours1.getBeginTime().after(new Date()))
-                                quickReplies.add(TextQuickReply.create(formatDate(officeHours1.getBeginTime()), officeHours1.getBeginTime().toString()));
+                                quickReplies.add(TextQuickReply.create(formatDate(officeHours1.getBeginTime()), formatDateForWit(officeHours1.getBeginTime())));
                         });
                 if (quickReplies.isEmpty()) {
                     response = TextMessage.create("Profesor trenutno nema zakazanih termina. Mozete se obratiti na: " + appointment.getProfessor().getEmail());
@@ -164,7 +164,7 @@ public class ResponseService {
                 professor.getListOfOfficeHours().stream()
                         .filter(officeHours -> officeHours.getBeginTime().after(new Date()))
                         .forEach(officeHours ->
-                                quickReplies.add(TextQuickReply.create(formatDate(officeHours.getBeginTime()), officeHours.getBeginTime().toString())));
+                                quickReplies.add(TextQuickReply.create(formatDate(officeHours.getBeginTime()), formatDateForWit(officeHours.getBeginTime()))));
                 if (quickReplies.isEmpty()) {
                     response = TextMessage.create("Profesor trenutno nema zakazanih termina. Mozete se obratiti na: " + appointment.getProfessor().getEmail());
                 } else {
