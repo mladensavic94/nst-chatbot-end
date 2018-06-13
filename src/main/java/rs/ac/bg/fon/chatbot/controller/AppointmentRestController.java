@@ -70,10 +70,10 @@ public class AppointmentRestController {
                 String message = generateMessageBasedOnStatus(appointment, status);
                 appointment.setLength(length);
                 responseService.sendResponse(MessagePayload.create(appointment.getStudentID(), TextMessage.create(message)));
-                appointmentsService.save(appointment);
+                appointment  = appointmentsService.save(appointment);
                 entityManager.clear();
             } else throw new Exception();
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.OK).body(appointment);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

@@ -30,7 +30,7 @@ public class ProfessorService implements UserDetailsService {
         this.officeHoursRepository = officeHoursRepository;
     }
 
-    public void saveProfessor(Professor professor) {
+    public Professor saveProfessor(Professor professor) {
 
         if(professor.getListOfOfficeHours() != null){
             professor.getListOfOfficeHours().forEach(officeHours -> {
@@ -49,7 +49,7 @@ public class ProfessorService implements UserDetailsService {
                 }
             });
         }
-        professorRepository.save(professor);
+        return professorRepository.save(professor);
     }
 
     private OfficeHours changeLocale(OfficeHours officeHours) {

@@ -18,9 +18,76 @@
         <jsp:include page="WEB-INF/include.jsp" />
     </head>
     <body>
-        <div class="alert-danger">
-            <h1>Index strana</h1>
+    <div class="main-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="header">
+                            <h4 class="title">REST API SPECIFICATION</h4>
+                        </div>
+                        <div class="content table-responsive table-full-width">
+                            <table class="table table-hover table-striped table-responsive">
+                                <thead >
+                                <tr style="max-width: 100px;">
+                                    <th class="text-center">Putanja</th>
+                                    <th class="text-center">Metod</th>
+                                    <th class="text-center">Opis</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>/login</td>
+                                        <td>GET</td>
+                                        <td>login putanja - prihvata email i password i vraca token ukoliko je uspesna autentikacija</td>
+                                        <td>/rest/register</td>
+                                        <td>POST</td>
+                                        <td>Registracija novog profesora - email, password, ime i prezime</td>
+                                        <td>/rest/professors</td>
+                                        <td>GET</td>
+                                        <td>Vraca sve podatke o profesorima - token</td>
+                                        <td>/rest/professor</td>
+                                        <td>GET</td>
+                                        <td>Vraca sve podatke o profesoru - email, token</td>
+                                        <td>/rest/professor/save</td>
+                                        <td>POST</td>
+                                        <td>Vraca sve podatke o profesoru - email, token</td>
+                                        <td>/rest/chatbotVerification</td>
+                                        <td>GET</td>
+                                        <td>Facebook messenger verification</td>
+                                        <td>/rest/chatbot</td>
+                                        <td>POST</td>
+                                        <td>Facebook messenger komunikacioni kanal</td>
+                                        <td>/rest/officehours</td>
+                                        <td>GET</td>
+                                        <td>Termini konsultacija za profesora - email, token</td>
+                                        <td>/rest/officehours</td>
+                                        <td>POST</td>
+                                        <td>Dodavanje termina konsultacija - termin, token</td>
+                                        <td>/rest/appointments</td>
+                                        <td>GET</td>
+                                        <td>Svi zakazani termini za profesora - email, token</td>
+                                        <td>/rest/appointments/save</td>
+                                        <td>POST</td>
+                                        <td>Dodavanje novog zahteva - zahtev, token</td>
+                                        <td>/rest/appointments/update</td>
+                                        <td>POST</td>
+                                        <td>Izmena zahteva - zahtev, token</td>
+                                        <td>/rest/appointments/filter</td>
+                                        <td>GET</td>
+                                        <td>Filtriranje zahteva po terminu i profesoru - termin id, profesor, token</td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
+
     </body>
 </html>
 
