@@ -6,11 +6,11 @@ public enum Status {
 
     @SerializedName("OPEN")
     OPEN,
-    @SerializedName("ACCEPTED")
+    @SerializedName("PRIHVACENO")
     ACCEPTED,
-    @SerializedName("FULL")
+    @SerializedName("POPUNJENO")
     FULL,
-    @SerializedName("DENIED")
+    @SerializedName("ODBIJENO")
     DENIED,
     @SerializedName("DESCRIPTION_MISSING")
     DESCRIPTION_MISSING,

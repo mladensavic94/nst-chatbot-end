@@ -26,7 +26,7 @@ public class OfficeHours {
     @Column(name = "end_time")
     private Date endTime;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY, mappedBy = "officeHours")
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY, mappedBy = "officeHours", orphanRemoval = true)
     private List<Appointment> appointments;
 
     public OfficeHours(Professor professor, Date beginTime, Date endTime, List<Appointment> appointments) {
