@@ -40,43 +40,54 @@
                                         <td>/login</td>
                                         <td>GET</td>
                                         <td>login putanja - prihvata email i password i vraca token ukoliko je uspesna autentikacija</td>
+                                    </tr><tr>
                                         <td>/rest/register</td>
                                         <td>POST</td>
                                         <td>Registracija novog profesora - email, password, ime i prezime</td>
+                                    </tr><tr>
                                         <td>/rest/professors</td>
                                         <td>GET</td>
                                         <td>Vraca sve podatke o profesorima - token</td>
+                                    </tr><tr>
                                         <td>/rest/professor</td>
                                         <td>GET</td>
                                         <td>Vraca sve podatke o profesoru - email, token</td>
+                                    </tr><tr>
                                         <td>/rest/professor/save</td>
                                         <td>POST</td>
                                         <td>Vraca sve podatke o profesoru - email, token</td>
+                                    </tr><tr>
                                         <td>/rest/chatbotVerification</td>
                                         <td>GET</td>
                                         <td>Facebook messenger verification</td>
+                                    </tr><tr>
                                         <td>/rest/chatbot</td>
                                         <td>POST</td>
                                         <td>Facebook messenger komunikacioni kanal</td>
+                                    </tr><tr>
                                         <td>/rest/officehours</td>
                                         <td>GET</td>
                                         <td>Termini konsultacija za profesora - email, token</td>
+                                    </tr><tr>
                                         <td>/rest/officehours</td>
                                         <td>POST</td>
                                         <td>Dodavanje termina konsultacija - termin, token</td>
+                                    </tr><tr>
                                         <td>/rest/appointments</td>
                                         <td>GET</td>
                                         <td>Svi zakazani termini za profesora - email, token</td>
+                                    </tr><tr>
                                         <td>/rest/appointments/save</td>
                                         <td>POST</td>
                                         <td>Dodavanje novog zahteva - zahtev, token</td>
+                                    </tr><tr>
                                         <td>/rest/appointments/update</td>
                                         <td>POST</td>
                                         <td>Izmena zahteva - zahtev, token</td>
+                                    </tr><tr>
                                         <td>/rest/appointments/filter</td>
                                         <td>GET</td>
                                         <td>Filtriranje zahteva po terminu i profesoru - termin id, profesor, token</td>
-
                                     </tr>
                                 </tbody>
                             </table>
