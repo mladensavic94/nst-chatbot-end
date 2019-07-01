@@ -1,11 +1,14 @@
 package rs.ac.bg.fon.chatbot.config;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Constants {
 
-    public final static String TOKEN = "EAAZATKY8ZBibMBALULxVjuFum4gkPbJEfNEOevHNLOlZBZC72KIYclVESzo4IBINgIAxrFbw7t6nfNVUWJxiYoiY3n2anXe4GAFG2ahLG06jrlarIjnXu2QOBZCrzyft9SW5NksaLwOsX98kEphRDMxbKpwBZC4HW0fuhqzZBPMr722u27vbtBC";
+    @Value("${facebook.token}")
+    public static String TOKEN;
     public final static String APP_SECRET= "4ba374d8b7c30dae4326613e0817f691";
     public static String WIT_AI_VERSION = "20180320";
     public final static String URL_WIT_AI = "https://api.wit.ai/message?v=" + WIT_AI_VERSION + "&q=";
