@@ -5,6 +5,7 @@
  */
 package rs.ac.bg.fon.chatbot.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/rest")
 public class FacebookChallengeRestController {
 
-    private final String TOKEN = "EAAZATKY8ZBibMBAJzzyx384nZBWRPAnIJy6u7RvEIFT36rmZBawFv8R5QjZB54V2FJ8suhzouRYtoDJyWtsvc1DgC4lZCFXkxY2o2XHHsVN2iiMrfrWafQjGaQ0VPnREZBH6cU5NxnKsPyCWqJJMq0y5iw6HHAHmaapZBHGryU3dgYjQfLAnONbv";
+    @Value("facebook.token")
+    private String TOKEN;
 
     @RequestMapping("/chatbotVerification")
     public @ResponseBody Object validateFacebookApp(@RequestParam("hub.mode") String mode, @RequestParam("hub.verify_token") String verify_token,
