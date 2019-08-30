@@ -3,9 +3,7 @@ package rs.ac.bg.fon.chatbot.controller;
 import com.github.messenger4j.Messenger;
 import com.github.messenger4j.exception.MessengerApiException;
 import com.github.messenger4j.exception.MessengerIOException;
-import com.github.messenger4j.send.MessagePayload;
 import com.github.messenger4j.send.SenderActionPayload;
-import com.github.messenger4j.send.message.TextMessage;
 import com.github.messenger4j.send.senderaction.SenderAction;
 import com.github.messenger4j.webhook.Event;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import rs.ac.bg.fon.chatbot.response.ResponseService;
 
 import java.util.Optional;
 

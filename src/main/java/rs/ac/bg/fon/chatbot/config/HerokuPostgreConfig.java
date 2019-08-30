@@ -1,7 +1,7 @@
 package rs.ac.bg.fon.chatbot.config;
 
 import com.github.messenger4j.Messenger;
-import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -17,12 +17,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Properties;
-
-import static rs.ac.bg.fon.chatbot.config.Constants.APP_SECRET;
-import static rs.ac.bg.fon.chatbot.config.Constants.TOKEN;
 
 @Configuration
 @ComponentScan(basePackages = "rs.ac.bg.fon.chatbot")
@@ -30,6 +26,11 @@ import static rs.ac.bg.fon.chatbot.config.Constants.TOKEN;
 @EnableTransactionManagement
 @EnableAsync
 public class HerokuPostgreConfig {
+
+    @Value("facebook.token")
+    private String token;
+    @Value("facebook.appSecret")
+    private String appSecret;
 
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource")
@@ -63,6 +64,7 @@ public class HerokuPostgreConfig {
         em.setJpaProperties(additionalProperties());
         return em;
     }
+
     Properties additionalProperties() {
         Properties properties = new Properties();
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
@@ -81,10 +83,9 @@ public class HerokuPostgreConfig {
     }
 
     @Bean
-    public Messenger getMessenger(){
-        return Messenger.create(TOKEN,APP_SECRET, "verifyToken");
+    public Messenger getMessenger() {
+        return Messenger.create(token, appSecret, "verifyToken");
     }
-
 
 
 }
