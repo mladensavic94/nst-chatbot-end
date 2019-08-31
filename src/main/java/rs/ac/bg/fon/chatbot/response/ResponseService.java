@@ -33,9 +33,9 @@ public class ResponseService {
     private List<AnswerGeneratorHandler> answerHandlers;
     private WitAiService witAiService;
 
-    @Value("facebook.token")
+    @Value("${facebook.token}")
     private String token;
-    @Value("facebook.appSecret")
+    @Value("${facebook.appSecret}")
     private String appSecret;
 
     public ResponseService(AppointmentsService appointmentsService,
