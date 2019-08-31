@@ -2,6 +2,7 @@ package rs.ac.bg.fon.chatbot.config;
 
 import com.github.messenger4j.Messenger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
@@ -21,6 +23,7 @@ import java.net.URISyntaxException;
 import java.util.Properties;
 
 @Configuration
+@EnableAutoConfiguration
 @ComponentScan(basePackages = "rs.ac.bg.fon.chatbot")
 @EnableJpaRepositories("rs.ac.bg.fon.chatbot.db")
 @EnableTransactionManagement
@@ -84,6 +87,8 @@ public class HerokuPostgresConfig {
 
     @Bean
     public Messenger getMessenger() {
+        System.out.println(token);
+        System.out.println(appSecret);
         return Messenger.create(token, appSecret, "verifyToken");
     }
 
