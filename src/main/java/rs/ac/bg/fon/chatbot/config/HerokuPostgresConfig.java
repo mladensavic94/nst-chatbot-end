@@ -25,7 +25,7 @@ import java.util.Properties;
 @EnableJpaRepositories("rs.ac.bg.fon.chatbot.db")
 @EnableTransactionManagement
 @EnableAsync
-public class HerokuPostgreConfig {
+public class HerokuPostgresConfig {
 
     @Value("facebook.token")
     private String token;
@@ -65,7 +65,7 @@ public class HerokuPostgreConfig {
         return em;
     }
 
-    Properties additionalProperties() {
+    private Properties additionalProperties() {
         Properties properties = new Properties();
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         properties.setProperty("hibernate.show_sql", "true");
