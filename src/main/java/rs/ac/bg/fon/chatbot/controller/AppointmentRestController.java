@@ -11,11 +11,10 @@ import rs.ac.bg.fon.chatbot.ParsingUtil;
 import rs.ac.bg.fon.chatbot.db.domain.Appointment;
 import rs.ac.bg.fon.chatbot.db.domain.Status;
 import rs.ac.bg.fon.chatbot.db.services.AppointmentsService;
+import rs.ac.bg.fon.chatbot.response.ResponseService;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Calendar;
-import java.util.List;
 
 @Controller
 @RequestMapping("/rest")
