@@ -13,6 +13,7 @@ import com.github.messenger4j.webhook.event.TextMessageEvent;
 import com.github.messenger4j.webhook.event.attachment.Attachment;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import rs.ac.bg.fon.chatbot.db.domain.Appointment;
@@ -25,6 +26,7 @@ import static rs.ac.bg.fon.chatbot.ParsingUtil.parseIntent;
 import static rs.ac.bg.fon.chatbot.db.domain.Status.*;
 
 @Service
+@PropertySource("classpath:application.properties")
 public class ResponseService {
 
 
