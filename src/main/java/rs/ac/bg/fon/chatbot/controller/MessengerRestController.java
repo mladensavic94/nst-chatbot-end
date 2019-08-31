@@ -29,14 +29,9 @@ public class MessengerRestController {
     private final ResponseService responseService;
     private Messenger messenger;
 
-    @Value("${facebook.token}")
-    private String token;
-    @Value("${facebook.appSecret}")
-    private String appSecret;
-
     @Autowired
     public MessengerRestController(ResponseService responseService, Messenger messenger) {
-        this.messenger = Messenger.create(token, appSecret, "4ba374d8b7c30dae4326613e0817f691");
+        this.messenger = messenger;
         this.responseService = responseService;
     }
 
