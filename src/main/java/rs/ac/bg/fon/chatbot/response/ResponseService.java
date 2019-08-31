@@ -11,6 +11,8 @@ import com.github.messenger4j.webhook.event.AttachmentMessageEvent;
 import com.github.messenger4j.webhook.event.QuickReplyMessageEvent;
 import com.github.messenger4j.webhook.event.TextMessageEvent;
 import com.github.messenger4j.webhook.event.attachment.Attachment;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import rs.ac.bg.fon.chatbot.db.domain.Appointment;
@@ -31,14 +33,20 @@ public class ResponseService {
     private List<AnswerGeneratorHandler> answerHandlers;
     private WitAiService witAiService;
 
-    public ResponseService(Messenger messenger,
-                           AppointmentsService appointmentsService,
+    @Value("facebook.token")
+    private String token;
+    @Value("facebook.appSecret")
+    private String appSecret;
+
+    public ResponseService(AppointmentsService appointmentsService,
                            List<AnswerGeneratorHandler> answerHandlers,
                            WitAiService witAiService) {
-        this.messenger = messenger;
         this.appointmentsService = appointmentsService;
         this.answerHandlers = answerHandlers;
         this.witAiService = witAiService;
+        System.out.println(token);
+        System.out.println(appSecret);
+        this.messenger = Messenger.create(token, appSecret, "4ba374d8b7c30dae4326613e0817f691");
     }
 
     @Async

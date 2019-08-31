@@ -8,6 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -30,10 +31,6 @@ import java.util.Properties;
 @EnableAsync
 public class HerokuPostgresConfig {
 
-    @Value("facebook.token")
-    private String token;
-    @Value("facebook.appSecret")
-    private String appSecret;
 
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource")
@@ -86,10 +83,8 @@ public class HerokuPostgresConfig {
     }
 
     @Bean
-    public Messenger getMessenger() {
-        System.out.println(token);
-        System.out.println(appSecret);
-        return Messenger.create(token, appSecret, "verifyToken");
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
 
 
