@@ -11,7 +11,6 @@ import com.github.messenger4j.webhook.event.AttachmentMessageEvent;
 import com.github.messenger4j.webhook.event.QuickReplyMessageEvent;
 import com.github.messenger4j.webhook.event.TextMessageEvent;
 import com.github.messenger4j.webhook.event.attachment.Attachment;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -32,15 +31,15 @@ public class ResponseService {
     private Messenger messenger;
     private AppointmentsService appointmentsService;
     private List<AnswerGeneratorHandler> answerHandlers;
-    private WitAiService witAiService;
+    private NLPService nlpService;
 
 
     public ResponseService(Messenger messenger, AppointmentsService appointmentsService,
                            List<AnswerGeneratorHandler> answerHandlers,
-                           WitAiService witAiService) {
+                           NLPService nlpService) {
         this.appointmentsService = appointmentsService;
         this.answerHandlers = answerHandlers;
-        this.witAiService = witAiService;
+        this.nlpService = nlpService;
         this.messenger = messenger;
     }
 
@@ -69,8 +68,8 @@ public class ResponseService {
         if (isForConverastionRestart(senderId, text))
             return MessagePayload.create(senderId, TextMessage.create("Stanje obrisano, mozete poceti iz pocetka"));
 
-        String appointmentString = witAiService.callAndParse(text);
-        Appointment appointment = appointmentsService.findByStudentID(senderId);
+        String appointmentString = nlpService.callAndParse(text);
+        Appointment appointment = appointmentsService.findOrCreate(senderId);
         TextMessage response = null;
         try {
             for (AnswerGeneratorHandler answerHandler : answerHandlers) {
@@ -153,11 +152,23 @@ public class ResponseService {
     private void handleTextMessageEvents(Event event) {
         TextMessageEvent messageEvent = event.asTextMessageEvent();
         try {
-            MessagePayload response = generateAnswer(messageEvent.senderId(), messageEvent.text());
+            String text = checkForCyrillicAndParse(messageEvent);
+            MessagePayload response = generateAnswer(messageEvent.senderId(),text);
             sendResponse(response);
         } catch (Exception e) {
             e.printStackTrace();
             sendResponse(MessagePayload.create(messageEvent.senderId(), TextMessage.create("Ups! " + e.getMessage())));
         }
+    }
+
+    private String checkForCyrillicAndParse(TextMessageEvent messageEvent) {
+        String text = messageEvent.text();
+        for(int i = 0; i < text.length(); i++) {
+            if(Character.UnicodeBlock.of(text.charAt(i)).equals(Character.UnicodeBlock.CYRILLIC)) {
+                return "opravi da prebacuje u latinicu";
+            }
+        }
+        return text;
+
     }
 }

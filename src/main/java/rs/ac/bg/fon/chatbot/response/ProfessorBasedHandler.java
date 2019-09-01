@@ -29,8 +29,8 @@ public class ProfessorBasedHandler implements AnswerGeneratorHandler {
     }
 
     @Override
-    public TextMessage generateAnswer(String witResponse, Appointment targetedAppointment) {
-        return getResponseBasedOnProfessorParameter(witResponse, targetedAppointment);
+    public TextMessage generateAnswer(String nlpResponse, Appointment targetedAppointment) {
+        return getResponseBasedOnProfessorParameter(nlpResponse, targetedAppointment);
     }
 
     private TextMessage getResponseBasedOnProfessorParameter(String appointmentString, Appointment appointment) {

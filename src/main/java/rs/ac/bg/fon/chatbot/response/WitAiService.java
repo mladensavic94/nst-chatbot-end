@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Component
-public class WitAiService {
+public class WitAiService implements NLPService{
 
     private static String WIT_AI_VERSION = "20180320";
     private final static String URL_WIT_AI = "https://api.wit.ai/message?v=" + WIT_AI_VERSION + "&q=";
@@ -21,7 +21,7 @@ public class WitAiService {
         WIT_AI_VERSION = new SimpleDateFormat("yyyyMMdd").format(new Date());
     }
 
-    String callAndParse(String text) {
+    public String callAndParse(String text) {
         RestTemplate getUserInfo = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", token);

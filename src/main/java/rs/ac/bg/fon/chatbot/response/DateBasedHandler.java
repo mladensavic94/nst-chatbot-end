@@ -30,8 +30,8 @@ public class DateBasedHandler implements AnswerGeneratorHandler {
     }
 
     @Override
-    public TextMessage generateAnswer(String witResponse, Appointment targetedAppointment) {
-        return getResponseBasedOnDateParameter(witResponse, targetedAppointment);
+    public TextMessage generateAnswer(String nlpResponse, Appointment targetedAppointment) {
+        return getResponseBasedOnDateParameter(nlpResponse, targetedAppointment);
     }
 
     private TextMessage getResponseBasedOnDateParameter(String appointmentString, Appointment appointment) {

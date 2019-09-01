@@ -35,11 +35,9 @@ public class AppointmentsService {
     }
 
 
-    public Appointment findByStudentID(String id) {
+    public Appointment findOrCreate(String id) {
         Appointment appointment;
-
         appointment = appointmentsRepository.findByStudentID(id);
-
         if (appointment == null) {
             appointment = new Appointment();
             appointment.setId(0L);

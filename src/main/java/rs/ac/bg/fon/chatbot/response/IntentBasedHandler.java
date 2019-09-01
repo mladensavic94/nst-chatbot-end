@@ -13,8 +13,8 @@ public class IntentBasedHandler implements AnswerGeneratorHandler {
 
 
     @Override
-    public TextMessage generateAnswer(String witResponse, Appointment targetedAppointment) throws AnswerGeneratorHandlerException {
-        String intent = parseIntent(witResponse);
+    public TextMessage generateAnswer(String nlpResponse, Appointment targetedAppointment) throws AnswerGeneratorHandlerException {
+        String intent = parseIntent(nlpResponse);
         if ((intent != null && intent.equals("request")) || targetedAppointment != null) {
             return null;
         } else {

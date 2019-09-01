@@ -5,5 +5,5 @@ import rs.ac.bg.fon.chatbot.db.domain.Appointment;
 
 public interface AnswerGeneratorHandler {
 
-    TextMessage generateAnswer(String witResponse, Appointment targetedAppointment) throws AnswerGeneratorHandlerException;
+    TextMessage generateAnswer(String nlpResponse, Appointment targetedAppointment) throws AnswerGeneratorHandlerException;
 }
