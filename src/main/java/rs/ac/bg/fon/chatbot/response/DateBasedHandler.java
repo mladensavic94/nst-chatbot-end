@@ -48,9 +48,9 @@ public class DateBasedHandler implements AnswerGeneratorHandler {
                                 quickReplies.add(TextQuickReply.create(convertToUserFriendly(officeHours1.getBeginTime()), formatDateForWit(officeHours1.getBeginTime())));
                         });
                 if (quickReplies.isEmpty()) {
-                    response = TextMessage.create("Profesor trenutno nema zakazanih termina. Mozete se obratiti na: " + appointment.getProfessor().getEmail());
+                    response = TextMessage.create(String.format(I18nService.get("date.not.available"), appointment.getProfessor().getEmail()));
                 } else {
-                    response = TextMessage.create("U tom terminu nema konsultacija.", Optional.of(quickReplies), Optional.empty());
+                    response = TextMessage.create(I18nService.get("appointment.not.available"), Optional.of(quickReplies), Optional.empty());
                 }
             } else {
                 appointment.setOfficeHours(officeHours);

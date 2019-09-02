@@ -11,6 +11,7 @@ import com.github.messenger4j.webhook.event.AttachmentMessageEvent;
 import com.github.messenger4j.webhook.event.QuickReplyMessageEvent;
 import com.github.messenger4j.webhook.event.TextMessageEvent;
 import com.github.messenger4j.webhook.event.attachment.Attachment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class ResponseService {
     private List<AnswerGeneratorHandler> answerHandlers;
     private NLPService nlpService;
 
-
+    @Autowired
     public ResponseService(Messenger messenger, AppointmentsService appointmentsService,
                            List<AnswerGeneratorHandler> answerHandlers,
                            NLPService nlpService) {
@@ -52,8 +53,6 @@ public class ResponseService {
         } else if (event.isAttachmentMessageEvent()) {
             handleAttachmentMessageEvents(event);
         }
-
-
     }
 
     public void sendResponse(MessagePayload message) {
@@ -65,8 +64,8 @@ public class ResponseService {
     }
 
     private MessagePayload generateAnswer(String senderId, String text) throws MessengerIOException {
-        if (isForConverastionRestart(senderId, text))
-            return MessagePayload.create(senderId, TextMessage.create("Stanje obrisano, mozete poceti iz pocetka"));
+        if (isForConversationRestart(senderId, text))
+            return MessagePayload.create(senderId, TextMessage.create(I18nService.get("reset.state")));
 
         String appointmentString = nlpService.callAndParse(text);
         Appointment appointment = appointmentsService.findOrCreate(senderId);
@@ -85,17 +84,18 @@ public class ResponseService {
             appointment.setDescription(text);
         }
         if (appointmentStatus.equals(DESCRIPTION_MISSING)) {
-            response = TextMessage.create("Unesite razlog dolaska na konsultacije ili prikacite neki dokument ili zip folder.");
+            response = TextMessage.create(I18nService.get("appointment.attachments"));
             appointment.setStatus(DESCRIPTION_REQUESTED);
         }
         appointmentsService.save(appointment);
         if (appointmentStatus.equals(FULL)) {
-            response = TextMessage.create("Zahtev za konsultacije poslat profesoru na odobrenje\nProfesor: " + appointment.getProfessor().getLastName() + " " + appointment.getProfessor().getFirstName() + "\nDatum: " + appointment.getDateAndTime());
+
+            response = TextMessage.create(String.format(I18nService.get("appointment.sent"), appointment.getDateAndTime().toString(), appointment.getProfessor().getFirstName(), appointment.getProfessor().getLastName()));
         }
         return MessagePayload.create(senderId, response);
     }
 
-    private boolean isForConverastionRestart(String senderId, String text) {
+    private boolean isForConversationRestart(String senderId, String text) {
         if (text.equalsIgnoreCase("restart")) {
             appointmentsService.deleteByStudentID(senderId);
             return true;

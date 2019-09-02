@@ -41,25 +41,25 @@ public class ProfessorBasedHandler implements AnswerGeneratorHandler {
             professor = professorService.findProfessorUsingStringDistance(professorString);
             if (professor != null) {
                 appointment.setProfessor(professor);
-                String text = "Kog dana zelite kod prof. " + professor.getLastName() + " na konsultacije";
+                String text = String.format(I18nService.get("professor.appointment.day"), professor.getLastName());
                 List<QuickReply> quickReplies = new ArrayList<>();
                 professor.getListOfOfficeHours().stream()
                         .filter(officeHours -> officeHours.getBeginTime().after(new Date()))
                         .forEach(officeHours ->
                                 quickReplies.add(TextQuickReply.create(convertToUserFriendly(officeHours.getBeginTime()), formatDateForWit(officeHours.getBeginTime()))));
                 if (quickReplies.isEmpty()) {
-                    response = TextMessage.create("Profesor trenutno nema zakazanih termina. Mozete se obratiti na: " + appointment.getProfessor().getEmail());
+                    response = TextMessage.create(String.format(I18nService.get("date.not.available"), appointment.getProfessor().getEmail()));
                 } else {
                     response = TextMessage.create(text, Optional.of(quickReplies), Optional.empty());
                 }
             } else {
-                String text = "Profesor koga trazite ne postoji u sistemu.\n Neki od ponudjenih su dati u nastavku:";
+                String text = I18nService.get("professor.available.names");
                 List<QuickReply> quickReplies = new ArrayList<>();
                 professorService.findAll().forEach(professor1 -> quickReplies.add(TextQuickReply.create(professor1.getLastName() + " " + professor1.getFirstName(), professor1.getLastName() + " " + professor1.getFirstName())));
                 response = TextMessage.create(text, Optional.of(quickReplies), Optional.empty());
             }
         } catch (Exception e) {
-            String text = "Kod kog profesora zelite na konsultacije?";
+            String text = I18nService.get("professor.question");
             List<QuickReply> quickReplies = new ArrayList<>();
             professorService.findAll().forEach(professor1 -> quickReplies.add(TextQuickReply.create(professor1.getLastName() + " " + professor1.getFirstName(), professor1.getLastName() + " " + professor1.getFirstName())));
             response = TextMessage.create(text, Optional.of(quickReplies), Optional.empty());

@@ -13,9 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import rs.ac.bg.fon.chatbot.response.ResponseService;
 
 import java.util.Optional;
@@ -28,6 +26,9 @@ public class MessengerRestController {
 
     private final ResponseService responseService;
     private Messenger messenger;
+    @Value("facebook.token")
+    private String TOKEN;
+
 
     @Autowired
     public MessengerRestController(ResponseService responseService, Messenger messenger) {
@@ -46,8 +47,17 @@ public class MessengerRestController {
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    @RequestMapping("/chatbotVerification")
+    public ResponseEntity<Object> validateFacebookApp(@RequestParam("hub.mode") String mode,
+                               @RequestParam("hub.verify_token") String verify_token,
+                               @RequestParam("hub.challenge") String challenge) {
+        if (verify_token.equals(TOKEN))
+            return ResponseEntity.status(HttpStatus.OK).body(challenge);
+        return null;
     }
 
     private void sendSeen(Event event) {

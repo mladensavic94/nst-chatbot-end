@@ -1,6 +1,6 @@
 package rs.ac.bg.fon.chatbot.config;
 
-public class TokenConstants {
+public class JWTConstants {
 
     public static final String SECRET = "L0ngRand0mStr1ngSecret";
     public static final long EXPIRATION_TIME = 24 * 60 * 60 * 1000;

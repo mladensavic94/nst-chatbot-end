@@ -11,6 +11,7 @@ import rs.ac.bg.fon.chatbot.ParsingUtil;
 import rs.ac.bg.fon.chatbot.db.domain.Appointment;
 import rs.ac.bg.fon.chatbot.db.domain.Status;
 import rs.ac.bg.fon.chatbot.db.services.AppointmentsService;
+import rs.ac.bg.fon.chatbot.response.I18nService;
 import rs.ac.bg.fon.chatbot.response.ResponseService;
 
 import javax.persistence.EntityManager;
@@ -69,7 +70,7 @@ public class AppointmentRestController {
                 String message = generateMessageBasedOnStatus(appointment, status);
                 appointment.setLength(length);
                 responseService.sendResponse(MessagePayload.create(appointment.getStudentID(), TextMessage.create(message)));
-                appointment  = appointmentsService.save(appointment);
+                appointment = appointmentsService.save(appointment);
                 entityManager.clear();
             } else throw new Exception();
             return ResponseEntity.status(HttpStatus.OK).body(appointment.getDateAndTime());
@@ -85,7 +86,7 @@ public class AppointmentRestController {
             String response;
             if (id == 0) {
                 response = ParsingUtil.parseDomainObjectToJson(appointmentsService.findAllByEmail(email));
-            }else{
+            } else {
                 response = ParsingUtil.parseDomainObjectToJson(appointmentsService.findAllByOfficeHourId((long) id));
             }
             return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -100,10 +101,10 @@ public class AppointmentRestController {
     private String generateMessageBasedOnStatus(Appointment appointment, Status status) {
         String message;
         if (status.equals(Status.ACCEPTED)) {
-            message = "Vas zahtev za konsultacije je prihvacen!\nDetalji: -> datum " + appointment.getDateAndTime() + " profesor: " + appointment.getProfessor().getLastName() + " " + appointment.getProfessor().getFirstName();
+            message = String.format(I18nService.get("appointment.accept"), appointment.getDateAndTime().toString(), appointment.getProfessor().getFirstName(), appointment.getProfessor().getLastName());
             appointment.setStatus(Status.valueOf("ACCEPTED"));
         } else {
-            message = "Vas zahtev za konsultacije je odbijen!\nDetalji: -> datum " + appointment.getDateAndTime() + " profesor: " + appointment.getProfessor().getLastName() + " " + appointment.getProfessor().getFirstName();
+            message = String.format(I18nService.get("appointment.deny"), appointment.getDateAndTime().toString(), appointment.getProfessor().getFirstName(), appointment.getProfessor().getLastName());
             appointment.setStatus(Status.valueOf("DENIED"));
         }
         return message;

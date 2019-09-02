@@ -19,6 +19,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static rs.ac.bg.fon.chatbot.config.JWTConstants.*;
+
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
@@ -43,10 +47,10 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         String token = Jwts.builder()
                 .setSubject(((User) authResult.getPrincipal()).getUsername())
-                .setExpiration(new Date(System.currentTimeMillis() + TokenConstants.EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512, TokenConstants.SECRET.getBytes())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(SignatureAlgorithm.HS512, SECRET.getBytes())
                 .compact();
-        response.addHeader("Access-Control-Expose-Headers", "Authorization");
-        response.addHeader(TokenConstants.HEADER_STRING, TokenConstants.TOKEN_PREFIX + token);
+        response.addHeader(ACCESS_CONTROL_EXPOSE_HEADERS, AUTHORIZATION);
+        response.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
     }
 }
